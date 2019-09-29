@@ -11,10 +11,12 @@ import com.majiang.user.majianguser.utils.MD5;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserInfoserviceImpl implements UserInfoservice {
+
 
     @Autowired
     UserInfoMapper userInfoMapper;

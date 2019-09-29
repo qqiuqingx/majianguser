@@ -9,11 +9,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.servlet.LocaleResolver;
 
+import javax.sound.midi.Soundbank;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static javafx.scene.input.KeyCode.L;
 
@@ -24,6 +31,11 @@ public class MajianguserApplicationTests {
     UserInfoMapper userInfoMapper;
     @Autowired
     UserInfoservice userInfoservice;
+
+    @Autowired
+    RedisTemplate redisTemplate;//K-V都是对象
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;//K-V都是字符串
     @Test
     public void contextLoads() {
         UserInfo userInfo=new UserInfo();
@@ -41,7 +53,16 @@ public class MajianguserApplicationTests {
     }
     @Test
     public  void ssa(){
-        System.out.println( userInfoMapper.selectUser("13111019844"));
+        //System.out.println( userInfoMapper.selectUser("13111019844"));
+        //操作字符串
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        valueOperations.set("123","123456", 10000,TimeUnit.SECONDS);
+        System.out.println(valueOperations.get("123"));
+
+        //redisTemplate.opsForValue().append("msg","呵呵大");
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<String>(String.class));
+        Object msg = redisTemplate.opsForValue().get("msg");
+        System.out.println(msg);
     }
 
 
