@@ -1,5 +1,6 @@
 package com.majiang.user.majianguser;
 
+import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserVO;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
@@ -64,6 +65,24 @@ public class MajianguserApplicationTests {
         Object msg = redisTemplate.opsForValue().get("msg");
         System.out.println(msg);
     }
-
+    //测试Gson
+    @Test
+    public void json(){
+        UserInfo userInfo=new UserInfo();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYYMMddHHmmss");
+        userInfo.setKeyID(simpleDateFormat.format(new Date()));
+        userInfo.setName("你回忆");
+        userInfo.setPassWord("1234567");
+        userInfo.setPhone("18881014683");
+        userInfo.setAddTime(new Date());
+        userInfo.setModifTime(new Date());
+        System.out.println(new Date());
+        userInfo.setIsDelete(0);
+        Gson gson = new Gson();
+        String s = gson.toJson(userInfo);
+        System.out.println(s);
+        UserInfo userInfo1 = gson.fromJson(s, UserInfo.class);
+        System.out.println(userInfo);
+    }
 
 }

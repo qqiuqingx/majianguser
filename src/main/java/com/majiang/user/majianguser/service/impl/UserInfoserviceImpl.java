@@ -2,16 +2,14 @@ package com.majiang.user.majianguser.service.impl;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserVO;
+import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.UserExceptionEnum;
 import com.majiang.user.majianguser.exception.UserException;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.MD5;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,11 +22,12 @@ public class UserInfoserviceImpl implements UserInfoservice {
     @Override
     public UserVO insertUser(UserInfo userInfo) throws UserException{
 
-        UserVO userVO=new UserVO<UserInfo>();
+        UserVO userVO=null;
         String desPhone=null;
 
             if (userInfo.getName()==null||"".equals(userInfo.getName())){
-                throw  new UserException(UserExceptionEnum.UserNameNotNull);
+                return new UserVO(UserEnum.UserNameNotNull);
+                //throw  new UserException(UserExceptionEnum.UserNameNotNull);
             }
             if (userInfo.getPhone()==null||"".equals(userInfo.getPhone())){
                 throw  new UserException(UserExceptionEnum.UserPhoneNotNull);
@@ -47,11 +46,11 @@ public class UserInfoserviceImpl implements UserInfoservice {
             System.out.println("加密后的密码："+userInfo.getPassWord());
             userInfo.setPhone(desPhone);
             inserUser(userInfo);
-           userVO=new  UserVO<UserInfo>();
-            userVO.setT(userInfo);
-            userVO.setCode(1000);
 
-        return userVO;
+          /*  userVO.setDate(userInfo);
+            userVO.setCode(1000);*/
+
+        return new UserVO<UserInfo>(userInfo,UserEnum.SUCSS);
     }
 
     @Override
