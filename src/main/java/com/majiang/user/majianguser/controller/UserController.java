@@ -3,19 +3,27 @@ package com.majiang.user.majianguser.controller;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserVO;
 import com.majiang.user.majianguser.service.UserInfoservice;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-
-@RestController
+@Api(value="用户相关接口")
+@Controller
 public class UserController {
     @Autowired
     UserInfoservice userInfoservice;
 
-    @RequestMapping(value = "/addUser",method = RequestMethod.GET)
-    public UserVO addUser(UserInfo userInfo) throws UnknownError{
+    /**
+     * 添加员工
+     * @param userInfo
+     * @return
+     * @throws UnknownError
+     */
+    @ApiOperation(value = "新增用户",notes = "手机号为唯一")
+    @ResponseBody
+    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    public UserVO addUser( @RequestBody UserInfo userInfo) throws UnknownError{
         return userInfoservice.insertUser(userInfo);
     }
 }

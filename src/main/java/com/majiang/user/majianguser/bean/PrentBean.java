@@ -1,15 +1,22 @@
 package com.majiang.user.majianguser.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
-
-public class PrentBean {
+@ApiModel
+public class PrentBean implements Serializable {
+    @ApiModelProperty(hidden = true)
     private String KeyID;
+    @ApiModelProperty(value = "添加时间",hidden = true)
     private Date AddTime;
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @ApiModelProperty(hidden = true)
     private Date ModifTime;
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @ApiModelProperty(hidden = true)
     private  Integer IsDelete;
 
     public Integer getIsDelete() {
