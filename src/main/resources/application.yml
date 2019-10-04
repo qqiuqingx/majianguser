@@ -1,4 +1,6 @@
-
+server:
+  servlet:
+    context-path: /user
 spring:
   datasource:
     #   数据源其他配置

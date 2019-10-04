@@ -2,6 +2,7 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserVO;
+import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,14 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public UserVO addUser( @RequestBody UserInfo userInfo) throws UnknownError{
+        System.out.println("进入");
         return userInfoservice.insertUser(userInfo);
+    }
+    @ApiOperation(value = "打招呼")
+    @ResponseBody
+    @RequestMapping(value = "/seyHello",method = RequestMethod.GET)
+    public String hello(){
+        /*new UserVO(UserEnum.SUCSS);*/
+        return "hello";
     }
 }
