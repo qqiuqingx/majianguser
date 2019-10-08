@@ -1,10 +1,12 @@
 package com.majiang.user.majianguser.bean.vo;
 
 import com.majiang.user.majianguser.enums.UserEnum;
+import io.swagger.annotations.ApiModelProperty;
 
 public class UserVO<T> {
     private T date;
     private Integer code;
+    @ApiModelProperty(value = "返回信息")
     private String msg;
     @Override
     public String toString() {

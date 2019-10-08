@@ -19,11 +19,13 @@ public class MySwaggerConfig {
         System.out.println("swagger配置类》》》》》》》》》》》》》》》》》》》》》");
         return new Docket(DocumentationType.SWAGGER_2)
                 //详细的定制信息
-                .apiInfo(apiInfo())
+                .apiInfo(ApiInfo.DEFAULT)
+                //分组
+                .groupName("子安测试")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.majiang.user.majianguser.controller"))//API包路径
+                //.apis(RequestHandlerSelectors.basePackage("com.majiang.user.majianguser.controller"))//API包路径
                 // 扫描所有
-                 //.apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -32,12 +34,7 @@ public class MySwaggerConfig {
      * 添加摘要信息
      * @return
      */
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("接口文档")
-                .description("swagger")
-                .termsOfServiceUrl("麻将")
-                .version("版本号：2.0")
-                .build();
-    }
+   /* private ApiInfo apiInfo() {
+        return new ApiInfo(ApiInfo.DEFAULT);
+    }*/
 }

@@ -6,18 +6,17 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
-@ApiModel
 public class PrentBean implements Serializable {
     @ApiModelProperty(hidden = true)
-    private String KeyID;
+    public String KeyID;
     @ApiModelProperty(value = "添加时间",hidden = true)
-    private Date AddTime;
+    public Date AddTime;
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @ApiModelProperty(hidden = true)
-    private Date ModifTime;
+    public Date ModifTime;
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @ApiModelProperty(hidden = true)
-    private  Integer IsDelete;
+    public  Integer IsDelete;
 
     public Integer getIsDelete() {
         return IsDelete;
