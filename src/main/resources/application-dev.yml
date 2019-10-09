@@ -1,0 +1,15 @@
+logging:
+  #level:
+    #com:
+      #majiang:
+        #user:
+          #majianguser: info
+  #设置日志的位置
+ #file: Logs/springboot.log
+  #path: E:/Logs/
+  #pattern:
+    #日志在文件中的格式
+   # file: "%d{yyyy-MM-dd HH:MM:ss} [%thread] %-5level %logger{50} - %msg%n"
+
+
+

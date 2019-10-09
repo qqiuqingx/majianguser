@@ -6,8 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+//@ApiModel
 public class PrentBean implements Serializable {
-    @ApiModelProperty(hidden = true)
+   /* @ApiModelProperty(hidden = true)
     public String KeyID;
     @ApiModelProperty(value = "添加时间",hidden = true)
     public Date AddTime;
@@ -48,5 +49,5 @@ public class PrentBean implements Serializable {
 
     public void setModifTime(Date modifTime) {
         ModifTime = modifTime;
-    }
+    }*/
 }

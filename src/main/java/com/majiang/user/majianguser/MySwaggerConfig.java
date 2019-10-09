@@ -23,9 +23,9 @@ public class MySwaggerConfig {
                 //分组
                 .groupName("子安测试")
                 .select()
-                //.apis(RequestHandlerSelectors.basePackage("com.majiang.user.majianguser.controller"))//API包路径
+                .apis(RequestHandlerSelectors.basePackage("com.majiang.user.majianguser.controller"))//API包路径
                 // 扫描所有
-                .apis(RequestHandlerSelectors.any())
+                //.apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }

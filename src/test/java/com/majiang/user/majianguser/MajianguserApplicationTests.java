@@ -49,8 +49,8 @@ public class MajianguserApplicationTests {
         userInfo.setModifTime(new Date());
         System.out.println(new Date());
         userInfo.setIsDelete(0);
-        UserVO userVO = userInfoservice.insertUser(userInfo);
-        System.out.println(userVO);
+       // UserVO userVO = userInfoservice.insertUser(userInfo);
+       // System.out.println(userVO);
     }
     @Test
     public  void ssa(){
