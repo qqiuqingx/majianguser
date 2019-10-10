@@ -85,11 +85,43 @@ public class UserInfoserviceImpl implements UserInfoservice {
         }
 
     }
+    /**
+     * 用户手机号登录登录
+     */
+    public UserVO userLogin(UserReqVO userInfo) {
+        String Phone=userInfo.getPhone();
+        String PassWord=userInfo.getPassWord();
+        Integer errornum=0;
+        if (Phone == null || "".equals(Phone)) {
+            return new UserVO(UserEnum.UserPhoneNotNull);
+        }
+        if (PassWord == null || "".equals(PassWord)) {
+            return new UserVO(UserEnum.UserPassWordNotNull);
+        }
+        //加密密码和手机号
+        Phone=MD5.md5(Phone);
+        PassWord=MD5.md5(PassWord);
+        UserInfo userInfo2 = selectUser(Phone);
+        if (userInfo2==null){
+            return new UserVO(UserEnum.PhoneNotRegistered);
+        }
+        if (!PassWord.equals(userInfo2.getPassWord())){
+            errornum++;
+            return new UserVO(UserEnum.PassWordNotright);
+        }
+
+
+
+
+        return null;
+    }
 
     @Override
     public UserInfo selectUser(String phone) {
         return null;
     }
+
+
 
     private Integer inserUser(UserInfo userInfo) throws UserException {
         Integer integer = userInfoMapper.inserUser(userInfo);

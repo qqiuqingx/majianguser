@@ -23,7 +23,7 @@ public class UserController {
 
 
     /**
-     * 添加员工
+     * 新增用户
      * @param userInfo
      * @return
      * @throws UnknownError
@@ -33,7 +33,10 @@ public class UserController {
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public UserVO addUser( @RequestBody UserReqVO userInfo) throws  Exception {
         System.out.println("进入");
-        return userInfoservice.insertUser(userInfo);
+
+        UserVO userVO = userInfoservice.insertUser(userInfo);
+        System.out.println("获取到的值: "+userVO);
+        return userVO;
     }
     @ApiOperation(value = "打招呼")
     @ResponseBody
@@ -42,4 +45,15 @@ public class UserController {
         /*new UserVO(UserEnum.SUCSS);*/
         return "hello";
     }
+
+
+    /**
+     * 用户手机号登录
+     */
+    @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
+    public UserVO userLogin(@RequestBody UserReqVO userInfo){
+
+        return null;
+    }
+
 }

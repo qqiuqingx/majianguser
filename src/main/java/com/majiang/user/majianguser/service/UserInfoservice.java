@@ -10,4 +10,9 @@ public interface UserInfoservice {
 
     /*根据手机号查询用户信息*/
     public UserInfo selectUser(String phone);
+
+    /**
+     * 用户手机号登录登录
+     */
+    UserVO userLogin(UserReqVO userInfo);
 }

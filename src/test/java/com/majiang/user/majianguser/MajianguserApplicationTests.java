@@ -18,9 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.sound.midi.Soundbank;
+import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static javafx.scene.input.KeyCode.L;
@@ -68,7 +70,7 @@ public class MajianguserApplicationTests {
     //测试Gson
     @Test
     public void json(){
-        UserInfo userInfo=new UserInfo();
+       /* UserInfo userInfo=new UserInfo();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYYMMddHHmmss");
         userInfo.setKeyID(simpleDateFormat.format(new Date()));
         userInfo.setName("你回忆");
@@ -82,7 +84,14 @@ public class MajianguserApplicationTests {
         String s = gson.toJson(userInfo);
         System.out.println(s);
         UserInfo userInfo1 = gson.fromJson(s, UserInfo.class);
-        System.out.println(userInfo);
+        System.out.println(userInfo);*/
+        String s1 = UUID.randomUUID().toString();
+        System.out.println(s1);
+
     }
+
+
+
+
 
 }

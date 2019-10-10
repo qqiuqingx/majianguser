@@ -1,8 +1,9 @@
 package com.majiang.user.majianguser.bean.vo;
 
 import com.majiang.user.majianguser.enums.UserEnum;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+@ApiModel
 public class UserVO<T> {
     private T date;
     private Integer code;
