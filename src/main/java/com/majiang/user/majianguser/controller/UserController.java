@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sound.midi.Soundbank;
 import java.util.logging.Logger;
 
 @Controller
@@ -51,9 +52,11 @@ public class UserController {
      * 用户手机号登录
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
+    @ResponseBody
     public UserVO userLogin(@RequestBody UserReqVO userInfo){
+        System.out.println("登录");
 
-        return null;
+        return userInfoservice.userLogin(userInfo);
     }
 
 }

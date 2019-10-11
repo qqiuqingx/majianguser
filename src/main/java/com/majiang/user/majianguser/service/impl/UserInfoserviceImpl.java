@@ -12,7 +12,10 @@ import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.MD5;
+import com.majiang.user.majianguser.utils.RedisUtils;
+import com.majiang.user.majianguser.utils.TokenUtil;
 import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +33,9 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /*添加员工*/
     @Override
@@ -86,34 +92,52 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     }
     /**
-     * 用户手机号登录登录
+     *
      */
     public UserVO userLogin(UserReqVO userInfo) {
-        String Phone=userInfo.getPhone();
-        String PassWord=userInfo.getPassWord();
+        String Phone=null;
+        String PassWord=null;
         Integer errornum=0;
-        if (Phone == null || "".equals(Phone)) {
+        if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
             return new UserVO(UserEnum.UserPhoneNotNull);
         }
-        if (PassWord == null || "".equals(PassWord)) {
+        if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
             return new UserVO(UserEnum.UserPassWordNotNull);
         }
+        Phone=userInfo.getPhone();
+        PassWord=userInfo.getPassWord();
+        System.out.println("加密前的手机号:"+Phone);
         //加密密码和手机号
-        Phone=MD5.md5(Phone);
+        Phone=DesUtil.encode(DesUtil.KEY,Phone);
+        System.out.println("加密的手机号:"+Phone);
         PassWord=MD5.md5(PassWord);
-        UserInfo userInfo2 = selectUser(Phone);
+        UserInfo userInfo2=null;
+        userInfo2=(UserInfo)redisUtils.get(Phone);
+        System.out.println("从redis中取到的数据:"+userInfo2);
+        //先查缓存
         if (userInfo2==null){
-            return new UserVO(UserEnum.PhoneNotRegistered);
+            //查数据库
+            userInfo2 = selecUser(Phone);
+            System.out.println("从数据库中取到的数据:"+userInfo2);
+            //未查到此人
+            if (userInfo2==null){
+                return new UserVO(UserEnum.PhoneNotRegistered);
+            }
         }
+        //密码错误
         if (!PassWord.equals(userInfo2.getPassWord())){
-            errornum++;
+           // redisUtils.set(Phone,errornum,5);
+            //errornum++;
             return new UserVO(UserEnum.PassWordNotright);
         }
 
-
-
-
-        return null;
+        //redis中存用户相关信息
+        String newToken = TokenUtil.getNewToken();
+        redisUtils.set(Phone,newToken,60*60*2);
+        redisUtils.set(newToken,userInfo2,60*60*2);
+        userInfo2.setPassWord("");
+        System.out.println("userInfo:"+userInfo2);
+        return new UserVO<UserInfo>(userInfo2,UserEnum.SUCSS);
     }
 
     @Override
