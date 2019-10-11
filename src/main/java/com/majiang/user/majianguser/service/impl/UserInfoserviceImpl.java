@@ -97,7 +97,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     public UserVO userLogin(UserReqVO userInfo) {
         String Phone=null;
         String PassWord=null;
-        Integer errornum=0;
+        //Integer errornum=0;
         if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
             return new UserVO(UserEnum.UserPhoneNotNull);
         }
@@ -131,10 +131,12 @@ public class UserInfoserviceImpl implements UserInfoservice {
             return new UserVO(UserEnum.PassWordNotright);
         }
 
-        //redis中存用户相关信息
-        String newToken = TokenUtil.getNewToken();
-        redisUtils.set(Phone,newToken,60*60*2);
-        redisUtils.set(newToken,userInfo2,60*60*2);
+        //在redis中保存用户相关信息
+        String userToken = TokenUtil.getNewToken();
+        //加密后的手机号+token
+        redisUtils.set(Phone,userToken,60*60*2);
+        //token和用户相关信息
+        redisUtils.set(userToken,userInfo2,60*60*2);
         userInfo2.setPassWord("");
         System.out.println("userInfo:"+userInfo2);
         return new UserVO<UserInfo>(userInfo2,UserEnum.SUCSS);
