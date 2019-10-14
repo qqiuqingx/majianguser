@@ -18,9 +18,10 @@ public class UserInfo {
                 "Name='" + Name + '\'' +
                 ", Phone='" + Phone + '\'' +
                 ", PassWord='" + PassWord + '\'' +
-                ", KeyID='" + getKeyID() + '\'' +
-                ", AddTime='" + getAddTime() + '\'' +
-                ", ModifTime='" + getModifTime() + '\'' +
+                ", KeyID='" + KeyID + '\'' +
+                ", AddTime=" + AddTime +
+                ", ModifTime=" + ModifTime +
+                ", IsDelete=" + IsDelete +
                 '}';
     }
 

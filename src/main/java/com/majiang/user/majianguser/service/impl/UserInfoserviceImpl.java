@@ -10,15 +10,11 @@ import com.majiang.user.majianguser.exception.UserException;
 import com.majiang.user.majianguser.exception.majiangRunTimeException;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
-import com.majiang.user.majianguser.utils.DesUtil;
-import com.majiang.user.majianguser.utils.MD5;
-import com.majiang.user.majianguser.utils.RedisUtils;
-import com.majiang.user.majianguser.utils.TokenUtil;
+import com.majiang.user.majianguser.utils.*;
 import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -68,13 +64,9 @@ public class UserInfoserviceImpl implements UserInfoservice {
             //加密密码
             userInfo.setPassWord(MD5.md5(userInfo.getPassWord()));
             System.out.println("加密后的密码：" + userInfo.getPassWord());
-            //设置KeyID
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYYMMddHHmmss");
-            userInfo.setKeyID(simpleDateFormat.format(new Date()));
             userInfo.setPhone(desPhone);
-            userInfo.setAddTime(new Date());
-            userInfo.setModifTime(new Date());
-            userInfo.setIsDelete(0);
+            //设置公共属性的值
+            BeanUtils.setXXX(userInfo);
             inserUser(userInfo);
             userInfo.setPassWord("");
             return new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);

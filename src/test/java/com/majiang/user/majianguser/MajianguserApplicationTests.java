@@ -6,6 +6,7 @@ import com.majiang.user.majianguser.bean.vo.UserVO;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -89,7 +91,13 @@ public class MajianguserApplicationTests {
         System.out.println(s1);
 
     }
-
+    @Test
+    public  void testSelectAll(){
+        List<UserInfo> userInfos = userInfoMapper.selectAllUser();
+        for(UserInfo userInfo:userInfos){
+            System.out.println(userInfo);
+        }
+    }
 
 
 
