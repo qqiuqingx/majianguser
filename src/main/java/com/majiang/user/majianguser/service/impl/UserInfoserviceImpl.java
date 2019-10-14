@@ -29,7 +29,7 @@ import java.util.Date;
 @Service
 public class UserInfoserviceImpl implements UserInfoservice {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(UserInfoserviceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoserviceImpl.class);
 
     @Autowired
     UserInfoMapper userInfoMapper;
@@ -39,17 +39,17 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     /*添加员工*/
     @Override
-    public UserVO insertUser(UserReqVO userReqVO) throws  Exception {
-        UserInfo userInfo=null;
+    public UserVO insertUser(UserReqVO userReqVO) throws Exception {
+        UserInfo userInfo = null;
         try {
             Logger logger = LoggerFactory.getLogger(getClass());
-            System.out.println("用户传进来的:"+userReqVO);
-            userInfo=new UserInfo();
+            System.out.println("用户传进来的:" + userReqVO);
+            userInfo = new UserInfo();
             String desPhone = null;
             //将参数一的内容复制到参数二
-            BeanUtils.copyProperties(userReqVO,userInfo);
-            System.out.println("复制后的INFO："+userInfo);
-            System.out.println("复制后的VO:"+userReqVO);
+            BeanUtils.copyProperties(userReqVO, userInfo);
+            System.out.println("复制后的INFO：" + userInfo);
+            System.out.println("复制后的VO:" + userReqVO);
             if (userInfo.getName() == null || "".equals(userInfo.getName())) {
                 return new UserVO(UserEnum.UserNameNotNull);
             }
@@ -79,74 +79,68 @@ public class UserInfoserviceImpl implements UserInfoservice {
             userInfo.setPassWord("");
             return new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
 
-        }catch (majiangRunTimeException exception){
-            LOGGER.info("错误:"+exception.getCode()+",原因:"+exception.getMessage());
-            throw new   UserException(UserExceptionEnum.UserPhoneNotOnly);
-        }catch (Exception e){
+        } catch (majiangRunTimeException exception) {
+            LOGGER.info("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
+            throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e);
-        }
-        finally {
-            LOGGER.info("添加的用户为："+userInfo);
+        } finally {
+            LOGGER.info("添加的用户为：" + userInfo);
         }
 
     }
+
     /**
      *
      */
-    public UserVO userLogin(UserReqVO userInfo) {
-        String Phone=null;
-        String PassWord=null;
-        //Integer errornum=0;
-        if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
-            return new UserVO(UserEnum.UserPhoneNotNull);
-        }
-        if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
-            return new UserVO(UserEnum.UserPassWordNotNull);
-        }
-        Phone=userInfo.getPhone();
-        PassWord=userInfo.getPassWord();
-        System.out.println("加密前的手机号:"+Phone);
-        //加密密码和手机号
-        Phone=DesUtil.encode(DesUtil.KEY,Phone);
-        System.out.println("加密的手机号:"+Phone);
-        PassWord=MD5.md5(PassWord);
-        UserInfo userInfo2=null;
-        userInfo2=(UserInfo)redisUtils.get(Phone);
-        System.out.println("从redis中取到的数据:"+userInfo2);
-        //先查缓存
-        if (userInfo2==null){
+    public UserVO userLogin(UserReqVO userInfo)  {
+        String Phone = null;
+        String PassWord = null;
+        UserInfo userInfo2 = null;
+        try {
+            if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
+                return new UserVO(UserEnum.UserPhoneNotNull);
+            }
+            if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
+                return new UserVO(UserEnum.UserPassWordNotNull);
+            }
+            Phone = userInfo.getPhone();
+            PassWord = userInfo.getPassWord();
+            //加密密码和手机号
+            Phone = DesUtil.encode(DesUtil.KEY, Phone);
+            PassWord = MD5.md5(PassWord);
             //查数据库
             userInfo2 = selecUser(Phone);
-            System.out.println("从数据库中取到的数据:"+userInfo2);
+            System.out.println("从数据库中取到的数据:" + userInfo2);
             //未查到此人
-            if (userInfo2==null){
+            if (userInfo2 == null) {
                 return new UserVO(UserEnum.PhoneNotRegistered);
             }
+            //密码错误
+            if (!PassWord.equals(userInfo2.getPassWord())) {
+                return new UserVO(UserEnum.PassWordNotright);
+            }
+            //获取token
+            String userToken = TokenUtil.getNewToken();
+            //token和用户相关信息
+            redisUtils.set(userToken, userInfo2, 60 * 60 * 2);
+            userInfo2.setPassWord("");
+            System.out.println("userInfo:" + userInfo2);
+        } catch (Exception e) {
+            LOGGER.warn("错误:" + e.getMessage());
+            System.out.println(e.getMessage());
+        } finally {
+            LOGGER.warn("登录的用户为:" + userInfo2);
         }
-        //密码错误
-        if (!PassWord.equals(userInfo2.getPassWord())){
-           // redisUtils.set(Phone,errornum,5);
-            //errornum++;
-            return new UserVO(UserEnum.PassWordNotright);
-        }
+        return new UserVO<UserInfo>(userInfo2, UserEnum.SUCSS);
 
-        //在redis中保存用户相关信息
-        String userToken = TokenUtil.getNewToken();
-        //加密后的手机号+token
-        redisUtils.set(Phone,userToken,60*60*2);
-        //token和用户相关信息
-        redisUtils.set(userToken,userInfo2,60*60*2);
-        userInfo2.setPassWord("");
-        System.out.println("userInfo:"+userInfo2);
-        return new UserVO<UserInfo>(userInfo2,UserEnum.SUCSS);
     }
 
     @Override
     public UserInfo selectUser(String phone) {
         return null;
     }
-
 
 
     private Integer inserUser(UserInfo userInfo) throws UserException {

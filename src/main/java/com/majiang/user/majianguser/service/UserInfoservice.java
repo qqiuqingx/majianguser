@@ -14,5 +14,5 @@ public interface UserInfoservice {
     /**
      * 用户手机号登录登录
      */
-    UserVO userLogin(UserReqVO userInfo);
+    UserVO userLogin(UserReqVO userInfo) ;
 }
