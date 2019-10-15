@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import sun.security.pkcs11.P11Util;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sound.midi.Soundbank;
 import java.util.logging.Logger;
 
@@ -53,10 +56,16 @@ public class UserController {
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
     @ResponseBody
-    public UserVO userLogin(@RequestBody UserReqVO userInfo){
+    public UserVO userLogin(@RequestBody UserReqVO userInfo, HttpServletResponse response){
         System.out.println("登录");
 
-        return userInfoservice.userLogin(userInfo);
+        return userInfoservice.userLogin(userInfo,  response);
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/getAllUser",method = RequestMethod.GET)
+    public UserVO getAllUser(){
+        return userInfoservice.selectAllUser();
+    }
 }

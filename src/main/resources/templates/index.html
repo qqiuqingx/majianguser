@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Signin Template for Bootstrap</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+<!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
+    <link rel="stylesheet" href="../static/asserts/css/signin.css">
+</head>
+<body>
+<h1>Hello</h1>
+<form class="form-signin"  id="form-login" method="post" onsubmit="return false">
+    <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{asserts/img/bootstrap-solid.svg}" alt=""
+         width="72" height="72"/>
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <input type="text" class="form-control" name="username" placeholder="手机" required="" autofocus=""/>
+    <input type="password" name="password" class="form-control" placeholder="密码" required=""/>
+    <div class="checkbox mb-3">
+        <label><input type="checkbox" value="remember-me"/> 记住我</label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn-login">登录</button>
+    <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+
+</form>
+
+
+<script type="text/javascript">
+    $("#btn-login").click(function (){
+        console.log("jinru");
+        console.log(JSON.stringify($("#form-login").serialized)),
+            console.log(JSON.stringify($("#form-login").serializeArray())),
+        $.ajax({
+        url: "/user/userLogin",
+        type: "post",
+        data: JSON.stringify($("#form-login").serializeArray()),
+        dataType:"json",
+        success: function (JSON){
+          if(JSON.code ==200){
+            alert("登录成功");
+        }else{
+            alert(JSON.msg);
+    }
+        }
+    });
+    });
+</script>
+</body>
+</html>

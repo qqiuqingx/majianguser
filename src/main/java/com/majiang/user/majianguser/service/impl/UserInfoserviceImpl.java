@@ -19,8 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserInfoserviceImpl implements UserInfoservice {
@@ -86,7 +90,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     /**
      *
      */
-    public UserVO userLogin(UserReqVO userInfo)  {
+    public UserVO userLogin(UserReqVO userInfo, HttpServletResponse response)  {
         String Phone = null;
         String PassWord = null;
         UserInfo userInfo2 = null;
@@ -115,6 +119,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
             }
             //获取token
             String userToken = TokenUtil.getNewToken();
+            Cookie cookie = new Cookie("token",userToken);
+            response.addCookie(cookie);
             //token和用户相关信息
             redisUtils.set(userToken, userInfo2, 60 * 60 * 2);
             userInfo2.setPassWord("");
@@ -128,6 +134,29 @@ public class UserInfoserviceImpl implements UserInfoservice {
         return new UserVO<UserInfo>(userInfo2, UserEnum.SUCSS);
 
     }
+
+
+    public  UserVO selectAllUser(){
+        List<UserInfo> userInfos=null;
+        try {
+            userInfos = selectAllU();
+            if (userInfos.isEmpty()){
+                return new UserVO(UserEnum.NoUser);
+            }
+            for (UserInfo userInfo:userInfos){
+                userInfo.setPassWord("");
+            }
+        }catch (Exception e){
+            LOGGER.info(e.getMessage());
+        }finally {
+            LOGGER.warn("查询所有的用户:",userInfos);
+        }
+
+        return new UserVO<List<UserInfo>>(userInfos,UserEnum.SUCSS);
+    }
+
+
+
 
     @Override
     public UserInfo selectUser(String phone) {
@@ -146,5 +175,9 @@ public class UserInfoserviceImpl implements UserInfoservice {
     private UserInfo selecUser(String Phone) {
         UserInfo userInfo = userInfoMapper.selectUser(Phone);
         return userInfo;
+    }
+
+    private   List<UserInfo> selectAllU(){
+        return userInfoMapper.selectAllUser();
     }
 }

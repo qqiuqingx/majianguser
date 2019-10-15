@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @ApiModel
 public class UserReqVO implements Serializable {
-    @ApiModelProperty(value="姓名")
+    @ApiModelProperty(value="姓名",required = false)
     public    String Name;
     @ApiModelProperty(value="手机号",required = true,example = "12346798")
     public  String Phone;

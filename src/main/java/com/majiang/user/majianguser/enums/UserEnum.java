@@ -8,7 +8,9 @@ public enum UserEnum {
     UserPhoneNotNull("手机号不能为空",1006),
     //登录相关
     PhoneNotRegistered("该手机号未注册",1007),
-    PassWordNotright("密码错误",1008);
+    PassWordNotright("密码错误",1008),
+    //用户查询相关
+    NoUser("没有用户",2009);
 
     private String message;
     private Integer code;
