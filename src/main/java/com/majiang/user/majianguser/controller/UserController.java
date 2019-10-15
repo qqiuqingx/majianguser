@@ -64,7 +64,7 @@ public class UserController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/getAllUser",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllUser",method = RequestMethod.POST)
     public UserVO getAllUser(){
         return userInfoservice.selectAllUser();
     }

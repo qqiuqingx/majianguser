@@ -5,6 +5,7 @@ server:
 
 
 
+
 spring:
   datasource:
     #   数据源其他配置
@@ -37,8 +38,10 @@ spring:
     lettuce:
       shutdown-timeout: 100s
   #使用dev配置文件
-  #profiles:
-    #active: dev
+  profiles:
+    active: dev
+    #禁用模板缓存
+
 mybatis:
   mapper-locations: classpath*:/mapper/**Mapper.xml
   configuration:
