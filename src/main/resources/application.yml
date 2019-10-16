@@ -37,8 +37,8 @@ spring:
     lettuce:
       shutdown-timeout: 100s
   #使用dev配置文件
-  #profiles:
-    #active: dev
+  profiles:
+    active: dev
 mybatis:
   mapper-locations: classpath*:/mapper/**Mapper.xml
   configuration:

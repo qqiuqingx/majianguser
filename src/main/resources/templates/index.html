@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
     <meta charset="UTF-8">
     <title>首页</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -8,14 +9,15 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>Signin Template for Bootstrap</title>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <!--  <script src="http://code.jquery.com/jquery-latest.js"></script>-->
 <!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
     <link rel="stylesheet" href="../static/asserts/css/signin.css">
+
 </head>
 <body>
 <h1>Hello</h1>
 <form class="form-signin"  id="form-login" method="post" onsubmit="return false">
-    <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{asserts/img/bootstrap-solid.svg}" alt=""
+    <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{/img/bootstrap-solid.svg}" alt=""
          width="72" height="72"/>
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <input type="text" class="form-control" name="phone" placeholder="手机" required="" autofocus=""/>
@@ -33,12 +35,13 @@
     $("#btn-login").click(function (){
         console.log("jinru");
         console.log(JSON.stringify($("#form-login").serialized)),
-            console.log(JSON.stringify($("#form-login").serializeArray())),
+            console.log(JSON.stringify($("#form-login").serializeObject())),
+            console.log($("#form-login").serializeObject()),
         $.ajax({
         url: "/user/userLogin",
         type: "post",
-        contentType:"application/json",
-        data: $("#form-login").serialize(),
+        contentType:"application/json;charset=utf-8",
+        data: JSON.stringify($("#form-login").serializeObject()),
         dataType:"json",
         success: function (JSON){
           if(JSON.code ==200){
@@ -49,6 +52,23 @@
         }
     });
     });
+
+
+
+
+
+</script>
+<script type="text/javascript">
+    jQuery.fn.serializeObject = function () {
+        var formData = {};
+        var formArray = this.serializeArray();
+        for(var i = 0, n = formArray.length; i < n; ++i){
+            formData[formArray[i].name] = formArray[i].value;
+        }
+        return formData;
+    };
+
+
 </script>
 </body>
 </html>
