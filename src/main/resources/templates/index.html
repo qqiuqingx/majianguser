@@ -18,7 +18,7 @@
     <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{asserts/img/bootstrap-solid.svg}" alt=""
          width="72" height="72"/>
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <input type="text" class="form-control" name="username" placeholder="手机" required="" autofocus=""/>
+    <input type="text" class="form-control" name="phone" placeholder="手机" required="" autofocus=""/>
     <input type="password" name="password" class="form-control" placeholder="密码" required=""/>
     <div class="checkbox mb-3">
         <label><input type="checkbox" value="remember-me"/> 记住我</label>
@@ -37,7 +37,8 @@
         $.ajax({
         url: "/user/userLogin",
         type: "post",
-        data: JSON.stringify($("#form-login").serializeArray()),
+        contentType:"application/json",
+        data: $("#form-login").serialize(),
         dataType:"json",
         success: function (JSON){
           if(JSON.code ==200){
