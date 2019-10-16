@@ -24,7 +24,7 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-    url: jdbc:mysql://172.17.42.192:3306/UnifiedUserInfo?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    url: jdbc:mysql://172.17.42.69:3306/UnifiedUserInfo?serverTimezone=GMT%2B8&characterEncoding=utf-8
     username: root
     password: 123456
     #默认使用的是tomcat数据源，在此使用自己引入的数据源Druid
@@ -32,13 +32,13 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   redis:
     port: 6379
-    host: 172.17.42.192
+    host: 172.17.42.69
     database: 0
     lettuce:
       shutdown-timeout: 100s
   #使用dev配置文件
-  profiles:
-    active: dev
+  #profiles:
+    #active: dev
 mybatis:
   mapper-locations: classpath*:/mapper/**Mapper.xml
   configuration:

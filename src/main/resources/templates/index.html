@@ -9,19 +9,17 @@
     <meta name="author" content=""/>
     <title>Signin Template for Bootstrap</title>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
-    <link rel="stylesheet" th:href="@{/asserts/css/signin.css}">
-    <link rel="stylesheet" th:href="@{/asserts/css/bootstrap.min.css}">
-    <script th:src="@{asserts/js/bootstrap.min.js}"></script>
+<!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
+    <link rel="stylesheet" href="../static/asserts/css/signin.css">
 </head>
 <body>
-
-<form class="form-signin" id="form-login" onsubmit="return false" method="post">
+<h1>Hello</h1>
+<form class="form-signin"  id="form-login" method="post" onsubmit="return false">
     <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{asserts/img/bootstrap-solid.svg}" alt=""
          width="72" height="72"/>
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <input type="text" class="form-control" name="Phone" placeholder="手机" required="" autofocus=""/>
-    <input type="password" name="PassWord" class="form-control" placeholder="密码" required=""/>
+    <input type="text" class="form-control" name="username" placeholder="手机" required="" autofocus=""/>
+    <input type="password" name="password" class="form-control" placeholder="密码" required=""/>
     <div class="checkbox mb-3">
         <label><input type="checkbox" value="remember-me"/> 记住我</label>
     </div>
@@ -32,50 +30,24 @@
 
 
 <script type="text/javascript">
-    $("#btn-login").click(function () {
-
-        var arry = $("#form-login").serializeArray();
-
-        var obj = {};
-    /*    for (var i = 0; i < arry.length; i++) {
-            obj[arry[i].name] = arry[i].value;
-        }
-*/
-        $.each(arry, function () {
-            if (obj[this.name]) {
-                if (!obj[this.name].push) {
-                    obj[this.name] = [obj[this.name]];
-                }
-                obj[this.name].push($.trim(this.value) || '');
-            } else {
-                obj[this.name] = $.trim(this.value) || '';
-            }
-        });
-        console.log(obj);
-        console.log(JSON.stringify(arry));
-        var formda = new FormData($("#form-login")[0]);
-        formda.append("Name", "ai");
-        console.log("asdasd");
-        console.log(formda);
-
+    $("#btn-login").click(function (){
+        console.log("jinru");
+        console.log(JSON.stringify($("#form-login").serialized)),
+            console.log(JSON.stringify($("#form-login").serializeArray())),
         $.ajax({
-            url: "/user/userLogin",
-            type: "post",
-            data: obj,
-            dataType: "json",
-            contentType: 'application/json',
-           /* success: function (JSON) {
-                if (JSON.code == 200) {
-                    alert("登录成功");
-                } else {
-                    alert(JSON.msg);
-                }
-            }*/
-        })
-    })
-
-
+        url: "/user/userLogin",
+        type: "post",
+        data: JSON.stringify($("#form-login").serializeArray()),
+        dataType:"json",
+        success: function (JSON){
+          if(JSON.code ==200){
+            alert("登录成功");
+        }else{
+            alert(JSON.msg);
+    }
+        }
+    });
+    });
 </script>
-
 </body>
 </html>

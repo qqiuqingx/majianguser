@@ -147,7 +147,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
         List<UserInfo> userInfos=null;
         try {
             userInfos = selectAllU();
-            if (userInfos.isEmpty()){
+            if (null==userInfos){
                 return new UserVO(UserEnum.NoUser);
             }
             for (UserInfo userInfo:userInfos){
