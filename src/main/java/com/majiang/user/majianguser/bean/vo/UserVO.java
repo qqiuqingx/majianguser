@@ -14,7 +14,8 @@ public class UserVO<T> {
         return "UserVO{" +
                 "date=" + date +
                 ", code=" + code +
-                '}';
+                ", msg=" + msg+
+        '}';
     }
 
     public UserVO(UserEnum userEnum) {

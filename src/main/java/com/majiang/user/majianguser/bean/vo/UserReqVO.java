@@ -14,7 +14,15 @@ public class UserReqVO implements Serializable {
     @ApiModelProperty(value="密码",required = true,example = "123456")
     public String PassWord;
 
-  /*  @Override
+    @Override
+    public String toString() {
+        return "UserReqVO{" +
+                "Name='" + Name + '\'' +
+                ", Phone='" + Phone + '\'' +
+                ", PassWord='" + PassWord + '\'' +
+                '}';
+    }
+    /*  @Override
     public String toString() {
         return "UserReqVO{" +
                 "Name='" + Name + '\'' +

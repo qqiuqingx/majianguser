@@ -11,5 +11,6 @@ logging:
     #日志在文件中的格式
    # file: "%d{yyyy-MM-dd HH:MM:ss} [%thread] %-5level %logger{50} - %msg%n"
 
-
-
+spring:
+  thymeleaf:
+    cache: false

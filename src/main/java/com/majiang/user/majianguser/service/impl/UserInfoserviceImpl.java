@@ -94,6 +94,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
         String Phone = null;
         String PassWord = null;
         UserInfo userInfo2 = null;
+        UserVO userVO = null;
         try {
             if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
                 return new UserVO(UserEnum.UserPhoneNotNull);
@@ -111,11 +112,13 @@ public class UserInfoserviceImpl implements UserInfoservice {
             System.out.println("从数据库中取到的数据:" + userInfo2);
             //未查到此人
             if (userInfo2 == null) {
-                return new UserVO(UserEnum.PhoneNotRegistered);
+                userVO=new UserVO(UserEnum.PhoneNotRegistered);
+                return userVO;
             }
             //密码错误
             if (!PassWord.equals(userInfo2.getPassWord())) {
-                return new UserVO(UserEnum.PassWordNotright);
+                userVO= new UserVO(UserEnum.PassWordNotright);
+                return userVO;
             }
             //获取token
             String userToken = TokenUtil.getNewToken();
@@ -125,13 +128,17 @@ public class UserInfoserviceImpl implements UserInfoservice {
             redisUtils.set(userToken, userInfo2, 60 * 60 * 2);
             userInfo2.setPassWord("");
             System.out.println("userInfo:" + userInfo2);
+            userVO=new UserVO(userInfo2, UserEnum.SUCSS);
         } catch (Exception e) {
             LOGGER.warn("错误:" + e.getMessage());
             System.out.println(e.getMessage());
         } finally {
+
             LOGGER.warn("登录的用户为:" + userInfo2);
+            LOGGER.warn("返回值:" + userVO);
         }
-        return new UserVO<UserInfo>(userInfo2, UserEnum.SUCSS);
+
+        return userVO;
 
     }
 
