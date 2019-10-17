@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author banruo
@@ -22,6 +24,18 @@ public final class BeanUtils {
      */
     private BeanUtils() {
         throw new RuntimeException("This is util class,can not instance");
+    }
+
+
+    /**
+     * 验证手机号码是否佛和规定
+     * @param mobiles
+     * @return
+     */
+    public static boolean isMobileNO(String mobiles) {
+        Pattern p = Pattern.compile("^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$");
+        Matcher m = p.matcher(mobiles);
+        return m.matches();
     }
 
     /**

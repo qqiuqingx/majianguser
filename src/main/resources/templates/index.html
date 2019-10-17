@@ -11,17 +11,18 @@
     <title>Signin Template for Bootstrap</title>
   <!--  <script src="http://code.jquery.com/jquery-latest.js"></script>-->
 <!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
-    <link rel="stylesheet" href="../static/asserts/css/signin.css">
+    <link rel="stylesheet" th:href="@{/css/signin.css}">
+    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
 </head>
 <body>
-<h1>Hello</h1>
 <form class="form-signin"  id="form-login" method="post" onsubmit="return false">
     <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{/img/bootstrap-solid.svg}" alt=""
          width="72" height="72"/>
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <input type="text" class="form-control" name="phone" placeholder="手机" required="" autofocus=""/>
-    <input type="password" name="password" class="form-control" placeholder="密码" required=""/>
+    <input type="text" class="form-control" name="Phone" placeholder="手机" />
+    <input type="password" name="PassWord" class="form-control" placeholder="密码" />
     <div class="checkbox mb-3">
         <label><input type="checkbox" value="remember-me"/> 记住我</label>
     </div>

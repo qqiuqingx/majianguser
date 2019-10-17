@@ -42,13 +42,6 @@ public class UserController {
         System.out.println("获取到的值: "+userVO);
         return userVO;
     }
-    @ApiOperation(value = "打招呼")
-    @ResponseBody
-    @RequestMapping(value = "/seyHello",method = RequestMethod.GET)
-    public String hello(){
-        /*new UserVO(UserEnum.SUCSS);*/
-        return "hello";
-    }
 
 
     /**

@@ -3,7 +3,6 @@ package com.majiang.user.majianguser.service.impl;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
-import com.majiang.user.majianguser.config.MyLogConfig;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.UserExceptionEnum;
 import com.majiang.user.majianguser.exception.UserException;
@@ -11,19 +10,13 @@ import com.majiang.user.majianguser.exception.majiangRunTimeException;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.*;
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
-import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,6 +34,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     @Override
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
+        UserVO userVO=null;
         try {
             Logger logger = LoggerFactory.getLogger(getClass());
             System.out.println("用户传进来的:" + userReqVO);
@@ -59,6 +53,10 @@ public class UserInfoserviceImpl implements UserInfoservice {
             if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
                 return new UserVO(UserEnum.UserPassWordNotNull);
             }
+
+            if (!BeanUtils.isMobileNO(userInfo.getPhone())){
+                return new UserVO(UserEnum.PhoneNotre);
+            }
             //加密手机号
             desPhone = DesUtil.encode(DesUtil.KEY, userInfo.getPhone());
             //判断手机号是否已添加
@@ -73,7 +71,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
             BeanUtils.setXXX(userInfo);
             inserUser(userInfo);
             userInfo.setPassWord("");
-            return new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
+            userVO=new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
+            return userVO;
 
         } catch (majiangRunTimeException exception) {
             LOGGER.info("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
@@ -83,6 +82,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
             throw new Exception(e);
         } finally {
             LOGGER.info("添加的用户为：" + userInfo);
+            LOGGER.info("返回值：" + userVO);
+
         }
 
     }
@@ -95,12 +96,16 @@ public class UserInfoserviceImpl implements UserInfoservice {
         String PassWord = null;
         UserInfo userInfo2 = null;
         UserVO userVO = null;
+        System.out.println(userInfo);
         try {
             if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
                 return new UserVO(UserEnum.UserPhoneNotNull);
             }
             if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
                 return new UserVO(UserEnum.UserPassWordNotNull);
+            }
+            if (!BeanUtils.isMobileNO(userInfo.getPhone())){
+                return new UserVO(UserEnum.PhoneNotre);
             }
             Phone = userInfo.getPhone();
             PassWord = userInfo.getPassWord();
