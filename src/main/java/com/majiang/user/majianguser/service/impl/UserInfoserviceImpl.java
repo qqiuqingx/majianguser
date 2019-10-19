@@ -1,6 +1,5 @@
 package com.majiang.user.majianguser.service.impl;
 
-import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
@@ -15,12 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
 @Service
 public class UserInfoserviceImpl implements UserInfoservice {
 
@@ -33,7 +31,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
     RedisUtils redisUtils;
 
     /*添加员工*/
-    @ExceptionHandler
     @Override
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
@@ -78,17 +75,14 @@ public class UserInfoserviceImpl implements UserInfoservice {
             return userVO;
 
         } catch (majiangRunTimeException exception) {
-
-            LOGGER.error("错误:" + exception.getCode() + ",原因:"+userInfo.getPhone()+"," + exception.getMessage());
+            LOGGER.info("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
             throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
         } catch (Exception e) {
-            LOGGER.error("错误: "+e.getMessage());
-            LOGGER.error("错误:",e );
             e.printStackTrace();
             throw new Exception(e);
         } finally {
-            LOGGER.warn("添加的用户为：" + userInfo);
-            LOGGER.warn("返回值：" + userVO);
+            LOGGER.info("添加的用户为：" + userInfo);
+            LOGGER.info("返回值：" + userVO);
 
         }
 
@@ -102,7 +96,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
         String PassWord = null;
         UserInfo userInfo2 = null;
         UserVO userVO = null;
-        Gson gson = new Gson();
         System.out.println(userInfo);
         try {
             if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
@@ -134,22 +127,26 @@ public class UserInfoserviceImpl implements UserInfoservice {
             }
             //获取token
             String userToken = TokenUtil.getNewToken();
-            Cookie cookie1 = new Cookie("token",userToken);
-            response.addCookie(cookie1);
+            Cookie cookie = new Cookie("token",userToken);
+            response.addCookie(cookie);
             //token和用户相关信息
             redisUtils.set(userToken, userInfo2, 60 * 60 * 2);
             userInfo2.setPassWord("");
+            System.out.println("userInfo:" + userInfo2);
             userVO=new UserVO(userInfo2, UserEnum.SUCSS);
         } catch (Exception e) {
-            LOGGER.error("错误:",e );
+            LOGGER.warn("错误:" + e.getMessage());
             System.out.println(e.getMessage());
-            e.printStackTrace();
         } finally {
+
             LOGGER.warn("登录的用户为:" + userInfo2);
             LOGGER.warn("返回值:" + userVO);
         }
+
         return userVO;
+
     }
+
 
     public  UserVO selectAllUser(){
         List<UserInfo> userInfos=null;
@@ -162,8 +159,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
                 userInfo.setPassWord("");
             }
         }catch (Exception e){
-            LOGGER.error("错误:",e );
-            LOGGER.error(e.getMessage());
+            LOGGER.warn(e.getMessage());
         }finally {
             LOGGER.warn("查询所有的用户:",userInfos);
         }
@@ -189,9 +185,15 @@ public class UserInfoserviceImpl implements UserInfoservice {
     }
 
     private UserInfo selecUser(String Phone) {
-        UserInfo userInfo = userInfoMapper.selectUser(Phone);
+        UserInfo userInfo =null;
+        try {
+            userInfo =userInfoMapper.selectUser(Phone);
+
+        }catch (Exception e){
+            LOGGER.error("dao层错误："+e.getMessage());
+        }
         return userInfo;
-    }
+        }
 
     private   List<UserInfo> selectAllU(){
         return userInfoMapper.selectAllUser();

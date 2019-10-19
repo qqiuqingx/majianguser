@@ -11,14 +11,19 @@
 
     <!-- 每天产生一个文件 -->
   <!--  <springProfile >-->
-        <!--正常日志-->
-       <appender name="warn"  class="ch.qos.logback.core.rolling.RollingFileAppender">
-            r<!--ollingPolicy标签指定日志分包策略，TimeBasedRollingPolicy类实现的是基于时间的分包策略，分包间隔是根据fileNamePattern中指定的事件最小单位&ndash;&gt;
+
+       <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+           <filter class="ch.qos.logback.classic.filter.LevelFilter">
+               <level>WARN</level>
+               <onMatch>DENY</onMatch>
+               <onMismatch>NEUTRAL</onMismatch>
+           </filter>
+           <!--ollingPolicy标签指定日志分包策略，TimeBasedRollingPolicy类实现的是基于时间的分包策略，分包间隔是根据fileNamePattern中指定的事件最小单位&ndash;&gt;
             ${logPath}/info.%d{yyyy-MM-dd}.log  他的触发方式为一天，略在每次想日志中添加新内容时触发，如果满足条件，就将springboot.log复制到logs/目录并更名为
             springbootinfo-2019-10-09_13-13.log，并删除原springboot.log。-->
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                <!--  日志文件输出得文件名称 -->
-                <fileNamePattern>${LOG_HOME}/springbootinfo.%d{yyyy-MM-dd }-warn.log</fileNamePattern>
+                <fileNamePattern>${LOG_HOME}/springbootinfo.%d{yyyy-MM-dd }.log</fileNamePattern>
             <!--   日志文件保留天数 -->
                 <MaxHistory>30</MaxHistory>
             </rollingPolicy>
@@ -33,41 +38,11 @@
             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                 <MaxFileSize>10MB</MaxFileSize>
             </triggeringPolicy>
-           <filter class="ch.qos.logback.classic.filter.LevelFilter">
-               <level>warn</level>
-               <onMatch>ACCEPT</onMatch>
-               <onMismatch>DENY</onMismatch>
-           </filter>
         </appender>
 
-
-    <!--异常日志-->
-    <appender name="error"  class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/springbootinfo.%d{yyyy-MM-dd }-error.log</fileNamePattern>
-            <MaxHistory>30</MaxHistory>
-        </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>${PATTERN}</pattern>
-        </layout>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>error</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
         <root level="info">
             <appender-ref ref="STDOUT" />
-            <!--<appender-ref ref="FILE" />-->
-            <appender-ref ref="warn" />
-            <appender-ref ref="error" />
+          <!--  <appender-ref ref="FILE" />-->
         </root>
 
 

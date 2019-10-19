@@ -49,7 +49,7 @@ public class UserController {
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
     @ResponseBody
-    public UserVO userLogin(@RequestBody UserReqVO userInfo, HttpServletResponse response){
+    public UserVO userLogin( @RequestBody UserReqVO userInfo, HttpServletResponse response){
         System.out.println("登录");
 
         return userInfoservice.userLogin(userInfo,  response);
