@@ -1,70 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
     <meta charset="UTF-8">
-    <title>首页</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-    <title>Signin Template for Bootstrap</title>
-  <!--  <script src="http://code.jquery.com/jquery-latest.js"></script>-->
-<!--    <script src="../static/asserts/js/bootstrap.min.js"></script>-->
-    <link rel="stylesheet" th:href="@{/css/signin.css}">
-    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <script th:src="@{/js/OpenUtils.js}"></script>
+    <title>麻将馆</title>
 </head>
 <body>
-<form class="form-signin"  id="form-login" method="post" onsubmit="return false">
-    <img class="mb-4" src="/asserts/img/bootstrap-solid.svg" th:src="@{/img/bootstrap-solid.svg}" alt=""
-         width="72" height="72"/>
-    <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
-    <input type="text" class="form-control" name="Phone" placeholder="手机" />
-    <input type="password" name="PassWord" class="form-control" placeholder="密码" />
-    <div class="checkbox mb-3">
-        <label><input type="checkbox" value="remember-me"/> 记住我</label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn-login">登录</button>
-    <p class="mt-5 mb-3 text-muted">© 2018-2019</p>
-
-</form>
-
-
-<script type="text/javascript">
-    $("#btn-login").click(function (){
-        console.log("jinru");
-        console.log(JSON.stringify($("#form-login").serialized)),
-            console.log(JSON.stringify($("#form-login").serializeObject())),
-            console.log($("#form-login").serializeObject()),
-        $.ajax({
-        url: "/user/userLogin",
-        type: "post",
-        contentType:"application/json;charset=utf-8",
-        data: JSON.stringify($("#form-login").serializeObject()),
-        dataType:"json",
-        success: function (JSON){
-          if(JSON.code ==1000){
-              /*重定向*/
-              /*Http.open("/main");*/
-              console.log("成功")
-           window.location.href="http://localhost:8080/user/main";
-        }else{
-            alert(JSON.msg);
-    }
-        }
-    });
-    });
-
-
-
-
-
-</script>
-<script type="text/javascript">
-
-
-</script>
+<span>
+        <a th:if="${session.userinfo ==null}" href="http://localhost:8080/user/login">登录</a>
+        <a th:unless="${session.userinfo==null}" th:href="@{/outApp}">退出</a>
+    </span>
+<br>
+<span th:unless="${session.userinfo==null}">
+        欢迎你：<span  th:text="${session.userinfo.name}"></span>
+    </span>
 </body>
 </html>

@@ -75,14 +75,15 @@ public class UserInfoserviceImpl implements UserInfoservice {
             return userVO;
 
         } catch (majiangRunTimeException exception) {
-            LOGGER.info("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
+            LOGGER.error("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
             throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
         } catch (Exception e) {
+            LOGGER.error("错误:",e);
             e.printStackTrace();
             throw new Exception(e);
         } finally {
-            LOGGER.info("添加的用户为：" + userInfo);
-            LOGGER.info("返回值：" + userVO);
+            LOGGER.warn("添加的用户为：" + userInfo);
+            LOGGER.warn("返回值：" + userVO);
 
         }
 
@@ -99,13 +100,16 @@ public class UserInfoserviceImpl implements UserInfoservice {
         System.out.println(userInfo);
         try {
             if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
-                return new UserVO(UserEnum.UserPhoneNotNull);
+                userVO=new UserVO(UserEnum.UserPhoneNotNull);
+                return userVO;
             }
             if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
-                return new UserVO(UserEnum.UserPassWordNotNull);
+                userVO=new UserVO(UserEnum.UserPassWordNotNull);
+                return userVO;
             }
             if (!BeanUtils.isMobileNO(userInfo.getPhone())){
-                return new UserVO(UserEnum.PhoneNotre);
+                userVO=new UserVO(UserEnum.PhoneNotre);
+                return userVO;
             }
             Phone = userInfo.getPhone();
             PassWord = userInfo.getPassWord();
@@ -135,10 +139,9 @@ public class UserInfoserviceImpl implements UserInfoservice {
             System.out.println("userInfo:" + userInfo2);
             userVO=new UserVO(userInfo2, UserEnum.SUCSS);
         } catch (Exception e) {
-            LOGGER.warn("错误:" + e.getMessage());
+            LOGGER.error("错误:",e);
             System.out.println(e.getMessage());
         } finally {
-
             LOGGER.warn("登录的用户为:" + userInfo2);
             LOGGER.warn("返回值:" + userVO);
         }
@@ -159,7 +162,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
                 userInfo.setPassWord("");
             }
         }catch (Exception e){
-            LOGGER.warn(e.getMessage());
+            LOGGER.error("错误:",e);
         }finally {
             LOGGER.warn("查询所有的用户:",userInfos);
         }
@@ -168,7 +171,23 @@ public class UserInfoserviceImpl implements UserInfoservice {
     }
 
 
-
+    /**
+     * 退出
+     */
+     public  boolean outApp(String token){
+         UserInfo userInfo=null;
+         try {
+             userInfo=(UserInfo) redisUtils.get(token);
+             if (null!=userInfo)
+             redisUtils.delete(token);
+         }catch (Exception e){
+             LOGGER.warn("用户退出错误:",e);
+         }
+         finally {
+             LOGGER.warn("删除缓存中的用户:"+userInfo);
+         }
+         return true;
+    }
 
     @Override
     public UserInfo selectUser(String phone) {

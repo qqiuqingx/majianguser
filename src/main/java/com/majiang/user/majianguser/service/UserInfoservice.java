@@ -25,4 +25,9 @@ public interface UserInfoservice {
      * 查询所有用户
      */
     UserVO selectAllUser();
+
+    /**
+     * 退出
+     */
+    boolean outApp(String token);
 }
