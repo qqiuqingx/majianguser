@@ -29,27 +29,30 @@ public class UserVO<T> {
         this.msg = userEnum.getMessage();
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
     public T getDate() {
         return date;
     }
 
-    public void setDate(T date) {
+    public UserVO<T> setDate(T date) {
         this.date = date;
+        return this;
     }
 
     public Integer getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public UserVO<T> setCode(Integer code) {
         this.code = code;
+        return this;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public UserVO<T> setMsg(String msg) {
+        this.msg = msg;
+        return this;
     }
 }

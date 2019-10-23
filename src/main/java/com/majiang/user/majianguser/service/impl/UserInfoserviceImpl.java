@@ -64,9 +64,9 @@ public class UserInfoserviceImpl implements UserInfoservice {
                 throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
             }
             //加密密码
-            userInfo.setPassWord(MD5.md5(userInfo.getPassWord()));
+            userInfo.setPassWord(MD5.md5(userInfo.getPassWord())).setPhone(desPhone);
             System.out.println("加密后的密码：" + userInfo.getPassWord());
-            userInfo.setPhone(desPhone);
+            //userInfo.setPhone(desPhone);
             //设置公共属性的值
             BeanUtils.setXXX(userInfo);
             inserUser(userInfo);

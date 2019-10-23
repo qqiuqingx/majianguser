@@ -35,59 +35,66 @@ public class UserInfo {
 
     private  Integer IsDelete;
 
-    public Integer getIsDelete() {
-        return IsDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        IsDelete = isDelete;
-    }
-
-    public String getKeyID() {
-        return KeyID;
-    }
-
-    public void setKeyID(String keyID) {
-        KeyID = keyID;
-    }
-
-    public Date getAddTime() {
-        return AddTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        AddTime = addTime;
-    }
-
-    public Date getModifTime() {
-        return ModifTime;
-    }
-
-    public void setModifTime(Date modifTime) {
-        ModifTime = modifTime;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
-    }
-
     public String getName() {
         return Name;
     }
 
-    public void setName(String name) {
+    public UserInfo setName(String name) {
         Name = name;
+        return this;
     }
 
     public String getPhone() {
         return Phone;
     }
 
+    public UserInfo setPhone(String phone) {
+        Phone = phone;
+        return this;
+    }
+
     public String getPassWord() {
         return PassWord;
     }
 
-    public void setPassWord(String passWord) {
+    public UserInfo setPassWord(String passWord) {
         PassWord = passWord;
+        return this;
+    }
+
+    public String getKeyID() {
+        return KeyID;
+    }
+
+    public UserInfo setKeyID(String keyID) {
+        KeyID = keyID;
+        return this;
+    }
+
+    public Date getAddTime() {
+        return AddTime;
+    }
+
+    public UserInfo setAddTime(Date addTime) {
+        AddTime = addTime;
+        return this;
+    }
+
+    public Date getModifTime() {
+        return ModifTime;
+    }
+
+    public UserInfo setModifTime(Date modifTime) {
+        ModifTime = modifTime;
+        return this;
+    }
+
+    public Integer getIsDelete() {
+        return IsDelete;
+    }
+
+    public UserInfo setIsDelete(Integer isDelete) {
+        IsDelete = isDelete;
+        return this;
     }
 }

@@ -35,23 +35,26 @@ public class UserReqVO implements Serializable {
         return Name;
     }
 
-    public void setName(String name) {
+    public UserReqVO setName(String name) {
         Name = name;
+        return this;
     }
 
     public String getPhone() {
         return Phone;
     }
 
-    public void setPhone(String phone) {
+    public UserReqVO setPhone(String phone) {
         Phone = phone;
+        return this;
     }
 
     public String getPassWord() {
         return PassWord;
     }
 
-    public void setPassWord(String passWord) {
+    public UserReqVO setPassWord(String passWord) {
         PassWord = passWord;
+        return this;
     }
 }
