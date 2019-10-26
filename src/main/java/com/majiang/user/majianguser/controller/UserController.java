@@ -1,9 +1,7 @@
 package com.majiang.user.majianguser.controller;
 
-import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
-import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
 import io.swagger.annotations.*;
@@ -12,13 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import sun.security.pkcs11.P11Util;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sound.midi.Soundbank;
 
 @Controller
 public class UserController {

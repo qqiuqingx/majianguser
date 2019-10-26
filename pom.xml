@@ -18,6 +18,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <shiro.version>1.4.0</shiro.version>
     </properties>
 
     <dependencies>
@@ -79,6 +80,18 @@
             <artifactId>druid</artifactId>
             <version>1.1.10</version>
         </dependency>
+        <!--引入shiro-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
 
         <!--引入日志 spring-boot-starter 模块已经引入该依赖 -->
     <!--    <dependency>
