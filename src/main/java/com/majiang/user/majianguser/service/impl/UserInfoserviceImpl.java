@@ -93,65 +93,19 @@ public class UserInfoserviceImpl implements UserInfoservice {
      *
      */
     public UserVO userLogin(UserReqVO userInfo, HttpServletResponse response)  {
-        String Phone = null;
-        String PassWord = null;
-        UserInfo userInfo2 = null;
-        UserVO userVO = null;
-        System.out.println(userInfo);
-        try {
-            if (userInfo.getPhone() == null || "".equals(userInfo.getPhone())) {
-                userVO=new UserVO(UserEnum.UserPhoneNotNull);
-                return userVO;
-            }
-            if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
-                userVO=new UserVO(UserEnum.UserPassWordNotNull);
-                return userVO;
-            }
-            if (!BeanUtils.isMobileNO(userInfo.getPhone())){
-                userVO=new UserVO(UserEnum.PhoneNotre);
-                return userVO;
-            }
-            Phone = userInfo.getPhone();
-            PassWord = userInfo.getPassWord();
-            //加密密码和手机号
-            Phone = DesUtil.encode(DesUtil.KEY, Phone);
-            PassWord = MD5.md5(PassWord);
-            //查数据库
-            userInfo2 = selecUser(Phone);
-            System.out.println("从数据库中取到的数据:" + userInfo2);
-            //未查到此人
-            if (userInfo2 == null) {
-                userVO=new UserVO(UserEnum.PhoneNotRegistered);
-                return userVO;
-            }
-            //密码错误
-            if (!PassWord.equals(userInfo2.getPassWord())) {
-                userVO= new UserVO(UserEnum.PassWordNotright);
-                return userVO;
-            }
-            //获取token
-            String userToken = TokenUtil.getNewToken();
-            Cookie cookie = new Cookie("token",userToken);
-            response.addCookie(cookie);
-            //token和用户相关信息
-            redisUtils.set(userToken, userInfo2, 60 * 60 * 2);
-            userInfo2.setPassWord("");
-            System.out.println("userInfo:" + userInfo2);
-            userVO=new UserVO(userInfo2, UserEnum.SUCSS);
-        } catch (Exception e) {
-            LOGGER.error("错误:",e);
-            System.out.println(e.getMessage());
-        } finally {
-            LOGGER.warn("登录的用户为:" + userInfo2);
-            LOGGER.warn("返回值:" + userVO);
-        }
-
-        return userVO;
+        String newToken = TokenUtil.getNewToken();
+        Cookie cookie=new Cookie("token",newToken);
+        response.addCookie(cookie);
+        UserInfo userInfo1 = new UserInfo();
+        BeanUtils.copyProperties(userInfo,userInfo1);
+        redisUtils.set(newToken,userInfo1,60*60*2);
+        return null;
 
     }
 
 
     public  UserVO selectAllUser(){
+        LOGGER.warn("查询所有用户》》》》》》》》》》》》》》》》》》");
         List<UserInfo> userInfos=null;
         try {
             userInfos = selectAllU();
@@ -191,7 +145,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     @Override
     public UserInfo selectUser(String phone) {
-        return null;
+        return selecUser(phone);
     }
 
 
@@ -205,11 +159,13 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     private UserInfo selecUser(String Phone) {
         UserInfo userInfo =null;
+
         try {
             userInfo =userInfoMapper.selectUser(Phone);
-
         }catch (Exception e){
-            LOGGER.error("dao层错误："+e.getMessage());
+            LOGGER.error("dao层错误：",e);
+        }finally {
+            LOGGER.warn("service.selecUser>>>>>>>>>>:"+userInfo);
         }
         return userInfo;
         }
