@@ -16,7 +16,7 @@ public class MyCredentialsMatcher implements CredentialsMatcher {
     public boolean doCredentialsMatch(AuthenticationToken authenticationToken, AuthenticationInfo authenticationInfo) {
         UsernamePasswordToken token=(UsernamePasswordToken)authenticationToken;
         Object pass = MD5.md5(String.valueOf(token.getPassword()));
-        System.out.println("用于输入的密码加密后："+pass);
+        System.out.println("用户输入的密码加密后："+pass);
         Object credentials = authenticationInfo.getCredentials();
         System.out.println("credentials"+credentials+">>>>>>>>>>>>>>>>>>>>>>>>>>");
         if (credentials.equals(pass)){

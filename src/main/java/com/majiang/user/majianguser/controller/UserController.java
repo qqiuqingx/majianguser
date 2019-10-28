@@ -93,7 +93,8 @@ public class UserController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-       // session.invalidate();
+        //removeAttribute()销毁session中的某一项属性，下一次用户访问的sessionID是不会变的。如果这个地方用session.invalidate(); 会报错
+        session.removeAttribute("userinfo");
         boolean b = userInfoservice.outApp(cookie.getValue());
         return "redirect:/";
     }

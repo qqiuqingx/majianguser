@@ -98,6 +98,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
         response.addCookie(cookie);
         UserInfo userInfo1 = new UserInfo();
         BeanUtils.copyProperties(userInfo,userInfo1);
+        userInfo1.setPassWord("");
         redisUtils.set(newToken,userInfo1,60*60*2);
         return null;
 
@@ -132,6 +133,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
          UserInfo userInfo=null;
          try {
              userInfo=(UserInfo) redisUtils.get(token);
+             LOGGER.warn("用户登出service层获取redis中用户的数据:"+userInfo);
              if (null!=userInfo)
              redisUtils.delete(token);
          }catch (Exception e){

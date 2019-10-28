@@ -17,11 +17,14 @@ public class UserUrlController {
 
     @RequestMapping("/")
     public String getMain(@CookieValue(required = false, value = "token") Cookie cookie, HttpSession session) {
+        System.out.println("进入：UserUrlController.getMain");
         if (cookie != null) {
             String token = cookie.getValue();
+            System.out.println("UserUrlController.getMain："+token);
             UserInfo user = (UserInfo) redisUtils.get(token);
+            System.out.println("UserUrlController.getMain：>>>>"+user);
             if (null != user) {
-                System.out.println(user);
+                System.out.println("UserUrlController.getMain："+user);
                 session.setAttribute("userinfo", user);
             }
         }
@@ -30,6 +33,7 @@ public class UserUrlController {
 
     @RequestMapping("/login")
     public String userLogin() {
+        System.out.println("跳转》》》》》》》》》》》》。");
         return "login";
     }
 }

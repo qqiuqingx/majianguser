@@ -11,7 +11,7 @@
     </span>
 <br>
 <span th:unless="${session.userinfo==null}">
-        欢迎你：<span  th:text="${session.userinfo.Phone}"></span>
+        欢迎你：<span style="color: red" th:text="${session.userinfo.Phone}"></span>
     </span>
 </body>
 </html>
