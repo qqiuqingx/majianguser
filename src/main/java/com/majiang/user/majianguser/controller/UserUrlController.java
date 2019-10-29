@@ -2,6 +2,7 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.utils.RedisUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -35,5 +36,13 @@ public class UserUrlController {
     public String userLogin() {
         System.out.println("跳转》》》》》》》》》》》》。");
         return "login";
+    }
+
+
+    @RequestMapping("/asd")
+    @RequiresPermissions("sys:user:query, sys:user:add")
+    public String user() {
+        System.out.println("跳转》》》》》》》》》》》》。");
+        return "accs";
     }
 }

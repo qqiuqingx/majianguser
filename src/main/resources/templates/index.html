@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>麻将馆</title>
@@ -13,5 +13,14 @@
 <span th:unless="${session.userinfo==null}">
         欢迎你：<span style="color: red" th:text="${session.userinfo.Phone}"></span>
     </span>
+
+
+<p shiro:hasAllPermissions="sys:user:query, sys:user:add"><!-- 权限与判断 -->
+   有权限
+</p>
+<p shiro:lacksPermission="sys:user:query, sys:user:add"><!-- 没有权限 -->
+    没有权限
+</p>
+
 </body>
 </html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.majiang.user.majianguser.mapper.RoleMapper">
+   <sql id="">
+
+   </sql>
+    <!--
+     * 根据手机号查询对应角色
+    List<Role> findByUserPhone(String Phone);-->
+    <select id="findByUserPhone" resultType="com.majiang.user.majianguser.bean.Role" parameterType="java.lang.String">
+        SELECT
+         p.roleNo,p.name,p.addTime,p.modifyTime,p.IsDelete
+        FROM
+        role p
+        INNER JOIN user_role ur on ur.roleNo=p.roleNo
+        INNER JOIN userinfo u  on u.Phone=ur.userPhone
+        WHERE
+        u.Phone = #{Phone} and u.IsDelete=0 and p.IsDelete=0
+    </select>
+
+    <!--    /**
+     * 查询所有的角色
+    List<Role> findAll();-->
+    <select id="findAll" resultType="com.majiang.user.majianguser.bean.Role">
+        select
+             roleNo,name,addTime,modifyTime,IsDelete
+        from
+          role
+        where
+          IsDelete=0
+    </select>
+
+    <!--      * 添加权限
+    Integer addRole(Role role);-->
+    <insert id="addRole" parameterType="com.majiang.user.majianguser.bean.Role">
+      INSERT INTO `role`
+          ( `name`, `addTime`, `modifyTime`, `IsDelete`)
+      VALUES
+          (#{name}, #{addTime}, #{modifyTime}, #{IsDelete});
+
+    </insert>
+
+    <!--/**
+     * 添加角色权限关联表
+    Integer addRolePermiss(@Param("reloNo") Integer reloNo,@Param("permissionNo") List<Permission> permissions);-->
+    <insert id="addRolePermiss" parameterType="java.lang.Integer">
+        insert into  role_permission
+        (reloNo,permissionNo)
+        VALUES
+            <foreach collection="permissionNo" item="permissionNo" separator=",">
+                (#{reloNo},#{permissionNo})
+            </foreach>
+
+    </insert>
+</mapper>
