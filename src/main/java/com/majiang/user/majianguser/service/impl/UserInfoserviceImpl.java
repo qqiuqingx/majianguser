@@ -130,6 +130,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
      * 退出
      */
      public  boolean outApp(String token){
+         LOGGER.warn("UserInfoserviceImpl.outApp（）》》》》》》》");
          UserInfo userInfo=null;
          try {
              userInfo=(UserInfo) redisUtils.get(token);

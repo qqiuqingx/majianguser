@@ -73,10 +73,10 @@ public class PermissionMapperTest {
     @Test
     public void    addRoles(){
         List<Integer> asd = new ArrayList<>();
+        asd.add(1);
+        asd.add(2);
         asd.add(3);
-        asd.add(4);
-        asd.add(5);
-        Integer integer = roleMapper.addRolePermiss(2, asd);
+        Integer integer = roleMapper.addRolePermiss(1, asd);
         System.out.println(integer);
     }
 }

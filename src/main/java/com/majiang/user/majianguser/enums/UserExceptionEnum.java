@@ -6,8 +6,8 @@ public enum  UserExceptionEnum {
     UserPhoneNotOnly("用户手机号被占用",1003),
     UserNameNotNull("用户名不能为空",1004),
     UserPassWordNotNull("密码不能为空",1005),
-    UserPhoneNotNull("手机号不能为空",1006);
-
+    UserPhoneNotNull("手机号不能为空",1006),
+    UnknownException("未知错误",5000);
 
     private String message;
     private Integer code;

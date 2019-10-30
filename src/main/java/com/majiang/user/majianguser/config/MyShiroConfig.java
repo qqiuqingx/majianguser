@@ -1,5 +1,6 @@
 package com.majiang.user.majianguser.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -10,7 +11,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,35 +26,32 @@ public class MyShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-      /*  filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/sys/login/**", "anon");
-        filterChainDefinitionMap.put("/files/*", "anon");
-        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
-        filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/login", "logout");*/
-        //filterChainDefinitionMap.put("/**", "authc");
+
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/userLogin", "anon");
+        filterChainDefinitionMap.put("/addUser", "anon");
         filterChainDefinitionMap.put("/outApp", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/asd", "anon");
+        filterChainDefinitionMap.put("/noRole", "anon");
+        //对swagger放行
+        filterChainDefinitionMap.put("/swagger-ui.html","anon");
+        filterChainDefinitionMap.put("/swagger/**","anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**","anon");
+        filterChainDefinitionMap.put("/v2/**","anon");
+        filterChainDefinitionMap.put("/static/**", "anon");
+
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setLoginUrl("/login");
         //登陆成功后要跳转的界面
        // shiroFilterFactoryBean.setSuccessUrl("/index.html");
-
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setRedirectUrl("/login.html");
-
-
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -93,4 +90,12 @@ public class MyShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+    /*
+    * 配置ShiroDialect 用于thymeleaf和shiro标签配合使用
+    * */
+    @Bean
+    public ShiroDialect ShiroDialect(){
+        return  new ShiroDialect();
+    }
+
 }

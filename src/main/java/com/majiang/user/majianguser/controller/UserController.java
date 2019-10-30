@@ -84,20 +84,6 @@ public class UserController {
         return userInfoservice.selectAllUser();
     }
 
-    /**
-     * 退出
-     * @return
-     */
-    @RequestMapping(value = "/outApp")
-    public String outApp(@CookieValue(value = "token")Cookie cookie, HttpSession session,HttpServletResponse response){
-        System.out.println("进入方法");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        //removeAttribute()销毁session中的某一项属性，下一次用户访问的sessionID是不会变的。如果这个地方用session.invalidate(); 会报错
-        session.removeAttribute("userinfo");
-        boolean b = userInfoservice.outApp(cookie.getValue());
-        return "redirect:/";
-    }
+
 
 }
