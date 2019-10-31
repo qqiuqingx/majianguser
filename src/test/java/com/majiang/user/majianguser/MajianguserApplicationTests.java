@@ -2,6 +2,7 @@ package com.majiang.user.majianguser;
 
 import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.UserInfo;
+import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
@@ -100,6 +101,11 @@ public class MajianguserApplicationTests {
     }
 
 
+    @Test
+    public  void upuser(){
+        UserVO userVO = userInfoservice.upUser(new UserReqVO().setName("测试二号").setPassWord("11111").setPhone("18881014682"));
+        System.out.println(userVO);
+    }
 
 
 }

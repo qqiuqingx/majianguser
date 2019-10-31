@@ -10,6 +10,7 @@ import com.majiang.user.majianguser.exception.majiangRunTimeException;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.*;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -137,6 +139,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
              LOGGER.warn("用户登出service层获取redis中用户的数据:"+userInfo);
              if (null!=userInfo)
              redisUtils.delete(token);
+             //停止shiro的session
+             SecurityUtils.getSubject().getSession().stop();
          }catch (Exception e){
              LOGGER.warn("用户退出错误:",e);
          }
@@ -144,6 +148,29 @@ public class UserInfoserviceImpl implements UserInfoservice {
              LOGGER.warn("删除缓存中的用户:"+userInfo);
          }
          return true;
+    }
+
+    /**
+     *  修改用户信息(个人信息)
+     */
+    public UserVO upUser(UserReqVO user){
+        LOGGER.warn("UserInfoserviceImpl.upUser()");
+        UserInfo userInfo = new UserInfo();
+        userInfo.setPhone(DesUtil.encode(DesUtil.KEY,user.getPhone()));
+        System.out.println("加密后的手机号:"+userInfo.getPhone());
+        if(user.getPassWord()!=null||!"".equals(user.getPassWord())){
+            userInfo.setPassWord(MD5.md5(user.getPassWord()));
+        }
+        userInfo.setName(user.getName());
+        try {
+            userInfoMapper.upUser(userInfo);
+        }catch (Exception e){
+            LOGGER.error("修改用户信息错误：",e);
+            return new UserVO(UserEnum.application);
+        }finally {
+            LOGGER.warn("修改的用户为"+user);
+        }
+        return new UserVO<UserInfo>(userInfo,UserEnum.SUCSS);
     }
 
     @Override

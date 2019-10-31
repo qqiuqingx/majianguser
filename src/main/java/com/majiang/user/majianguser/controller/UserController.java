@@ -41,10 +41,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public UserVO addUser( @RequestBody UserReqVO userInfo) throws  Exception {
-        System.out.println("进入");
-
+        LOGGER.warn("UserController.addUser()");
         UserVO userVO = userInfoservice.insertUser(userInfo);
-        System.out.println("获取到的值: "+userVO);
         LOGGER.warn("UserController.addUser 返回值"+userVO);
         return userVO;
     }
@@ -56,6 +54,7 @@ public class UserController {
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
     @ResponseBody
     public UserVO userLogin( @RequestBody UserReqVO userInfo, HttpServletResponse response){
+        LOGGER.warn("UserController.userLogin()");
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userInfo.getPhone(), userInfo.getPassWord());
         try {
             SecurityUtils.getSubject().login(usernamePasswordToken);
@@ -81,9 +80,17 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/getAllUser",method = RequestMethod.POST)
     public UserVO getAllUser(){
+        LOGGER.warn("UserController.getAllUser()");
         return userInfoservice.selectAllUser();
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/upUser",method = RequestMethod.POST)
+    public UserVO upUser(UserReqVO user){
+        LOGGER.warn("UserController.upUser()");
+        return  userInfoservice.upUser(user);
+    }
 
 
 }

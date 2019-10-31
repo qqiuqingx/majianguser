@@ -11,8 +11,9 @@ public enum UserEnum {
     PassWordNotright("用户名或密码错误",1008),
     //用户查询相关
     NoUser("没有用户",2009),
-    PhoneNotre("请输入正确的手机号",3001);
-
+    PhoneNotre("请输入正确的手机号",3001),
+    //统一错误
+    application("系统错误",9999);
     private String message;
     private Integer code;
 

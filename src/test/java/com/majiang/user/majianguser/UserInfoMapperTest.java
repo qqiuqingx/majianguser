@@ -11,6 +11,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +46,15 @@ public class UserInfoMapperTest {
         asd.add(4);
         asd.add(5);
         Integer integer = userInfoMapper.addUserRole("4EB61209FDE1D883CED65465F0C48295", asd);
+        System.out.println(integer);
+    }
+
+    @Test
+    public void upuser() {
+
+        Integer integer = userInfoMapper.upUser(new UserInfo().setName("hah").
+                setPhone("4EB61209FDE1D883D01BA5FC85C154AA").setPassWord("123456789").setIsDelete(0));
+        /*4EB61209FDE1D8830C6A7D811CD07067*/
         System.out.println(integer);
     }
 

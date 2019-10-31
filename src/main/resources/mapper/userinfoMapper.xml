@@ -46,4 +46,21 @@
                 (#{Phone},#{roleNo})
             </foreach>
     </insert>
+
+  <!--  修改用户
+    Integer upUser(UserInfo user);-->
+    <update id="upUser">
+        update userinfo set
+        <if test="PassWord!=null and PassWord!=''">
+            PassWord=#{PassWord},
+        </if>
+        <if test="Name!=null and Name!=''">
+            Name=#{Name},
+        </if>
+        <if test="IsDelete!=null and IsDelete!=''">
+            IsDelete=#{IsDelete},
+        </if>
+        modifTime=NOW()
+        where Phone=#{phone}
+    </update>
 </mapper>
