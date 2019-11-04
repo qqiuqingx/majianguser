@@ -78,7 +78,7 @@ public class UserController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/getAllUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/getAllUser",method = RequestMethod.GET)
     public UserVO getAllUser(){
         LOGGER.warn("UserController.getAllUser()");
         return userInfoservice.selectAllUser();

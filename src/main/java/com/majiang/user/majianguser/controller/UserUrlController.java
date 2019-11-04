@@ -35,11 +35,10 @@ public class UserUrlController {
       LOGGER.warn("进入：UserUrlController.getMain");
         if (cookie != null) {
             String token = cookie.getValue();
-            System.out.println("UserUrlController.getMain："+token);
+            LOGGER.warn("UserUrlController.getMain："+token);
             UserInfo user = (UserInfo) redisUtils.get(token);
-            System.out.println("UserUrlController.getMain：>>>>"+user);
+            LOGGER.warn("UserUrlController.getMain：>>>>"+user);
             if (null != user) {
-                System.out.println("UserUrlController.getMain："+user);
                 session.setAttribute("userinfo", user);
             }
         }
@@ -48,7 +47,7 @@ public class UserUrlController {
 
     @RequestMapping("/login")
     public String userLogin() {
-        System.out.println("跳转》》》》》》》》》》》》。");
+        LOGGER.warn("进入跳转方法UserUrlController.userLogin");
         return "login";
     }
     /**
@@ -57,7 +56,7 @@ public class UserUrlController {
      */
     @RequestMapping(value = "/outApp")
     public String outApp(@CookieValue(value = "token")Cookie cookie, HttpSession session, HttpServletResponse response){
-        LOGGER.warn("进入退出方法》》");
+        LOGGER.warn("进入退出方法UserUrlController.outApp");
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -66,16 +65,9 @@ public class UserUrlController {
         boolean b = userInfoservice.outApp(cookie.getValue());
         return "redirect:/";
     }
-
-    @RequestMapping("/asd")
-    @RequiresPermissions("sys:user:query")
-    //@RequiresRoles("管理员")
-    public String user() throws majiangRunTimeException{
-        System.out.println("跳转》》》》》》》》》》》》。");
-        /*try {
-        }catch (AuthorizationException e){
-            throw  new MyShiroException(UserExceptionEnum.UnknownException);
-        }*/
-        return "accs";
+    @RequestMapping("/getUserList")
+    public String getUserList() {
+        LOGGER.warn("进入跳转方法UserUrlController.getUserList");
+        return "page/userList";
     }
 }

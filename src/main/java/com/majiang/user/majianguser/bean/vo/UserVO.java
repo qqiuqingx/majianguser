@@ -5,10 +5,23 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class UserVO<T> {
-    private T date;
+
     private Integer code;
     @ApiModelProperty(value = "返回信息")
     private String msg;
+    private Long count;
+    private T date;
+
+
+    public Long getCount() {
+        return count;
+    }
+
+    public UserVO<T> setCount(Long count) {
+        this.count = count;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "UserVO{" +

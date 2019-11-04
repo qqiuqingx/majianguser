@@ -45,7 +45,7 @@
                 data: JSON.stringify($("#form-login").serializeObject()),
                 dataType: "json",
                 success: function (JSON) {
-                    if (JSON.code == 1000) {
+                    if (JSON.code == 0) {
                         /*重定向*/
                         /*Http.open("/main");*/
                         console.log("成功")

@@ -35,10 +35,8 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/addUser", "anon");
         filterChainDefinitionMap.put("/outApp", "anon");
         filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/asd", "anon");
         filterChainDefinitionMap.put("/layui/**", "anon");
         filterChainDefinitionMap.put("/page/**", "anon");
-        filterChainDefinitionMap.put("/noRole", "anon");
         //对swagger放行
         filterChainDefinitionMap.put("/swagger-ui.html","anon");
         filterChainDefinitionMap.put("/swagger/**","anon");

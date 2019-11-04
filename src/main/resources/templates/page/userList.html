@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>所有友</title>
+
+    <link rel="stylesheet" href="./layui/css/layui.css"/>
+
+    <script th:src="@{/layui/layui.js}"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">麻将馆</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left" shiro:hasPermission="sys:user:query">
+            <li class="layui-nav-item"><a href="">管理</a></li>
+            <li class="layui-nav-item"><a href="">用户管理</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" th:unless="${session.userinfo==null}">
+                <a href="javascript:;" th:text="${session.userinfo.Phone}">
+                    名称
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">个人资料</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a th:if="${session.userinfo ==null}" href="http://localhost:8080/user/login">登录</a>
+                <a th:unless="${session.userinfo==null}" th:href="@{/outApp}">退出</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<table id="userlist" lay-data="{height: 312,url: '/user/getAllUser',id:'userlist',response:{dataName:'date'}}">
+    <thead>
+    <tr>
+        <th lay-data="{checkbox:true}"></th>
+        <th lay-data="{field:'keyID',  sort: true, fixed: 'left'}">ID</th>
+        <th lay-data="{field: 'name' }">用户名</th>
+        <th lay-data="{field: 'phone', sort: true}">手机号</th>
+    </tr>
+    </thead>
+</table>
+<script th:src="@{/layui/layui.js}"></script>
+
+<!--<script>
+
+    layui.use('table', function () {
+        console.log("进入方法")
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#userlist'
+            , height: 312
+            , url: '/user/getAllUser' //数据接口
+            //, page: true //开启分页
+            , cols: [
+                [ //表头
+                    {checkbox: true}
+                    ,{field: 'keyID', title: 'ID',  sort: true, fixed: 'left'}
+                    , {field: 'name', title: '姓名'}
+                    , {field: 'phone', title: '手机号', sort: true}
+
+                ]
+            ]
+            ,response:{
+                dataName:'date'
+            }
+        });
+
+
+
+
+    });-->
+
+</script>
+</body>
+</html>

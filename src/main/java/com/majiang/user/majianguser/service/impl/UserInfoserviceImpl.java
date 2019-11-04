@@ -1,5 +1,6 @@
 package com.majiang.user.majianguser.service.impl;
 
+import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -117,14 +119,16 @@ public class UserInfoserviceImpl implements UserInfoservice {
             }
             for (UserInfo userInfo:userInfos){
                 userInfo.setPassWord("");
+                userInfo.setPhone(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
             }
+            new Gson().toJson(userInfos).length();
         }catch (Exception e){
             LOGGER.error("错误:",e);
         }finally {
-            LOGGER.warn("查询所有的用户:",userInfos);
+            LOGGER.warn("查询所有的用户:"+userInfos);
         }
 
-        return new UserVO<List<UserInfo>>(userInfos,UserEnum.SUCSS);
+        return new UserVO<List<UserInfo>>(userInfos,UserEnum.SUCSS).setCount((long) new Gson().toJson(userInfos).length());
     }
 
 
