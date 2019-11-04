@@ -58,7 +58,6 @@ public class UserController {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userInfo.getPhone(), userInfo.getPassWord());
         try {
             SecurityUtils.getSubject().login(usernamePasswordToken);
-
             userInfoservice.userLogin(userInfo,response);
         }catch (UnknownAccountException e){
             LOGGER.warn("改手机号未注册",e);

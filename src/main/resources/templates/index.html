@@ -20,7 +20,7 @@
             <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
         </ul>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" th:unless="${session.userinfo==null}">
+            <li class="layui-nav-item" th:unless="${session.userinfo==null}" shiro:hasPermission="sys:user:query">
                 <a href="javascript:;" th:text="${session.userinfo.Phone}">
                     名称
                 </a>
@@ -29,8 +29,8 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a th:if="${session.userinfo ==null}" href="http://localhost:8080/user/login">登录</a>
-                <a th:unless="${session.userinfo==null}" th:href="@{/outApp}">退出</a>
+                <a  shiro:lacksPermission="sys:user:query" href="http://localhost:8080/user/login">登录</a>
+                <a  shiro:hasPermission="sys:user:query" th:href="@{/outApp}">退出</a>
             </li>
         </ul>
     </div>

@@ -33,20 +33,21 @@
         </ul>
     </div>
 </div>
-
-<table id="userlist" lay-data="{height: 312,url: '/user/getAllUser',id:'userlist',response:{dataName:'date'}}">
-    <thead>
-    <tr>
-        <th lay-data="{checkbox:true}"></th>
-        <th lay-data="{field:'keyID',  sort: true, fixed: 'left'}">ID</th>
-        <th lay-data="{field: 'name' }">用户名</th>
-        <th lay-data="{field: 'phone', sort: true}">手机号</th>
-    </tr>
-    </thead>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<table id="userlist">
 </table>
 <script th:src="@{/layui/layui.js}"></script>
 
-<!--<script>
+<script>
 
     layui.use('table', function () {
         console.log("进入方法")
@@ -56,27 +57,36 @@
         table.render({
             elem: '#userlist'
             , height: 312
+            , toolbar: '#toolbarDemo'//  开启头部工具栏，并为其绑定左侧模板
             , url: '/user/getAllUser' //数据接口
             //, page: true //开启分页
             , cols: [
                 [ //表头
                     {checkbox: true}
-                    ,{field: 'keyID', title: 'ID',  sort: true, fixed: 'left'}
+                    , {field: 'keyID', title: 'ID', sort: true, fixed: 'left'}
                     , {field: 'name', title: '姓名'}
                     , {field: 'phone', title: '手机号', sort: true}
-
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
                 ]
             ]
-            ,response:{
-                dataName:'date'
+            , response: {
+                dataName: 'date'
             }
         });
 
 
-
-
-    });-->
-
+    });
+    //监听行工具事件
+    table.on('tool(userlist)',function (obj) {
+        var data = obj.data;
+        console.log(obj)
+        if (obj.event === 'del') {
+            layer.confirm('真的删除行么', function (index) {
+                obj.del();
+                layer.close(index);
+            });
+        }
+    });
 </script>
 </body>
 </html>
