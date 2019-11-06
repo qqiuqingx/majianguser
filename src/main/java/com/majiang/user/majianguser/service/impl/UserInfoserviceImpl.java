@@ -179,7 +179,12 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     @Override
     public UserInfo selectUser(String phone) {
-        return selecUser(phone);
+        UserInfo userInfo = (UserInfo)redisUtils.get(phone);
+        if (userInfo==null){
+            userInfo=selecUser(phone);
+
+        }
+        return null;
     }
 
 

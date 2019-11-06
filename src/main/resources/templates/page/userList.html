@@ -15,7 +15,7 @@
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left" shiro:hasPermission="sys:user:query">
             <li class="layui-nav-item"><a href="">管理</a></li>
-            <li class="layui-nav-item"><a href="">用户管理</a></li>
+            <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" th:unless="${session.userinfo==null}">

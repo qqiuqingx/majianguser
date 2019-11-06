@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.majiang.user.majianguser.mapper.majiangMapper">
+    <sql id="majiang">
+        KeyID,majiangNum,num,IsDelete,addTime,modifyTime
+    </sql>
+    <sql id="majianguser">
+        KeyID,userPhone,majiangKeyID,IsDelete,addTime,modifyTime
+    </sql>
+    <!--List<majiangBean> getAllmajiang();-->
+    <select id="getAllmajiang" resultType="com.majiang.user.majianguser.bean.majiangBean">
+        select
+        <include refid="majiang"/>
+        from
+        majiang
+        where IsDelete=0
+    </select>
+
+    <!--Integer addMajiang(majiangBean majiang);-->
+    <insert id="addMajiang" parameterType="com.majiang.user.majianguser.bean.majiangBean" >
+        insert into majiang(
+           majiangNum,num,IsDelete,addTime,modifyTime
+        )VALUES (
+            #{majiangNum},#{IsDelete},#{num},#{addTime},#{modifyTime}
+        );
+    </insert>
+
+
+    <!--List<MajiangUserBean> getAllMajiangUserBean();-->
+    <select id="getAllMajiangUserBean" resultType="com.majiang.user.majianguser.bean.MajiangUserBean">
+        select
+          <include refid="majianguser"/>
+        from
+          majign_user
+        where
+          IsDelete=0
+    </select>
+
+    <!--Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean)-->
+    <insert id="addAllMajiangUserBean">
+        insert into
+         majign_user(
+            userPhone,majiangKeyID,IsDelete,addTime,modifyTime
+         )values(
+            #{userPhone},#{majiangKeyID},#{IsDelete},#{addTime},#{modifyTime}
+         )
+    </insert>
+
+</mapper>

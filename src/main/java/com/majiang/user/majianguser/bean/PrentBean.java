@@ -8,46 +8,43 @@ import java.io.Serializable;
 import java.util.Date;
 //@ApiModel
 public class PrentBean implements Serializable {
-   /* @ApiModelProperty(hidden = true)
-    public String KeyID;
-    @ApiModelProperty(value = "添加时间",hidden = true)
-    public Date AddTime;
-    //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    @ApiModelProperty(hidden = true)
-    public Date ModifTime;
-    //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    @ApiModelProperty(hidden = true)
-    public  Integer IsDelete;
+    private Date addTime;
+    private Date   modifyTime;
+    private Integer IsDelete;
+
+    @Override
+    public String toString() {
+        return "PrentBean{" +
+                "addTime=" + addTime +
+                ", modifyTime=" + modifyTime +
+                ", IsDelete=" + IsDelete +
+                '}';
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public PrentBean setAddTime(Date addTime) {
+        this.addTime = addTime;
+        return this;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public PrentBean setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
+    }
 
     public Integer getIsDelete() {
         return IsDelete;
     }
 
-    public void setIsDelete(Integer isDelete) {
+    public PrentBean setIsDelete(Integer isDelete) {
         IsDelete = isDelete;
+        return this;
     }
-
-    public String getKeyID() {
-        return KeyID;
-    }
-
-    public void setKeyID(String keyID) {
-        KeyID = keyID;
-    }
-
-    public Date getAddTime() {
-        return AddTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        AddTime = addTime;
-    }
-
-    public Date getModifTime() {
-        return ModifTime;
-    }
-
-    public void setModifTime(Date modifTime) {
-        ModifTime = modifTime;
-    }*/
 }
