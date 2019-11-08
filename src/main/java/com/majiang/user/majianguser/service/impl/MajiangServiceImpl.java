@@ -8,22 +8,28 @@ import com.majiang.user.majianguser.utils.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class MajiangServiceImpl implements MajiangService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MajiangServiceImpl.class);
     @Autowired
-    RedisUtils redisUtils;
+    private RedisUtils redisUtils;
     @Autowired
-    majiangMapper majiangMapper;
-
+    private majiangMapper majiangMapper;
+    @Value("${majiang.redis.majiangs}")
+    private String majiangs;
     @Override
     public List<majiangBean> getAllmajiang() {
+        List<majiangBean> o=null;
         //查缓存
-         redisUtils.get("majiangs");
-
+         o = (List)redisUtils.get(majiangs);
+        if (o==null){
+            o = majiangMapper.getAllmajiang();
+        }
         return null;
     }
 

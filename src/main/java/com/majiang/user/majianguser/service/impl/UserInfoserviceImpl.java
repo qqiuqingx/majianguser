@@ -38,7 +38,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     @Override
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
-        UserVO userVO=null;
+        UserVO userVO = null;
         try {
             Logger logger = LoggerFactory.getLogger(getClass());
             System.out.println("用户传进来的:" + userReqVO);
@@ -58,7 +58,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
                 return new UserVO(UserEnum.UserPassWordNotNull);
             }
 
-            if (!BeanUtils.isMobileNO(userInfo.getPhone())){
+            if (!BeanUtils.isMobileNO(userInfo.getPhone())) {
                 return new UserVO(UserEnum.PhoneNotre);
             }
             //加密手机号
@@ -75,14 +75,14 @@ public class UserInfoserviceImpl implements UserInfoservice {
             BeanUtils.setXXX(userInfo);
             inserUser(userInfo);
             userInfo.setPassWord("");
-            userVO=new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
+            userVO = new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
             return userVO;
 
         } catch (majiangRunTimeException exception) {
             LOGGER.error("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
             throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
         } catch (Exception e) {
-            LOGGER.error("错误:",e);
+            LOGGER.error("错误:", e);
             e.printStackTrace();
             throw new Exception(e);
         } finally {
@@ -96,95 +96,96 @@ public class UserInfoserviceImpl implements UserInfoservice {
     /**
      *
      */
-    public UserVO userLogin(UserReqVO userInfo, HttpServletResponse response)  {
+    public UserVO userLogin(UserReqVO userInfo, HttpServletResponse response) {
         String newToken = TokenUtil.getNewToken();
-        Cookie cookie=new Cookie("token",newToken);
+        Cookie cookie = new Cookie("token", newToken);
         response.addCookie(cookie);
+        userInfo.getPhone();
         UserInfo userInfo1 = new UserInfo();
-        BeanUtils.copyProperties(userInfo,userInfo1);
+        BeanUtils.copyProperties(userInfo, userInfo1);
         userInfo1.setPassWord("");
-        redisUtils.set(newToken,userInfo1,60*60*2);
+        redisUtils.set(newToken, userInfo1, 60 * 60 * 2);
         return null;
 
     }
 
 
-    public  UserVO selectAllUser(){
+    public UserVO selectAllUser() {
         LOGGER.warn("查询所有用户》》》》》》》》》》》》》》》》》》");
-        List<UserInfo> userInfos=null;
+        List<UserInfo> userInfos = null;
         try {
             userInfos = selectAllU();
-            if (null==userInfos){
+            if (null == userInfos) {
                 return new UserVO(UserEnum.NoUser);
             }
-            for (UserInfo userInfo:userInfos){
+            for (UserInfo userInfo : userInfos) {
                 userInfo.setPassWord("");
-                userInfo.setPhone(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
+                userInfo.setPhone(DesUtil.decode(DesUtil.KEY, userInfo.getPhone()));
             }
             new Gson().toJson(userInfos).length();
-        }catch (Exception e){
-            LOGGER.error("错误:",e);
-        }finally {
-            LOGGER.warn("查询所有的用户:"+userInfos);
+        } catch (Exception e) {
+            LOGGER.error("错误:", e);
+        } finally {
+            LOGGER.warn("查询所有的用户:" + userInfos);
         }
 
-        return new UserVO<List<UserInfo>>(userInfos,UserEnum.SUCSS).setCount((long) new Gson().toJson(userInfos).length());
+        return new UserVO<List<UserInfo>>(userInfos, UserEnum.SUCSS).setCount((long) new Gson().toJson(userInfos).length());
     }
 
 
     /**
      * 退出
      */
-     public  boolean outApp(String token){
-         LOGGER.warn("UserInfoserviceImpl.outApp（）》》》》》》》");
-         UserInfo userInfo=null;
-         try {
-             userInfo=(UserInfo) redisUtils.get(token);
-             LOGGER.warn("用户登出service层获取redis中用户的数据:"+userInfo);
-             if (null!=userInfo)
-             redisUtils.delete(token);
-             //停止shiro的session
-             SecurityUtils.getSubject().getSession().stop();
-         }catch (Exception e){
-             LOGGER.warn("用户退出错误:",e);
-         }
-         finally {
-             LOGGER.warn("删除缓存中的用户:"+userInfo);
-         }
-         return true;
+    public boolean outApp(String token) {
+        LOGGER.warn("UserInfoserviceImpl.outApp（）》》》》》》》");
+        UserInfo userInfo = null;
+        try {
+            userInfo = (UserInfo) redisUtils.get(token);
+            LOGGER.warn("用户登出service层获取redis中用户的数据:" + userInfo);
+            if (null != userInfo)
+                redisUtils.delete(token);
+            //停止shiro的session
+            SecurityUtils.getSubject().getSession().stop();
+        } catch (Exception e) {
+            LOGGER.warn("用户退出错误:", e);
+        } finally {
+            LOGGER.warn("删除缓存中的用户:" + userInfo);
+        }
+        return true;
     }
 
     /**
-     *  修改用户信息(个人信息)
+     * 修改用户信息(个人信息)
      */
-    public UserVO upUser(UserReqVO user){
+    public UserVO upUser(UserReqVO user) {
         LOGGER.warn("UserInfoserviceImpl.upUser()");
         UserInfo userInfo = new UserInfo();
-        userInfo.setPhone(DesUtil.encode(DesUtil.KEY,user.getPhone()));
-        System.out.println("加密后的手机号:"+userInfo.getPhone());
-        if(user.getPassWord()!=null||!"".equals(user.getPassWord())){
+        userInfo.setPhone(DesUtil.encode(DesUtil.KEY, user.getPhone()));
+        System.out.println("加密后的手机号:" + userInfo.getPhone());
+        if (user.getPassWord() != null || !"".equals(user.getPassWord())) {
             userInfo.setPassWord(MD5.md5(user.getPassWord()));
         }
         userInfo.setName(user.getName());
         try {
             userInfoMapper.upUser(userInfo);
-        }catch (Exception e){
-            LOGGER.error("修改用户信息错误：",e);
+            redisUtils.set(userInfo.getPhone(), userInfo, 60 * 60 * 2);
+        } catch (Exception e) {
+            LOGGER.error("修改用户信息错误：", e);
             return new UserVO(UserEnum.application);
-        }finally {
-            LOGGER.warn("修改的用户为"+user);
+        } finally {
+            LOGGER.warn("修改的用户为" + user);
         }
-        return new UserVO<UserInfo>(userInfo,UserEnum.SUCSS);
+        return new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
     }
 
     @Override
     public UserInfo selectUser(String phone) {
-        UserInfo userInfo = (UserInfo)redisUtils.get(phone);
-        if (userInfo==null){
-            userInfo=selecUser(phone);
-
+        UserInfo userInfo = (UserInfo) redisUtils.get(phone);
+        if (userInfo == null) {
+            userInfo = selecUser(phone);
+            redisUtils.set(phone, userInfo, 60 * 60 * 2);
         }
-        return null;
+        return userInfo;
     }
 
 
@@ -197,19 +198,19 @@ public class UserInfoserviceImpl implements UserInfoservice {
     }
 
     private UserInfo selecUser(String Phone) {
-        UserInfo userInfo =null;
+        UserInfo userInfo = null;
 
         try {
-            userInfo =userInfoMapper.selectUser(Phone);
-        }catch (Exception e){
-            LOGGER.error("dao层错误：",e);
-        }finally {
-            LOGGER.warn("service.selecUser>>>>>>>>>>:"+userInfo);
+            userInfo = userInfoMapper.selectUser(Phone);
+        } catch (Exception e) {
+            LOGGER.error("dao层错误：", e);
+        } finally {
+            LOGGER.warn("service.selecUser>>>>>>>>>>:" + userInfo);
         }
         return userInfo;
-        }
+    }
 
-    private   List<UserInfo> selectAllU(){
+    private List<UserInfo> selectAllU() {
         return userInfoMapper.selectAllUser();
     }
 }

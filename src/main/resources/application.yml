@@ -46,3 +46,6 @@ mybatis:
   configuration:
     #驼峰命名
     map-underscore-to-camel-case: true
+majiang:
+  redis:
+    majiangs: majiangs
