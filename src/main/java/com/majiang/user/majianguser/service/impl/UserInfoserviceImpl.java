@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.Cookie;
@@ -35,6 +37,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     RedisUtils redisUtils;
 
     /*添加员工*/
+    @Transactional
     @Override
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
@@ -80,10 +83,14 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
         } catch (majiangRunTimeException exception) {
             LOGGER.error("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
+            //事务手动回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
         } catch (Exception e) {
             LOGGER.error("错误:", e);
             e.printStackTrace();
+            //事务手动回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new Exception(e);
         } finally {
             LOGGER.warn("添加的用户为：" + userInfo);

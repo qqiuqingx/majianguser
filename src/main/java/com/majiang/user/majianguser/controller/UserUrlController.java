@@ -57,9 +57,10 @@ public class UserUrlController {
     @RequestMapping(value = "/outApp")
     public String outApp(@CookieValue(value = "token")Cookie cookie, HttpSession session, HttpServletResponse response){
         LOGGER.warn("进入退出方法UserUrlController.outApp");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        Cookie token = new Cookie("token", null);
+        token.setMaxAge(0);
+        token.setPath("/user");
+        response.addCookie(token);
         //removeAttribute()销毁session中的某一项属性，下一次用户访问的sessionID是不会变的。如果这个地方用session.invalidate(); 会报错
         session.removeAttribute("userinfo");
         boolean b = userInfoservice.outApp(cookie.getValue());

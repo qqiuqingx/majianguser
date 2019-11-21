@@ -15,11 +15,13 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.sound.midi.Soundbank;
 import java.util.List;
@@ -36,14 +38,17 @@ public class MyShiroRealm extends AuthorizingRealm {
     RoleMapper roleMapper;
     @Autowired
     PermissionMapper permissionMapper;
+    @Value("majiang.shiro.userLoginSession")
+    private String user;
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken user =(UsernamePasswordToken)token;
         UserInfo userInfo = userInfoservice.selectUser(DesUtil.encode(DesUtil.KEY,user.getUsername()));
-
         if (userInfo!=null){
             SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userInfo, userInfo.getPassWord(), getName());
-            SecurityUtils.getSubject().getSession().setAttribute("user_login",userInfo);
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setTimeout(60 * 60 * 2*1000);
+            session.setAttribute(this.user,userInfo);
             return simpleAuthenticationInfo;
         }
         return null;
@@ -51,12 +56,11 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("进入doGetAuthorizationInfo方法》》》》》》》》》》》》。");
-        log.debug("权限配置");
-
+        System.out.println("进入MyShiroRealm.doGetAuthorizationInfo方法》》》》》》》》》》》》。");
+        log.warn("权限配置MyShiroRealm.doGetAuthorizationInfo方法》》》》》》》》》》》》");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //获取在session中的用户数据
-        UserInfo user = (UserInfo)SecurityUtils.getSubject().getSession().getAttribute("user_login");
+        UserInfo user = (UserInfo)SecurityUtils.getSubject().getSession().getAttribute(this.user);
         if(user!=null) {
             System.out.println("shiro.session.user:" + user);
             List<Role> roles = roleMapper.findByUserPhone(user.getPhone());

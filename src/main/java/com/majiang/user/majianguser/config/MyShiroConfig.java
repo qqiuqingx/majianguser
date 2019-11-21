@@ -32,10 +32,10 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/userLogin", "anon");
-        filterChainDefinitionMap.put("/addUser", "anon");
-        filterChainDefinitionMap.put("/outApp", "anon");
+        filterChainDefinitionMap.put("/pub/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/layui/**", "anon");
+        filterChainDefinitionMap.put("/majiang/**", "anon");
         filterChainDefinitionMap.put("/page/**", "anon");
         //对swagger放行
         filterChainDefinitionMap.put("/swagger-ui.html","anon");
@@ -48,10 +48,12 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setLoginUrl("/login");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login.html");
         //登陆成功后要跳转的界面
        // shiroFilterFactoryBean.setSuccessUrl("/index.html");
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setRedirectUrl("/login.html");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
