@@ -16,5 +16,5 @@ public interface MajiangService {
     MajiangVo getAllMajiangUserBean();
 
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
-    MajiangVo buyMajiang(String majiang, @CookieValue(required = false, value = "token") Cookie cookie);
+    MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie);
 }

@@ -1,6 +1,7 @@
 package com.majiang.user.majianguser.bean.vo;
 
 import com.majiang.user.majianguser.enums.UserEnum;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 @ApiModel
@@ -12,7 +13,16 @@ public class MajiangVo<T> {
     private Long count;
     private T date;
 
-
+    public MajiangVo(majiangEnum majiangEnum, Long count, T date) {
+        this.code = majiangEnum.getCode();
+        this.msg = majiangEnum.getMessage();
+        this.count = count;
+        this.date = date;
+    }
+    public MajiangVo(majiangEnum majiangEnum) {
+        this.code = majiangEnum.getCode();
+        this.msg = majiangEnum.getMessage();
+    }
 
     public MajiangVo(UserEnum userEnum, Long count, T date) {
         this.code = userEnum.getCode();

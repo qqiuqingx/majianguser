@@ -4,6 +4,7 @@ import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.enums.UserEnum;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.RedisUtils;
@@ -66,21 +67,20 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
-    public MajiangVo buyMajiang(String majiang, @CookieValue(required = false, value = "token") Cookie cookie) {
-        LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:"+majiang+"cookie:"+cookie);
+    public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
+        LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:"+majiangKeyID+"cookie:"+cookie);
         System.out.println("SecurityUtils.getSubject().getSession():"+SecurityUtils.getSubject().getSession());
         System.out.println("redisUtils.get(cookie.getValue()):"+redisUtils.get(cookie.getValue()));
         if (SecurityUtils.getSubject().getSession()==null || redisUtils.get(cookie.getValue())==null){
             System.out.println("进入判断");
             return new MajiangVo(UserEnum.application);
         }
-        List<majiangBean> lists=(List)redisUtils.get(this.majiangs);
-        majiangBean majiangBean = (majiangBean)redisUtils.get(majiang);
-         if(majiangBean.getNum()>=0 && majiangBean.getNum()<4){
+        //这个地方的数据是在程序启动时yCommandLineRunner.run中添加的，进行预减
+        Long num = redisUtils.decr(majiangKeyID,1);
+        if (num<1){
+          return  new MajiangVo(majiangEnum.MAJIANGNUM);
+        }
 
-         }else {
-
-         }
 
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>返回值:");
         return new MajiangVo(UserEnum.SUCSS);
