@@ -2,6 +2,7 @@ package com.majiang.user.majianguser.utils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
     @Autowired
     RedisTemplate<String,Object> redisTemplate;
-
+    @Value("${majiang.redis.MAJIANG_TIME_OUT}")
+    private long MAJIANG_TIME_OUT;
         /**
          26
          * 指定缓存失效时间
@@ -151,10 +153,20 @@ public class RedisUtils {
          * @return
          */
     public long decr(String key, long delta) {
+
         if (delta < 0) {
             throw new RuntimeException("递减因子必须大于0");
         }
+
         return redisTemplate.opsForValue().increment(key, -delta);
+    }
+    public Integer decr(String key) {
+        Integer o = (Integer)redisTemplate.opsForValue().get(key);
+        System.out.println("MAJIANG_TIME_OUT："+MAJIANG_TIME_OUT);
+        System.out.println("o："+o);
+        System.out.println("key："+key);
+        redisTemplate.opsForValue().set(key,--o,MAJIANG_TIME_OUT);
+        return o;
     }
         // ================================Map=================================
         /**

@@ -33,7 +33,8 @@ public class MyCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         LOGGER.warn("MyCommandLineRunner.run>>>>>>>>>>>>>>>>>>>.");
         List<majiangBean> allmajiang = majiangMapper.getAllmajiang();
-        redisUtils.set(majiangs,allmajiang,MAJIANG_TIME_OUT);
+        System.out.println("过期时间"+MAJIANG_TIME_OUT);
+        redisUtils.set(majiangs,allmajiang,Long.valueOf(MAJIANG_TIME_OUT));
         //以MajiangNum为k   majiangBean为value 改为map
         Map<Integer,majiangBean> maps=allmajiang.stream().collect(Collectors.toMap(majiangBean::getMajiangNum,(p)->p));
         LOGGER.warn("MyCommandLineRunner.run:maps:"+maps);

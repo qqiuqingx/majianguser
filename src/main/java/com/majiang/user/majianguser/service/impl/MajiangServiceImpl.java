@@ -11,6 +11,7 @@ import com.majiang.user.majianguser.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class MajiangServiceImpl implements MajiangService {
     private majiangMapper majiangMapper;
     @Value("${majiang.redis.majiangs}")
     private String majiangs;
+
+    @Autowired
+    AmqpTemplate amqpTemplate ;
+
     @Override
     public MajiangVo getAllmajiang() {
         List<majiangBean> majiangs=null;
@@ -76,10 +81,17 @@ public class MajiangServiceImpl implements MajiangService {
             return new MajiangVo(UserEnum.application);
         }
         //这个地方的数据是在程序启动时yCommandLineRunner.run中添加的，进行预减
-        Long num = redisUtils.decr(majiangKeyID,1);
+        Integer num = redisUtils.decr(majiangKeyID);
+        System.out.println("MajiangServiceImpl.buyMajiang获取redis中麻将桌对应的人数:"+redisUtils.get(majiangKeyID));
         if (num<1){
           return  new MajiangVo(majiangEnum.MAJIANGNUM);
         }
+         amqpTemplate.convertAndSend("","");
+
+
+
+
+
 
 
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>返回值:");
