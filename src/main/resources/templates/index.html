@@ -98,7 +98,7 @@
                      var datas=JSON.date;
                      for (var i=0;i<JSON.date.length;i++){
                         // $("#majiangs-ss").append(' <div style=\"height: 50px\" value="+JSON.date[i].majiangNum+">第'+JSON.date[i].majiangNum+'桌<br><a style="color: #5FB878" class="a_majiang"  href=\"#\">'+'  订  '+'</a></div>');
-                         $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value=\"'+JSON.date[i].KeyID+'\">第'+JSON.date[i].majiangNum+'桌</button><br>');
+                         $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value=\"'+JSON.date[i].keyID+'\">第'+JSON.date[i].majiangNum+'桌</button><br>');
                          console.log(JSON.date[i]);
                      }
                     // $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value="12346">第'+JSON.date[i].majiangNum+'桌</button>');
@@ -145,9 +145,10 @@
                      /*重定向*!/
                      /!*Http.open("/main");*/
                      console.log("成功")
-                     $.ajax({
+                     alert(JSON.msg)
+                 /*    $.ajax({
 
-                     });
+                     });*/
                      //window.location.href = "http://localhost:8080/user/";
                  } else {
                      alert(JSON.msg)

@@ -45,7 +45,7 @@ spring:
     active: dev
   #MQ配置
   rabbitmq:
-    host: 172.17.42.192
+    host: 172.17.43.53
     port: 5672
     username: admin
     password: admin
@@ -62,3 +62,5 @@ majiang:
     MAJIANG_TIME_OUT: 86400
   shiro:
     userLoginSession: user_login
+  mq:
+    mqQueueName: majiangQueue

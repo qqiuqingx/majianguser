@@ -1,12 +1,15 @@
 package com.majiang.user.majianguser.service.impl;
 
+import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
+import com.majiang.user.majianguser.utils.BeanUtils;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,7 +34,8 @@ public class MajiangServiceImpl implements MajiangService {
     private majiangMapper majiangMapper;
     @Value("${majiang.redis.majiangs}")
     private String majiangs;
-
+    @Value("${majiang.mq.mqQueueName}")
+    private String mqQueueName;
     @Autowired
     AmqpTemplate amqpTemplate ;
 
@@ -74,27 +79,22 @@ public class MajiangServiceImpl implements MajiangService {
     @Override
     public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:"+majiangKeyID+"cookie:"+cookie);
-        System.out.println("SecurityUtils.getSubject().getSession():"+SecurityUtils.getSubject().getSession());
-        System.out.println("redisUtils.get(cookie.getValue()):"+redisUtils.get(cookie.getValue()));
-        if (SecurityUtils.getSubject().getSession()==null || redisUtils.get(cookie.getValue())==null){
+        UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
+        if (SecurityUtils.getSubject().getSession()==null || userInfo==null){
             System.out.println("进入判断");
             return new MajiangVo(UserEnum.application);
         }
-        //这个地方的数据是在程序启动时yCommandLineRunner.run中添加的，进行预减
-        Integer num = redisUtils.decr(majiangKeyID);
-        System.out.println("MajiangServiceImpl.buyMajiang获取redis中麻将桌对应的人数:"+redisUtils.get(majiangKeyID));
-        if (num<1){
-          return  new MajiangVo(majiangEnum.MAJIANGNUM);
+        Integer o = (Integer)redisUtils.get(majiangKeyID);
+        System.out.println("MajiangServiceImpl.buyMajiang获取redis中麻将桌对应的人数:"+o);
+        if(o<=0){
+            return new MajiangVo(majiangEnum.MAJIANGNUM);
         }
-         amqpTemplate.convertAndSend("","");
-
-
-
-
-
-
-
-        LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>返回值:");
+        //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
+        //num为自减1之后的结果
+        redisUtils.decr(majiangKeyID);
+        MajiangUserBean majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
+        BeanUtils.notNull(majiangUserBean,true);
+        amqpTemplate.convertAndSend(mqQueueName,new Gson().toJson(majiangUserBean));
         return new MajiangVo(UserEnum.SUCSS);
     }
 }

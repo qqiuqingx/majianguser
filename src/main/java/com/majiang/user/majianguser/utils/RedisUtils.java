@@ -161,11 +161,10 @@ public class RedisUtils {
         return redisTemplate.opsForValue().increment(key, -delta);
     }
     public Integer decr(String key) {
-        Integer o = (Integer)redisTemplate.opsForValue().get(key);
-        System.out.println("MAJIANG_TIME_OUT："+MAJIANG_TIME_OUT);
-        System.out.println("o："+o);
-        System.out.println("key："+key);
-        redisTemplate.opsForValue().set(key,--o,MAJIANG_TIME_OUT);
+        Integer o = (Integer)get(key);
+        o--;
+        System.out.println(">>>>>>>>>>>>(Integer)get(key)："+o);
+        redisTemplate.opsForValue().set(key, o, MAJIANG_TIME_OUT, TimeUnit.SECONDS);
         return o;
     }
         // ================================Map=================================

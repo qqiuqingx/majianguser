@@ -3,10 +3,11 @@ package com.majiang.user.majianguser.bean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     private  String Name;
     private  String Phone;

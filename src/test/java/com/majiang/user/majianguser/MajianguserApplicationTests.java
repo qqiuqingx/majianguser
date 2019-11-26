@@ -1,15 +1,18 @@
 package com.majiang.user.majianguser;
 
 import com.google.gson.Gson;
+import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
+import com.majiang.user.majianguser.utils.BeanUtils;
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -107,5 +110,13 @@ public class MajianguserApplicationTests {
         System.out.println(userVO);
     }
 
+    @Test
+    public void testUtils(){
+        MajiangUserBean majiangUserBean = new MajiangUserBean();
+        majiangUserBean.setMajiangKeyID(123);
+        System.out.println("属性处理前:"+majiangUserBean);
+        BeanUtils.notNull(majiangUserBean,true);
+        System.out.println("属性处理后:"+majiangUserBean);
+    }
 
 }

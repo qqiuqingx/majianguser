@@ -96,25 +96,46 @@ public final class BeanUtils {
     }
 
     /**
-     * 添加方法注释.
-     *
-     * @param obj
-     *            1
+     * 设置类中为null的属性的默认值
+     * @param 、、obj 对应的类
+     * @param 。。是否设置obj的父类的属性
      */
-    public static void assignmentObject(Object obj) {
-        try {
-            if (null == obj) {
-                return;
-            }
-            Field[] fields = obj.getClass().getDeclaredFields();
-            Class cla = obj.getClass();
-            for (Field field : fields) {
-                //设置属性的默认值
-                setFieldValue(obj, cla, field);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void notNull(Object obj,boolean s) {
+       if (s) {
+           try {
+               if (null == obj) {
+                   return;
+               }
+               //getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。
+               //getDeclaredFields获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
+               Field[] fields = obj.getClass().getDeclaredFields();
+               Class cla = obj.getClass();
+               for (Field field : fields) {
+                   field.setAccessible(true);
+                   if (field.get(obj) == null) {
+                       //设置属性的默认值
+                       setFieldValue(obj, cla, field);
+                   }
+               }
+               //设置父类中的属性方法默认值
+               Class superclass = cla.getSuperclass();
+               System.out.println("superclass：" + superclass);
+               System.out.println("superclass.getName()：" + superclass.getName());
+               System.out.println("superclass.getDeclaredFields()：" + superclass.getDeclaredFields());
+               Field[] declaredFields = superclass.getDeclaredFields();
+               for (Field field : declaredFields) {
+                   field.setAccessible(true);
+                   if (null == field.get(obj)) {
+                       setFieldValue(obj, cla, field);
+                   }
+                   field.setAccessible(false);
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+       }else {
+           notNull(obj);
+       }
     }
 
     /**
