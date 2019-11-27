@@ -79,22 +79,30 @@ public class MajiangServiceImpl implements MajiangService {
     @Override
     public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:"+majiangKeyID+"cookie:"+cookie);
-        UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
-        if (SecurityUtils.getSubject().getSession()==null || userInfo==null){
-            System.out.println("进入判断");
+        MajiangUserBean majiangUserBean =null;
+        try {
+            UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
+            if (SecurityUtils.getSubject().getSession()==null || userInfo==null){
+                System.out.println("进入判断");
+                return new MajiangVo(majiangEnum.LOGINFORNOW);
+            }
+            //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
+            //num为自减1之后的结果
+            long decr = redisUtils.decr(majiangKeyID);
+            System.out.println("自减1？decr:"+decr);
+            if(decr<0){
+                redisUtils.set(majiangKeyID,0);
+                return new MajiangVo(majiangEnum.MAJIANGNUM);
+            }
+            majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
+            BeanUtils.notNull(majiangUserBean,true);
+            amqpTemplate.convertAndSend(mqQueueName,new Gson().toJson(majiangUserBean));
+        }catch (Exception e){
+            LOGGER.error("点击定桌时异常:",e);
             return new MajiangVo(UserEnum.application);
+        }finally {
+            LOGGER.warn("要订桌的用户:"+majiangUserBean);
         }
-        Integer o = (Integer)redisUtils.get(majiangKeyID);
-        System.out.println("MajiangServiceImpl.buyMajiang获取redis中麻将桌对应的人数:"+o);
-        if(o<=0){
-            return new MajiangVo(majiangEnum.MAJIANGNUM);
-        }
-        //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
-        //num为自减1之后的结果
-        redisUtils.decr(majiangKeyID);
-        MajiangUserBean majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
-        BeanUtils.notNull(majiangUserBean,true);
-        amqpTemplate.convertAndSend(mqQueueName,new Gson().toJson(majiangUserBean));
         return new MajiangVo(UserEnum.SUCSS);
     }
 }

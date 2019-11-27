@@ -160,12 +160,13 @@ public class RedisUtils {
 
         return redisTemplate.opsForValue().increment(key, -delta);
     }
-    public Integer decr(String key) {
-        Integer o = (Integer)get(key);
+    public  long decr(String key) {
+        /*Integer o = (Integer)get(key);
         o--;
         System.out.println(">>>>>>>>>>>>(Integer)get(key)："+o);
         redisTemplate.opsForValue().set(key, o, MAJIANG_TIME_OUT, TimeUnit.SECONDS);
-        return o;
+        */
+        return  redisTemplate.getConnectionFactory().getConnection().decr(key.getBytes());
     }
         // ================================Map=================================
         /**
