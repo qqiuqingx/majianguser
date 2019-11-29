@@ -5,6 +5,7 @@ import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.config.MyMqConfig;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
@@ -34,8 +35,7 @@ public class MajiangServiceImpl implements MajiangService {
     private majiangMapper majiangMapper;
     @Value("${majiang.redis.majiangs}")
     private String majiangs;
-    @Value("${majiang.mq.mqQueueName}")
-    private String mqQueueName;
+
     @Autowired
     AmqpTemplate amqpTemplate ;
 
@@ -96,7 +96,9 @@ public class MajiangServiceImpl implements MajiangService {
             }
             majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
             BeanUtils.notNull(majiangUserBean,true);
-            amqpTemplate.convertAndSend(mqQueueName,new Gson().toJson(majiangUserBean));
+            System.out.println("配置的amqp："+amqpTemplate);
+            amqpTemplate.convertAndSend(MyMqConfig.QUEUE_NAME,new Gson().toJson(majiangUserBean));
+
         }catch (Exception e){
             LOGGER.error("点击定桌时异常:",e);
             return new MajiangVo(UserEnum.application);

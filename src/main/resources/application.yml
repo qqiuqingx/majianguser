@@ -49,6 +49,13 @@ spring:
     port: 5672
     username: admin
     password: admin
+    listener:
+      simple:
+        retry:
+          #开启重试机制
+          enabled: true
+          #设置重试几次
+          max-attempts: 3
 
 mybatis:
   mapper-locations: classpath*:/mapper/**Mapper.xml

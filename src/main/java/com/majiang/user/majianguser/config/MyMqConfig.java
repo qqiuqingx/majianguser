@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MyMqConfig {
 
-    @Value("${majiang.mq.mqQueueName}")
-    private String mqQueueName;
+    public static final String QUEUE_NAME="majiangQueue";
     @Bean
     public Queue queue(){
-        return new Queue("mqQueueName",true);
+        return new Queue(QUEUE_NAME,true);
     }
 }
