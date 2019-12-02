@@ -40,4 +40,16 @@ public class majiangMapperTest {
         Integer integer = majiangMapper.addAllMajiangUserBean((MajiangUserBean) new MajiangUserBean().setMajiangKeyID(1).setUserPhone("123").setIsDelete(0).setAddTime(new Date()).setModifyTime(new Date()));
         System.out.println(integer);
     }
+
+    @Test
+    public  void getMajiang(){
+        majiangBean majiang = majiangMapper.getMajiang(7);
+        System.out.println(majiang);
+    }
+    @Test
+    public  void getMajiangUser(){
+        List<MajiangUserBean> muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone("1", "123");
+        System.out.println(muByKeyIDandUserPhone);
+
+    }
 }

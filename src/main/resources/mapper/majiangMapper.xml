@@ -16,8 +16,18 @@
         where IsDelete=0
     </select>
 
+    <!--majiangBean getMajiang(Integer KeyID);-->
+    <select id="getMajiang" resultType="com.majiang.user.majianguser.bean.majiangBean">
+        select
+        <include refid="majiang"/>
+        from
+        majiang
+        where KeyID=#{KeyID} and IsDelete=0
+    </select>
+
+
     <!--Integer addMajiang(majiangBean majiang);-->
-    <insert id="addMajiang" parameterType="com.majiang.user.majianguser.bean.majiangBean" >
+    <insert id="addMajiang" parameterType="com.majiang.user.majianguser.bean.majiangBean">
         insert into majiang(
            majiangNum,num,IsDelete,addTime,modifyTime
         )VALUES (
@@ -29,11 +39,21 @@
     <!--List<MajiangUserBean> getAllMajiangUserBean();-->
     <select id="getAllMajiangUserBean" resultType="com.majiang.user.majianguser.bean.MajiangUserBean">
         select
-          <include refid="majianguser"/>
+        <include refid="majianguser"/>
         from
-          majign_user
+        majign_user
         where
-          IsDelete=0
+        IsDelete=0
+    </select>
+
+    <!--MajiangUserBean getMUByKeyIDandUserPhone(String KeyID,String UserPhone);-->
+    <select id="getMUByKeyIDandUserPhone" resultType="com.majiang.user.majianguser.bean.MajiangUserBean">
+        select
+        <include refid="majianguser"/>
+        from
+        majign_user
+        where
+        userPhone=#{userPhone} and majiangKeyID=#{majiangKeyID} and IsDelete=0
     </select>
 
     <!--Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean)-->

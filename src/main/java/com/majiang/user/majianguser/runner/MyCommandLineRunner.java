@@ -39,10 +39,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
         Map<Integer,majiangBean> maps=allmajiang.stream().collect(Collectors.toMap(majiangBean::getMajiangNum,(p)->p));
         LOGGER.warn("MyCommandLineRunner.run:maps:"+maps);
         LOGGER.warn("MyCommandLineRunner.run:allmajiang:"+allmajiang);
-       //遍历k+v
-        /* for(Map.Entry<Integer,majiangBean> en:maps.entrySet()){
-            redisUtils.set(String.valueOf(en.getKey()),en.getValue().getNum());
-        }*/
+
         //只遍历value
         for(majiangBean ma:maps.values()){
             redisUtils.set(String.valueOf(ma.getKeyID()),ma.getNum(),MAJIANG_TIME_OUT);

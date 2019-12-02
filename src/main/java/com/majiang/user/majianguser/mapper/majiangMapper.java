@@ -10,9 +10,13 @@ public interface majiangMapper {
 
     List<majiangBean> getAllmajiang();
 
+    majiangBean getMajiang(Integer KeyID);
+
     Integer addMajiang(majiangBean majiang);
 
     List<MajiangUserBean> getAllMajiangUserBean();
+
+    List<MajiangUserBean> getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
 
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
 }

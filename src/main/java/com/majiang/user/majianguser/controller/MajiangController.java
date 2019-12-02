@@ -1,8 +1,15 @@
 package com.majiang.user.majianguser.controller;
+import com.google.gson.Gson;
+import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.config.MyMqConfig;
 import com.majiang.user.majianguser.enums.UserEnum;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.MajiangService;
+import com.majiang.user.majianguser.utils.BeanUtils;
+import com.majiang.user.majianguser.utils.RedisUtils;
 import io.lettuce.core.ScriptOutputType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -22,6 +29,7 @@ import javax.servlet.http.Cookie;
 @RequestMapping("/majiang")
 public class MajiangController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MajiangController.class);
+
     @Autowired
     MajiangService majiangService;
     @RequestMapping(value = "/buy",method = RequestMethod.GET)
@@ -39,4 +47,7 @@ public class MajiangController {
         LOGGER.warn("MajiangController.buyMajiang返回值:"+majiangVo);
         return majiangVo;
     }
+
+
+
 }

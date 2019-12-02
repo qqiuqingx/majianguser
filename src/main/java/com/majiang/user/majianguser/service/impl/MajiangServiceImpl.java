@@ -11,6 +11,8 @@ import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.BeanUtils;
+import com.majiang.user.majianguser.utils.DesUtil;
+import com.majiang.user.majianguser.utils.MD5;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -73,8 +75,32 @@ public class MajiangServiceImpl implements MajiangService {
 
     @Override
     public Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean) {
-        return null;
+
+        return majiangMapper.addAllMajiangUserBean(majiangUserBean);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
@@ -85,6 +111,11 @@ public class MajiangServiceImpl implements MajiangService {
             if (SecurityUtils.getSubject().getSession()==null || userInfo==null){
                 System.out.println("进入判断");
                 return new MajiangVo(majiangEnum.LOGINFORNOW);
+            }
+            //判断是否重复预定
+            Object o = redisUtils.get(userInfo.getPhone() + "_" + majiangKeyID);
+            if (o!=null){
+                return new MajiangVo(majiangEnum.Repeat);
             }
             //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
             //num为自减1之后的结果
