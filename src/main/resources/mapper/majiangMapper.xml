@@ -66,4 +66,14 @@
          )
     </insert>
 
+    <!--Integer updateMajiang(majiangBean majiangBean);-->
+    <update id="updateMajiang">
+        update
+         majiang
+        set
+         majiangNum=#{majiangNum},IsDelete=#{IsDelete},num=#{num},modifyTime=NOW()
+        WHERE
+         KeyID=#{KeyID}
+    </update>
+
 </mapper>

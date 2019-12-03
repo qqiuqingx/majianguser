@@ -42,7 +42,7 @@ public class MajiangController {
             majiangVo=majiangService.buyMajiang(majiangKeyID, cookie);
         }else {
             System.out.println("MajiangController.buyMajiang未进入service层");
-            majiangVo=new MajiangVo(UserEnum.application);
+            majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
         }
         LOGGER.warn("MajiangController.buyMajiang返回值:"+majiangVo);
         return majiangVo;

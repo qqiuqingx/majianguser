@@ -52,4 +52,17 @@ public class majiangMapperTest {
         System.out.println(muByKeyIDandUserPhone);
 
     }
+
+    @Test
+    public  void update(){
+        majiangBean majiangBean = new majiangBean();
+        majiangBean.setKeyID(2);
+        majiangBean.setNum(3);
+        majiangBean.setMajiangNum(2);
+        majiangBean.setIsDelete(0);
+        Integer integer = majiangMapper.updateMajiang(majiangBean);
+        System.out.println("majiangupdate:"+majiangBean+"更新:"+integer);
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.service;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
@@ -13,8 +14,16 @@ public interface MajiangService {
 
     Integer addMajiang(majiangBean majiang);
 
+    majiangBean getMajiang(Integer KeyID);
+
+    List<MajiangUserBean> getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
+
     MajiangVo getAllMajiangUserBean();
 
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
+
+    Integer updateMajiang(majiangBean majiangBean);
+
     MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie);
+
 }

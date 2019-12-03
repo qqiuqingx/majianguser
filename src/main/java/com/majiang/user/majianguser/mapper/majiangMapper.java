@@ -19,4 +19,7 @@ public interface majiangMapper {
     List<MajiangUserBean> getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
 
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
+
+    Integer updateMajiang(majiangBean majiangBean);
+
 }

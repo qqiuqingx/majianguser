@@ -69,6 +69,16 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
+    public majiangBean getMajiang(Integer KeyID) {
+        return majiangMapper.getMajiang(KeyID);
+    }
+
+    @Override
+    public List<MajiangUserBean> getMUByKeyIDandUserPhone(String majiangKeyID, String UserPhone) {
+        return majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID,UserPhone);
+    }
+
+    @Override
     public MajiangVo getAllMajiangUserBean() {
         return null;
     }
@@ -79,22 +89,10 @@ public class MajiangServiceImpl implements MajiangService {
         return majiangMapper.addAllMajiangUserBean(majiangUserBean);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public Integer updateMajiang(majiangBean majiangBean) {
+        return null;
+    }
 
 
 
