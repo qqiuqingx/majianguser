@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,7 +32,7 @@ public class UserUrlController {
     UserInfoservice userInfoservice;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserUrlController.class);
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/",method = RequestMethod.GET)
     public String getMain(@CookieValue(required = false, value = "token") Cookie cookie, HttpSession session) {
       LOGGER.warn("进入：UserUrlController.getMain");
         if (cookie != null) {
@@ -45,7 +47,7 @@ public class UserUrlController {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String userLogin() {
         LOGGER.warn("进入跳转方法UserUrlController.userLogin");
         return "login";
@@ -54,7 +56,7 @@ public class UserUrlController {
      * 退出
      * @return
      */
-    @RequestMapping(value = "/outApp")
+    @RequestMapping(value = "/outApp",method = RequestMethod.GET)
     public String outApp(@CookieValue(value = "token")Cookie cookie, HttpSession session, HttpServletResponse response){
         LOGGER.warn("进入退出方法UserUrlController.outApp");
         Cookie token = new Cookie("token", null);
@@ -66,7 +68,7 @@ public class UserUrlController {
         boolean b = userInfoservice.outApp(cookie.getValue());
         return "redirect:/";
     }
-    @RequestMapping("/getUserList")
+    @RequestMapping(value = "/getUserList",method = RequestMethod.GET)
     public String getUserList() {
         LOGGER.warn("进入跳转方法UserUrlController.getUserList");
         return "page/userList";

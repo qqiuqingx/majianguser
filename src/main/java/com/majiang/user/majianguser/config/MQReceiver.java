@@ -36,50 +36,51 @@ public class MQReceiver {
     MajiangService majiangService;
     @RabbitHandler
     @RabbitListener(queues = MyMqConfig.QUEUE_NAME)
-   // @Transactional  //为什么在这里加事务注解，只能入一条相同的数据
+    @Transactional  //为什么在这里加事务注解，只能入一条相同的数据
     public void majiangorder(String massage, Channel channel, Message messages) throws IOException {
         MajiangUserBean majiangUserBean = new Gson().fromJson(massage, MajiangUserBean.class);
+        Integer majiangKeyID=majiangUserBean.getMajiangKeyID();
         String userPhone = majiangUserBean.getUserPhone();
+        Integer newNum=null;
         System.out.println("majianguser:"+majiangUserBean);
         try {
-            majiangBean majiang = majiangService.getMajiang(majiangUserBean.getMajiangKeyID());
+            majiangBean majiang = majiangService.getMajiang(majiangKeyID);
             if (majiang.getNum() <= 0) {
                 //数据库中桌数少于0了 说明桌数已满，直接结束方法
                 return;
             }
             //更新麻将桌数
            // redisUtils.set(String.valueOf(majiangUserBean.getMajiangKeyID()), majiang.getNum());
-            majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, majiangUserBean.getUserPhone()));
+            majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, userPhone));
             //根据用户手机和麻将KeyID来获取订单
-            List<MajiangUserBean> muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangUserBean.getMajiangKeyID()), majiangUserBean.getUserPhone());
+            List<MajiangUserBean> muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
             if (muByKeyIDandUserPhone != null && muByKeyIDandUserPhone.size() >= 1) {
                 System.out.println("进入判断是否大于1》》》》》》》》》》》》》》》》》》》");
-                redisUtils.set(userPhone + "_" + majiangUserBean.getMajiangKeyID(), 1, 60 * 2 * 60);
+                redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
                 return;
             }
-            // TODO 更新najianguserbean订单表的数据
-            Integer integer = majiangService.addAllMajiangUserBean(majiangUserBean);
-            if (integer != null) {
-                System.out.println("添加成功addAllMajiangUserBean:" + integer);
-                redisUtils.set(userPhone + "_" + majiangUserBean.getMajiangKeyID(), 1, 60 * 60 * 2);
+            //  更新najianguserbean订单表的数据
+            Integer count = majiangService.addAllMajiangUserBean(majiangUserBean);
+            if (count != null) {
+                System.out.println("添加成功addAllMajiangUserBean:" + count);
+                redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 60 * 2);
             }
-            // TODO 更新麻将表中的桌数
-            Integer newNum = (Integer) redisUtils.get(String.valueOf(majiangUserBean.getMajiangKeyID()));
+            //  更新麻将表中的桌数
+            newNum = (Integer) redisUtils.get(String.valueOf(majiangKeyID));
             System.out.println("redis中的num:"+newNum);
             majiang.setNum(newNum);
             majiangService.updateMajiang(majiang);
-            // TODO 更新redis中的数据
-            // TODO 返回？
-
+            //  更新redis中的数据
+            redisUtils.set(String.valueOf(majiangKeyID), newNum);
             //手动确认消息，需要先配置:acknowledge-mode: manual
             channel.basicAck(messages.getMessageProperties().getDeliveryTag(),false);
         }catch (Exception e){
             LOGGER.error("消费者错误:",e);
-           // TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             //未收到消息
             channel.basicNack(messages.getMessageProperties().getDeliveryTag(),false,false);
         }finally {
-            System.out.println("mq队列里获取到的数据:"+massage);
+            LOGGER.warn("mq队列里获取到的数据:"+massage);
         }
 
 

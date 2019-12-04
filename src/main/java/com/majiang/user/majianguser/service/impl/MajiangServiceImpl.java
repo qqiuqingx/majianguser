@@ -91,7 +91,8 @@ public class MajiangServiceImpl implements MajiangService {
 
     @Override
     public Integer updateMajiang(majiangBean majiangBean) {
-        return null;
+        LOGGER.warn("MajiangServiceImpl.updateMajiang"+majiangBean);
+        return majiangMapper.updateMajiang(majiangBean);
     }
 
 
