@@ -134,7 +134,6 @@
     });*/
 
      function send(ss) {
-         console.log(ss.value);
          $.ajax({
              url: "/user/majiang/buy",
              type: "get",
@@ -144,18 +143,32 @@
                  if (JSON.code == 0) {
                      /*重定向*!/
                      /!*Http.open("/main");*/
-                     console.log("成功")
-                     alert(JSON.msg)
-                 /*    $.ajax({
-
-                     });*/
-                     //window.location.href = "http://localhost:8080/user/";
+                     alert(JSON.msg);
+                     getMU(ss.value)
                  } else {
                      alert(JSON.msg)
                  }
              }
          });
     }
+</script>
+<script>
+    function getMU(ss) {
+        $.ajax({
+            url: "/user/majiang/getMU",
+            type: "get",
+            data: "majiangKeyID="+ss,
+            success: function (JSON) {
+                console.log(JSON)
+                if (JSON.code == 0) {
+                    console.log("获取订单成功");
+                } else {
+                    console.log("失败了")
+                }
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

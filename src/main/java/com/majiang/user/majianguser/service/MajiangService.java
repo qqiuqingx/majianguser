@@ -16,9 +16,9 @@ public interface MajiangService {
 
     majiangBean getMajiang(Integer KeyID);
 
-    List<MajiangUserBean> getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
+    MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
 
-    MajiangVo getAllMajiangUserBean();
+    MajiangVo getAllMajiangUserBean(String UserPhone);
 
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
 

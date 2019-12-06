@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.config;
 import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.majiangBean;
+import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
@@ -36,7 +37,7 @@ public class MQReceiver {
     MajiangService majiangService;
     @RabbitHandler
     @RabbitListener(queues = MyMqConfig.QUEUE_NAME)
-    @Transactional  //为什么在这里加事务注解，只能入一条相同的数据
+    //@Transactional  //为什么在这里加事务注解，只能入一条相同的数据
     public void majiangorder(String massage, Channel channel, Message messages) throws IOException {
         MajiangUserBean majiangUserBean = new Gson().fromJson(massage, MajiangUserBean.class);
         Integer majiangKeyID=majiangUserBean.getMajiangKeyID();
@@ -53,7 +54,8 @@ public class MQReceiver {
            // redisUtils.set(String.valueOf(majiangUserBean.getMajiangKeyID()), majiang.getNum());
             majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, userPhone));
             //根据用户手机和麻将KeyID来获取订单
-            List<MajiangUserBean> muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
+            MajiangVo majiangVo = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
+            List<MajiangUserBean> muByKeyIDandUserPhone = (List)majiangVo.getDate();
             if (muByKeyIDandUserPhone != null && muByKeyIDandUserPhone.size() >= 1) {
                 System.out.println("进入判断是否大于1》》》》》》》》》》》》》》》》》》》");
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
@@ -76,7 +78,7 @@ public class MQReceiver {
             channel.basicAck(messages.getMessageProperties().getDeliveryTag(),false);
         }catch (Exception e){
             LOGGER.error("消费者错误:",e);
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+           // TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             //未收到消息
             channel.basicNack(messages.getMessageProperties().getDeliveryTag(),false,false);
         }finally {

@@ -74,12 +74,15 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
-    public List<MajiangUserBean> getMUByKeyIDandUserPhone(String majiangKeyID, String UserPhone) {
-        return majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID,UserPhone);
+    public MajiangVo getMUByKeyIDandUserPhone(String majiangKeyID, String UserPhone) {
+        System.out.println("MajiangServiceImpl.getMUByKeyIDandUserPhone>>>>>>>>>>>>>>>>>>>>>>>");
+        List<MajiangUserBean> muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, UserPhone);
+        long length = (long)new Gson().toJson(muByKeyIDandUserPhone).length();
+        return new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
     }
 
     @Override
-    public MajiangVo getAllMajiangUserBean() {
+    public MajiangVo getAllMajiangUserBean(String UserPhone) {
         return null;
     }
 
@@ -96,11 +99,12 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
 
-
-
-
-
-
+    /**
+     * 点击订之后
+     * @param majiangKeyID
+     * @param cookie
+     * @return  返回是否成功
+     */
     @Override
     public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:"+majiangKeyID+"cookie:"+cookie);
@@ -114,7 +118,7 @@ public class MajiangServiceImpl implements MajiangService {
             //判断是否重复预定
             Object o = redisUtils.get(userInfo.getPhone() + "_" + majiangKeyID);
             if (o!=null){
-                return new MajiangVo(majiangEnum.Repeat);
+                return new MajiangVo(majiangEnum.REPEAT);
             }
             //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
             //num为自减1之后的结果

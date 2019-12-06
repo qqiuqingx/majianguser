@@ -1,4 +1,5 @@
 package com.majiang.user.majianguser.controller;
+
 import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
@@ -9,6 +10,7 @@ import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.BeanUtils;
+import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import io.lettuce.core.ScriptOutputType;
 import org.apache.shiro.SecurityUtils;
@@ -32,22 +34,45 @@ public class MajiangController {
 
     @Autowired
     MajiangService majiangService;
-    @RequestMapping(value = "/buy",method = RequestMethod.GET)
+    @Autowired
+    RedisUtils redisUtils;
+    @RequestMapping(value = "/buy", method = RequestMethod.GET)
     //@RequiresRoles({"admin"})
     @ResponseBody
-    public MajiangVo buyMajiang( @CookieValue(required = false, value = "token") Cookie cookie,String majiangKeyID ){
-        LOGGER.warn("MajiangController.buyMajiang>>>>>>>>>>>>>>>>"+majiangKeyID);
-        MajiangVo majiangVo =null;
-        if(cookie!=null) {
-            majiangVo=majiangService.buyMajiang(majiangKeyID, cookie);
-        }else {
+    public MajiangVo buyMajiang(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID) {
+        LOGGER.warn("MajiangController.buyMajiang>>>>>>>>>>>>>>>>" + majiangKeyID);
+        MajiangVo majiangVo = null;
+        if (cookie != null) {
+            majiangVo = majiangService.buyMajiang(majiangKeyID, cookie);
+        } else {
             System.out.println("MajiangController.buyMajiang未进入service层");
-            majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
+            majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
         }
-        LOGGER.warn("MajiangController.buyMajiang返回值:"+majiangVo);
+        LOGGER.warn("MajiangController.buyMajiang返回值:" + majiangVo);
         return majiangVo;
     }
 
 
+    /**
+     * 获取单
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getMU",method = RequestMethod.GET)
+    @ResponseBody
+    public MajiangVo getMU(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID) {
+        LOGGER.warn("MajiangController.getMU>>>>>>>>>>>>>>>>" + majiangKeyID);
+        MajiangVo majiangVo = null;
+        if (cookie != null) {
+            UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
+            userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
+            majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone());
+        } else {
+            System.out.println("MajiangController.getMU未进入service层");
+            majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
+        }
+        LOGGER.warn("MajiangController.getMU返回值:" + majiangVo);
+        return majiangVo;
+    }
 
 }

@@ -3,7 +3,7 @@ package com.majiang.user.majianguser.enums;
 public enum majiangEnum {
 
      MAJIANGNUM("座位已满,请重新选座",10001)
-    ,Repeat("请勿重复预定",10003)
+    ,REPEAT("请勿重复预定",10003)
     ,LOGINFORNOW("请先登录",10002);
     private String message;
     private Integer code;
