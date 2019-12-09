@@ -16,16 +16,20 @@ import java.util.List;
 public class RoleServiceTest {
     @Autowired
     RoleService roleService;
-    @Test
-    public  void addRU(){
-        String Phone="1888101468222";
-        List<Role> roles=new ArrayList<>();
-       roles.add(new Role().setName("123"));
-       roles.add(new Role().setName("admin"));
-       roles.add(new Role().setName("user"));
-        roleService.addUserRole(Phone,roles);
-    }
 
+    @Test
+    public void addRU() {
+        String Phone = "1888101468222";
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role().setName("123"));
+        roles.add(new Role().setName("admin"));
+        roles.add(new Role().setName("user"));
+        try {
+            roleService.addUserRole(Phone, roles);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
 
 }

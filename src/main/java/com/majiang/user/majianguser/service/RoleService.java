@@ -32,7 +32,9 @@ public interface RoleService {
     Integer addRolePermiss(Integer reloNo,  List<Integer> permissions);
 
     /**
-     * 添加用户角色关联表
+     *
+     * @param Phone  用户加密后的手机号
+     * @param roles roles只需要有名称就行
      */
-    void addUserRole(String Phone,List<Role> roles);
+    void addUserRole(String Phone,List<Role> roles) throws Exception;
 }

@@ -54,7 +54,7 @@ public final class BeanUtils {
            setIsDelete.invoke(obj,0);
            setAddTime.invoke(obj,new Date());
            setModifTime.invoke(obj,new Date());
-            System.out.println("设置完毕");
+            System.out.println("设置公共属性完毕");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +74,7 @@ public final class BeanUtils {
     private static Date getStartDate() {
         try {
             //parse将指定的字符串转换为date类型
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-01 00:00:00");
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

@@ -70,6 +70,7 @@ public class MQReceiver {
             //  更新麻将表中的桌数
             newNum = (Integer) redisUtils.get(String.valueOf(majiangKeyID));
             System.out.println("redis中的num:"+newNum);
+            if (null==newNum){throw new Exception("根据majiangkeyID获取到redis中麻将的桌数:"+newNum);}
             majiang.setNum(newNum);
             majiangService.updateMajiang(majiang);
             //  更新redis中的数据

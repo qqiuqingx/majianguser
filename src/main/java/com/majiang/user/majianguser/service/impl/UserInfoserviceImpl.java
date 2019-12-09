@@ -65,7 +65,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
             if (userInfo.getPassWord() == null || "".equals(userInfo.getPassWord())) {
                 return new UserVO(UserEnum.UserPassWordNotNull);
             }
-
             if (!BeanUtils.isMobileNO(userInfo.getPhone())) {
                 return new UserVO(UserEnum.PhoneNotre);
             }
@@ -78,7 +77,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
             //加密密码
             userInfo.setPassWord(MD5.md5(userInfo.getPassWord())).setPhone(desPhone);
             System.out.println("加密后的密码：" + userInfo.getPassWord());
-            //todo 增加权限逻辑
+            // 增加权限逻辑
             roles.add(new Role().setName("user"));
             roleService.addUserRole(userInfo.getPhone(),roles);
             //userInfo.setPhone(desPhone);
@@ -88,7 +87,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
             userInfo.setPassWord("");
             userVO = new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
             return userVO;
-
         } catch (majiangRunTimeException exception) {
             LOGGER.error("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
             //事务手动回滚
