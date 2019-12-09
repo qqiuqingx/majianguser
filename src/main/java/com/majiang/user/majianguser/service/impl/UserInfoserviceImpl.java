@@ -1,6 +1,7 @@
 package com.majiang.user.majianguser.service.impl;
 
 import com.google.gson.Gson;
+import com.majiang.user.majianguser.bean.Role;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.UserReqVO;
 import com.majiang.user.majianguser.bean.vo.UserVO;
@@ -9,6 +10,7 @@ import com.majiang.user.majianguser.enums.UserExceptionEnum;
 import com.majiang.user.majianguser.exception.UserException;
 import com.majiang.user.majianguser.exception.majiangRunTimeException;
 import com.majiang.user.majianguser.mapper.UserInfoMapper;
+import com.majiang.user.majianguser.service.RoleService;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.*;
 import org.apache.shiro.SecurityUtils;
@@ -32,6 +34,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    RoleService roleService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -42,6 +46,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
         UserVO userVO = null;
+        List<Role> roles=null;
         try {
             Logger logger = LoggerFactory.getLogger(getClass());
             System.out.println("用户传进来的:" + userReqVO);
@@ -74,6 +79,8 @@ public class UserInfoserviceImpl implements UserInfoservice {
             userInfo.setPassWord(MD5.md5(userInfo.getPassWord())).setPhone(desPhone);
             System.out.println("加密后的密码：" + userInfo.getPassWord());
             //todo 增加权限逻辑
+            roles.add(new Role().setName("user"));
+            roleService.addUserRole(userInfo.getPhone(),roles);
             //userInfo.setPhone(desPhone);
             //设置公共属性的值
             BeanUtils.setXXX(userInfo);

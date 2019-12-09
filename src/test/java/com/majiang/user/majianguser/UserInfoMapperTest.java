@@ -45,8 +45,8 @@ public class UserInfoMapperTest {
         asd.add(3);
         asd.add(4);
         asd.add(5);
-        Integer integer = userInfoMapper.addUserRole("4EB61209FDE1D883CED65465F0C48295", asd);
-        System.out.println(integer);
+        /*Integer integer = userInfoMapper.addUserRole("4EB61209FDE1D883CED65465F0C48295", asd);
+        System.out.println(integer);*/
     }
 
     @Test

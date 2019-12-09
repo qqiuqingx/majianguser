@@ -30,7 +30,7 @@
           IsDelete=0
     </select>
 
-    <!--      * 添加权限
+    <!--      * 添加角色
     Integer addRole(Role role);-->
     <insert id="addRole" parameterType="com.majiang.user.majianguser.bean.Role">
       INSERT INTO `role`
@@ -51,5 +51,19 @@
                 (#{reloNo},#{permissionNo})
             </foreach>
 
+    </insert>
+
+
+
+    <!--    /**
+     * 添加用户角色关联表
+    Integer addUserRole(@Param("Phone") String Phone,@Param("roleNo")List<Integer> roleNo);-->
+    <insert id="addUserRole">
+        INSERT INTO user_role
+        (userPhone,roleNo)
+        values
+        <foreach collection="roleNo" item="roleNo" separator=",">
+            (#{Phone},#{roleNo})
+        </foreach>
     </insert>
 </mapper>

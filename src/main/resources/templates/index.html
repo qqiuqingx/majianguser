@@ -17,12 +17,12 @@
     <div class="layui-header">
         <div class="layui-logo"><a href="./" style="color: #009688">麻将馆</a></div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left" shiro:hasPermission="sys:user:query">
+        <ul class="layui-nav layui-layout-left" shiro:hasRole="admin">
             <li class="layui-nav-item"><a href="">管理</a></li>
             <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
         </ul>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" th:unless="${session.userinfo==null}" shiro:hasPermission="sys:user:query">
+            <li class="layui-nav-item" th:unless="${session.userinfo==null}" shiro:hasRole="user">
                 <a href="javascript:;" th:text="${session.userinfo.Phone}">
                     名称
                 </a>
@@ -31,8 +31,8 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a  shiro:lacksPermission="sys:user:query" href="http://localhost:8080/user/login">登录</a>
-                <a  shiro:hasPermission="sys:user:query" th:href="@{/outApp}">退出</a>
+                <a  shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
+                <a  shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
             </li>
         </ul>
     </div>

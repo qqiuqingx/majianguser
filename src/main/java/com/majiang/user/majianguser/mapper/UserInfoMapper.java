@@ -18,10 +18,7 @@ public interface UserInfoMapper {
      */
      List<UserInfo> selectAllUser();
 
-    /**
-     * 添加用户角色关联表
-     */
-    Integer addUserRole(@Param("Phone") String Phone,@Param("roleNo")List<Integer> roleNo);
+
 
     /*修改用户*/
     Integer upUser(UserInfo user);

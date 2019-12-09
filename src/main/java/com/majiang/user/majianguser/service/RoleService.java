@@ -1,18 +1,18 @@
-package com.majiang.user.majianguser.mapper;
+package com.majiang.user.majianguser.service;
 
-
-import com.majiang.user.majianguser.bean.Permission;
 import com.majiang.user.majianguser.bean.Role;
+import com.majiang.user.majianguser.bean.UserInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface RoleMapper {
+public interface RoleService {
     /**
      * 根据手机号查询对应角色
      * @return
      */
     List<Role> findByUserPhone(String Phone);
+
 
 
     /**
@@ -29,11 +29,10 @@ public interface RoleMapper {
     /**
      * 添加角色权限关联表
      */
-    Integer addRolePermiss(@Param("reloNo") Integer reloNo,@Param("permissionNo") List<Integer> permissions);
-
+    Integer addRolePermiss(Integer reloNo,  List<Integer> permissions);
 
     /**
      * 添加用户角色关联表
      */
-    Integer addUserRole(@Param("Phone") String Phone,@Param("roleNo")List<Integer> roleNo);
+    void addUserRole(String Phone,List<Role> roles);
 }
