@@ -42,29 +42,23 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void addUserRole(String Phone, List<Role> roles) throws Exception {
-        System.out.println("用户传进来的roles：" + roles);
         List<Integer> roleNos = null;
         Integer integer = null;
         List<Role> allroles = null;
         try {
-            //TODO 根据roles获取到name在查询数据库获取到所有角色的编号
-            //List<String> collect = roles.stream().map(Role::getName).collect(Collectors.toList());
             allroles = roleMapper.findAll();
             if (null == allroles) {
-                throw new Exception("未查询到角色:"+allroles);
+                throw new Exception("未查询到角色:" + allroles);
             }
-            System.out.println("数据库中获取到的roles：" + allroles);
             for (Role role1 : roles) {
                 for (Role role : allroles) {
                     if (role1.getName().equals(role.getName())) {
-                        System.out.println("遍历用户传进来的roles：" + role1.getName() + ",roleNO:" + role1.getRoleNo());
-                        System.out.println("遍历数据库中得到的roles：" + role.getName() + ",roleNO:" + role.getRoleNo());
                         role1.setRoleNo(role.getRoleNo());
                     }
                 }
             }
-            System.out.println("赋值完用户传进来的数据:" + roles);
-            roleNos = roles.stream().map(Role::getRoleNo).collect(Collectors.toList());
+           //过滤掉roleNO为null的，然后再获取到roleno并生成List<Integer> roleNos
+            roleNos = roles.stream().filter(role -> role.getRoleNo()!=null).map(Role::getRoleNo).collect(Collectors.toList());
             roleMapper.addUserRole(Phone, roleNos);
         } catch (Exception e) {
             LOGGER.error("添加用户角色关联错误:", e);
