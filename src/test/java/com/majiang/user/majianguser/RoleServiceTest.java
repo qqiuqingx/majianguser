@@ -23,7 +23,7 @@ public class RoleServiceTest {
         String Phone = "1888101468222";
         List<Role> roles = new ArrayList<>();
         roles.add(new Role().setName("123"));
-        //roles.add(new Role().setName("admin"));
+        roles.add(new Role().setName("admin"));
         roles.add(new Role().setName("user"));
         try {
             roleService.addUserRole(Phone, roles);

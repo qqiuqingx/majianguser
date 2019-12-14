@@ -45,11 +45,20 @@ public class RoleServiceImpl implements RoleService {
         List<Integer> roleNos = null;
         Integer integer = null;
         List<Role> allroles = null;
+        List<Integer> collect=null;
         try {
             allroles = roleMapper.findAll();
             if (null == allroles) {
                 throw new Exception("未查询到角色:" + allroles);
             }
+/*
+            //
+            for (Role role:roles){
+
+                collect = allroles.stream().filter(role1 -> role.getName().equals(role1.getName())).map(Role::getRoleNo).collect(Collectors.toList());
+            }
+            System.out.println("新方法得到的:"+collect);
+*/
             for (Role role1 : roles) {
                 for (Role role : allroles) {
                     if (role1.getName().equals(role.getName())) {

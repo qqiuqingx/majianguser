@@ -26,6 +26,7 @@ import javax.sound.midi.Soundbank;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -119,4 +120,23 @@ public class MajianguserApplicationTests {
         System.out.println("属性处理后:"+majiangUserBean);
     }
 
+
+    @Test
+    public  void updateUser(){
+        List<UserReqVO> users =new ArrayList<>();
+        users.add(new UserReqVO().setPhone("18881014680").setName("张三").setPassWord("123456"));
+        users.add(new UserReqVO().setPhone("18881014681").setName("李四").setPassWord("123456"));
+        users.add(new UserReqVO().setPhone("18881014684").setName("希尔瓦娜斯").setPassWord("123456"));
+       try {
+
+        for (UserReqVO userReqVO:users){
+            UserVO userVO = userInfoservice.insertUser(userReqVO);
+            System.out.println(userVO);
+        }
+
+       }catch (Exception e){
+           System.out.println("异常"+e);
+       }
+
+    }
 }

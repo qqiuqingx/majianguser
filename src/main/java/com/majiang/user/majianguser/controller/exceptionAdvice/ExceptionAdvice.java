@@ -29,7 +29,6 @@ public class ExceptionAdvice {
     }
     @ExceptionHandler({ AuthorizationException.class})
     public String MyException(){
-
         return "redirect:/";
     }
 }

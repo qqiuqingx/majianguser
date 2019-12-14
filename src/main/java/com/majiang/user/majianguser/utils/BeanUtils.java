@@ -42,7 +42,7 @@ public final class BeanUtils {
      * 利用反射设置指定类公共属性的值
      * @param obj
      */
-    public  static void setXXX(Object obj){
+    public  static synchronized void setXXX(Object obj){
         Class cls = obj.getClass();
         try {
             Method setKeyID = cls.getDeclaredMethod("setKeyID",String.class);

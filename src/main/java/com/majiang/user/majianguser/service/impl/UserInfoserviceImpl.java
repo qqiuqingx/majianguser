@@ -24,6 +24,7 @@ import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class UserInfoserviceImpl implements UserInfoservice {
     RedisUtils redisUtils;
 
     /*添加员工*/
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public UserVO insertUser(UserReqVO userReqVO) throws Exception {
         UserInfo userInfo = null;
         UserVO userVO = null;
-        List<Role> roles=null;
+        List<Role> roles=new ArrayList<>();
         try {
             Logger logger = LoggerFactory.getLogger(getClass());
             System.out.println("用户传进来的:" + userReqVO);
@@ -54,8 +55,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
             String desPhone = null;
             //将参数一的内容复制到参数二
             BeanUtils.copyProperties(userReqVO, userInfo);
-            System.out.println("复制后的INFO：" + userInfo);
-            System.out.println("复制后的VO:" + userReqVO);
             if (userInfo.getName() == null || "".equals(userInfo.getName())) {
                 return new UserVO(UserEnum.UserNameNotNull);
             }
@@ -73,6 +72,7 @@ public class UserInfoserviceImpl implements UserInfoservice {
             //判断手机号是否已添加
             if (null != selecUser(desPhone)) {
                 throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
+               // throw new Exception("手机号已存在");
             }
             //加密密码
             userInfo.setPassWord(MD5.md5(userInfo.getPassWord())).setPhone(desPhone);
@@ -90,13 +90,13 @@ public class UserInfoserviceImpl implements UserInfoservice {
         } catch (majiangRunTimeException exception) {
             LOGGER.error("错误:" + exception.getCode() + ",原因:" + exception.getMessage());
             //事务手动回滚
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UserException(UserExceptionEnum.UserPhoneNotOnly);
         } catch (Exception e) {
             LOGGER.error("错误:", e);
             e.printStackTrace();
             //事务手动回滚
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+           // TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new Exception(e);
         } finally {
             LOGGER.warn("添加的用户为：" + userInfo);
@@ -212,7 +212,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
 
     private UserInfo selecUser(String Phone) {
         UserInfo userInfo = null;
-
         try {
             userInfo = userInfoMapper.selectUser(Phone);
         } catch (Exception e) {

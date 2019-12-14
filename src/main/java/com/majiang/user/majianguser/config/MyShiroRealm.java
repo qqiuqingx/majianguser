@@ -62,16 +62,16 @@ public class MyShiroRealm extends AuthorizingRealm {
         //获取在session中的用户数据
         UserInfo user = (UserInfo)SecurityUtils.getSubject().getSession().getAttribute(this.user);
         if(user!=null) {
-            System.out.println("shiro.session.user:" + user);
+            //System.out.println("shiro.session.user:" + user);
             List<Role> roles = roleMapper.findByUserPhone(user.getPhone());
             System.out.println("根据用户手机号获取到的roles:" + roles);
             Set<String> collect = roles.stream().map(Role::getName).collect(Collectors.toSet());
-            System.out.println("获取到的角色名称" + collect);
+            //System.out.println("获取到的角色名称" + collect);
             authorizationInfo.setRoles(collect);
             List<Permission> permission = permissionMapper.findByUserPhone(user.getPhone());
             System.out.println("根据用户手机号获取到的权限:" + permission);
             Set<String> collect1 = permission.stream().map(Permission::getPermission).collect(Collectors.toSet());
-            System.out.println("获取到的权限Permission" + collect1);
+            //System.out.println("获取到的权限Permission" + collect1);
             authorizationInfo.setStringPermissions(collect1);
         }
         return authorizationInfo;
