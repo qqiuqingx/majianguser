@@ -68,6 +68,8 @@ mybatis:
 majiang:
   redis:
     majiangs: majiangs
+    ORDERKEY: orderkey
+    ORDER_OUT_TIME: 900
     MAJIANG_TIME_OUT: 86400
   shiro:
     userLoginSession: user_login

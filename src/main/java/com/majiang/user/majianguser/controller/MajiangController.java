@@ -1,23 +1,14 @@
 package com.majiang.user.majianguser.controller;
 
-import com.google.gson.Gson;
-import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
-import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
-import com.majiang.user.majianguser.config.MyMqConfig;
-import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.MajiangService;
-import com.majiang.user.majianguser.utils.BeanUtils;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
-import io.lettuce.core.ScriptOutputType;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -45,7 +36,7 @@ public class MajiangController {
         if (cookie != null) {
             majiangVo = majiangService.buyMajiang(majiangKeyID, cookie);
         } else {
-            System.out.println("MajiangController.buyMajiang未进入service层");
+            LOGGER.warn("MajiangController.buyMajiang未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
         }
         LOGGER.warn("MajiangController.buyMajiang返回值:" + majiangVo);
@@ -68,7 +59,7 @@ public class MajiangController {
             userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
             majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone());
         } else {
-            System.out.println("MajiangController.getMU未进入service层");
+            LOGGER.warn("MajiangController.getMU未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
         }
         LOGGER.warn("MajiangController.getMU返回值:" + majiangVo);

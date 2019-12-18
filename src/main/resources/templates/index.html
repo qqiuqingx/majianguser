@@ -143,7 +143,6 @@
                  if (JSON.code == 0) {
                      /*重定向*!/
                      /!*Http.open("/main");*/
-                     alert(JSON.msg);
                      getMU(ss.value)
                  } else {
                      alert(JSON.msg)
@@ -162,6 +161,12 @@
                 console.log(JSON)
                 if (JSON.code == 0) {
                     console.log("获取订单成功");
+                    var r=confirm("预定成功，是否前往订单界面？");
+                    if (r==true){
+                        console.log("var r=confirm 判断为true")
+                    } else {
+                        console.log("var r=confirm 判断为false")
+                    }
                 } else {
                     console.log("失败了")
                 }

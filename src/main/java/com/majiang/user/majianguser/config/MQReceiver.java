@@ -25,6 +25,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.LongStream;
 
 @Component
 public class MQReceiver {
@@ -32,7 +33,10 @@ public class MQReceiver {
     private static final Logger LOGGER = LoggerFactory.getLogger(MQReceiver.class);
     @Autowired
     private RedisUtils redisUtils;
-
+    @Value("${majiang.redis.ORDERKEY}")
+    private String ORDERKEY;
+    @Value("${majiang.redis.ORDER_OUT_TIME}")
+    private Long ORDER_OUT_TIME;
     @Autowired
     MajiangService majiangService;
     @RabbitHandler
@@ -66,13 +70,20 @@ public class MQReceiver {
             if (count != null) {
                 System.out.println("添加成功addAllMajiangUserBean:" + count);
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 60 * 2);
+                //将订单信息添加到redis中
+                LongStream longs = new Random().longs(60, 180);
+                System.out.println("产生的随机数:"+longs);
+                System.out.println("longs.count():"+longs.count());
+                redisUtils.set(ORDERKEY+"_"+userPhone + "_" + majiangKeyID,majiangUserBean,ORDER_OUT_TIME);
             }
+
             //  更新麻将表中的桌数
             newNum = (Integer) redisUtils.get(String.valueOf(majiangKeyID));
             System.out.println("redis中的num:"+newNum);
             if (null==newNum){throw new Exception("根据majiangkeyID获取到redis中麻将的桌数:"+newNum);}
             majiang.setNum(newNum);
-            majiangService.updateMajiang(majiang);
+            Integer integer = majiangService.updateMajiang(majiang);
+            System.out.println("majiangService.updateMajiang的返回值:"+integer);
             //  更新redis中的数据
             redisUtils.set(String.valueOf(majiangKeyID), newNum);
             //手动确认消息，需要先配置:acknowledge-mode: manual

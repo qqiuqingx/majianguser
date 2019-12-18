@@ -88,8 +88,9 @@ public class MajiangServiceImpl implements MajiangService {
 
     @Override
     public Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean) {
-
-        return majiangMapper.addAllMajiangUserBean(majiangUserBean);
+        Integer integer = majiangMapper.addAllMajiangUserBean(majiangUserBean);
+        System.out.println("addAllMajiangUserBeanf返回值》》》》》》》》》"+integer);
+        return integer;
     }
 
     @Override
@@ -115,6 +116,7 @@ public class MajiangServiceImpl implements MajiangService {
                 System.out.println("进入判断");
                 return new MajiangVo(majiangEnum.LOGINFORNOW);
             }
+            majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
             //判断是否重复预定
             Object o = redisUtils.get(userInfo.getPhone() + "_" + majiangKeyID);
             if (o!=null){
@@ -128,7 +130,6 @@ public class MajiangServiceImpl implements MajiangService {
                 redisUtils.set(majiangKeyID,0);
                 return new MajiangVo(majiangEnum.MAJIANGNUM);
             }
-            majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
             BeanUtils.notNull(majiangUserBean,true);
             System.out.println("配置的amqp："+amqpTemplate);
             amqpTemplate.convertAndSend(MyMqConfig.QUEUE_NAME,new Gson().toJson(majiangUserBean));

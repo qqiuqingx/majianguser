@@ -1,6 +1,6 @@
 package com.majiang.user.majianguser.bean;
 
-public class MajiangUserBean  extends  PrentBean{
+public class MajiangUserBean  extends  PrentBean {
     private  Integer keyID;
     private String userPhone;
     private Integer majiangKeyID;
