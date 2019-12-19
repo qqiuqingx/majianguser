@@ -54,27 +54,30 @@ public class MQReceiver {
                 //数据库中桌数少于0了 说明桌数已满，直接结束方法
                 return;
             }
-            //更新麻将桌数
-           // redisUtils.set(String.valueOf(majiangUserBean.getMajiangKeyID()), majiang.getNum());
             majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, userPhone));
+            if (redisUtils.get(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) + "_" + majiangKeyID)!=null){
+                System.out.println("已经存在了订单，直接结束方法");
+                return;
+            }
             //根据用户手机和麻将KeyID来获取订单
-            MajiangVo majiangVo = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
-            List<MajiangUserBean> muByKeyIDandUserPhone = (List)majiangVo.getDate();
-            if (muByKeyIDandUserPhone != null && muByKeyIDandUserPhone.size() >= 1) {
+           /* MajiangVo majiangVo = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
+            if (majiangVo.getDate()!=null){
+                redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
+                return;
+            }*/
+            // List<MajiangUserBean> muByKeyIDandUserPhone = (List)majiangVo.getDate();
+            /*if (muByKeyIDandUserPhone != null && muByKeyIDandUserPhone.size() >= 1) {
                 System.out.println("进入判断是否大于1》》》》》》》》》》》》》》》》》》》");
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
                 return;
-            }
+            }*/
             //  更新najianguserbean订单表的数据
             Integer count = majiangService.addAllMajiangUserBean(majiangUserBean);
             if (count != null) {
                 System.out.println("添加成功addAllMajiangUserBean:" + count);
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 60 * 2);
                 //将订单信息添加到redis中
-                LongStream longs = new Random().longs(60, 180);
-                System.out.println("产生的随机数:"+longs);
-                System.out.println("longs.count():"+longs.count());
-                redisUtils.set(ORDERKEY+"_"+userPhone + "_" + majiangKeyID,majiangUserBean,ORDER_OUT_TIME);
+                redisUtils.set(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) + "_" + majiangKeyID,majiangUserBean,ORDER_OUT_TIME+new Random().nextInt(120)+60);
             }
 
             //  更新麻将表中的桌数
