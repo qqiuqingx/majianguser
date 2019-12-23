@@ -70,6 +70,44 @@
     <!-- 内容主体区域 -->
     <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
     </div>
+
+    <div class="top">
+        <h4 style="text-align: center">订单详情页</h4>
+    </div>
+    <div class="goods">
+        <div class="containers">
+            <div class="goods_view">
+                <img  id="goodsImg"  width="560"/>
+            </div>
+            <div class="goods_info">
+                <h2 id="goodsName"></h2>
+                <p class="title" text="${goods.goodsTitle}"></p>
+                <p>
+                    <span class="price1"  id="orderPrice"></span>
+                </p>
+                <div class="seckill_data">
+                    <div>
+                        <span>下单时间</span>
+                        <p id="createDate"></p>
+                    </div>
+                    <div>
+                        <span>订单状态</span>
+                        <p id="orderStatus"></p>
+                    </div>
+                </div>
+                <div class="count">
+                    <span>收货人：</span>
+                    <span>XXX  1383838483</span>
+                </div>
+                <div class="count">
+                    <span>收货地址：</span>
+                    <span>北京市昌平区回龙观龙博一区</span>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+            </div>
+        </div>
+    </div>
     <br>
 </div>
 
