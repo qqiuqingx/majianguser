@@ -14,8 +14,10 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +27,10 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserUrlController {
+
+
+    @Value("${majiang.redis.ORDERKEY}")
+    private String ORDERKEY;
 
     @Autowired
     RedisUtils redisUtils;
@@ -73,4 +79,16 @@ public class UserUrlController {
         LOGGER.warn("进入跳转方法UserUrlController.getUserList");
         return "page/userList";
     }
+
+
+
+    @RequestMapping(value = "/userOrder/{majiangKeyID}",method = RequestMethod.GET)
+    public String getUserOrder(@PathVariable String majiangKeyID,@CookieValue(value = "token") Cookie cookie){
+        redisUtils.get(ORDERKEY+""+majiangKeyID+"");
+
+
+
+        return  null;
+    }
+
 }
