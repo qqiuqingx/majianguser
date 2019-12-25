@@ -1,5 +1,6 @@
 package com.majiang.user.majianguser.controller;
 
+import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.enums.majiangEnum;
@@ -66,4 +67,10 @@ public class MajiangController {
         return majiangVo;
     }
 
+
+
+    @RequestMapping(value = "" ,method = RequestMethod.POST)
+    public MajiangUserBean getUserOrderByMajiangKeyID(){
+        return null;
+    }
 }

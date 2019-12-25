@@ -77,7 +77,7 @@ public class MQReceiver {
                 System.out.println("添加成功addAllMajiangUserBean:" + count);
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 60 * 2);
                 //将订单信息添加到redis中
-                redisUtils.set(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) + "_" + majiangKeyID,majiangUserBean,ORDER_OUT_TIME+new Random().nextInt(120)+60);
+                redisUtils.set(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) ,majiangUserBean,ORDER_OUT_TIME+new Random().nextInt(120)+60);
             }
 
             //  更新麻将表中的桌数

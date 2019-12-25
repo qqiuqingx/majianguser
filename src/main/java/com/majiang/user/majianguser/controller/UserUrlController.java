@@ -1,6 +1,7 @@
 package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.MajianguserApplication;
+import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.UserExceptionEnum;
@@ -82,13 +83,20 @@ public class UserUrlController {
 
 
 
-    @RequestMapping(value = "/userOrder/{majiangKeyID}",method = RequestMethod.GET)
-    public String getUserOrder(@PathVariable String majiangKeyID,@CookieValue(value = "token") Cookie cookie){
-        redisUtils.get(ORDERKEY+""+majiangKeyID+"");
+    @RequestMapping(value = "/userOrder",method = RequestMethod.GET)
+    public String getUserOrder(@CookieValue(value = "token") Cookie cookie){
+        String token = cookie.getValue();
+        UserInfo userInfo = (UserInfo)redisUtils.get(token);
+        System.out.println("redis获取的userinfo："+userInfo);
+        if (token!=null&&userInfo!=null) {
+            MajiangUserBean majiangUserBean = (MajiangUserBean)redisUtils.get(ORDERKEY + "_" + userInfo.getPhone() );
+            System.out.println("获取的majiangUserBean"+majiangUserBean);
+        }
 
 
 
-        return  null;
+
+        return  "page/userOrder";
     }
 
 }
