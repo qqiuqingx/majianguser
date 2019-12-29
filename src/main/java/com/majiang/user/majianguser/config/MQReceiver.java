@@ -55,22 +55,10 @@ public class MQReceiver {
                 return;
             }
             majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, userPhone));
-            if (redisUtils.get(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) + "_" + majiangKeyID)!=null){
+            if (redisUtils.get(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone)+majiangKeyID )!=null){
                 System.out.println("已经存在了订单，直接结束方法");
                 return;
             }
-            //根据用户手机和麻将KeyID来获取订单
-           /* MajiangVo majiangVo = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), majiangUserBean.getUserPhone());
-            if (majiangVo.getDate()!=null){
-                redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
-                return;
-            }*/
-            // List<MajiangUserBean> muByKeyIDandUserPhone = (List)majiangVo.getDate();
-            /*if (muByKeyIDandUserPhone != null && muByKeyIDandUserPhone.size() >= 1) {
-                System.out.println("进入判断是否大于1》》》》》》》》》》》》》》》》》》》");
-                redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 2 * 60);
-                return;
-            }*/
             //  更新najianguserbean订单表的数据
             Integer count = majiangService.addAllMajiangUserBean(majiangUserBean);
             if (count != null) {

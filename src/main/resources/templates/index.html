@@ -158,7 +158,7 @@
             type: "get",
             data: "majiangKeyID="+ss,
             success: function (JSON) {
-                console.log(JSON)
+                console.log("获取到对应的订单:"+JSON)
                 if (JSON.code == 0) {
                     console.log("获取订单成功");
                     var r=confirm("预定成功，是否前往订单界面？");
@@ -169,7 +169,7 @@
                         console.log("var r=confirm 判断为false")
                     }
                 } else {
-                    console.log("失败了")
+                    console.log("获取订单失败了")
                 }
             }
         });
