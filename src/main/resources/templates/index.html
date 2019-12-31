@@ -94,16 +94,10 @@
              contentType: "application/json;charset=utf-8",
              success: function (JSON) {
                  if (JSON.code == 0) {
-                     //./majiang/buy
                      var datas=JSON.date;
                      for (var i=0;i<JSON.date.length;i++){
-                        // $("#majiangs-ss").append(' <div style=\"height: 50px\" value="+JSON.date[i].majiangNum+">第'+JSON.date[i].majiangNum+'桌<br><a style="color: #5FB878" class="a_majiang"  href=\"#\">'+'  订  '+'</a></div>');
                          $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value=\"'+JSON.date[i].keyID+'\">第'+JSON.date[i].majiangNum+'桌</button><br>');
-                         console.log(JSON.date[i]);
                      }
-                    // $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value="12346">第'+JSON.date[i].majiangNum+'桌</button>');
-                     /*重定向*/
-                     /*Http.open("/main");*/
                      console.log("成功")
                  } else {
                      alert(JSON.msg);
@@ -114,24 +108,7 @@
     </script>
 
 <script>
-   /* $(".a_majiang").click(function () {
-        console.log("jinru");
-            $.ajax({
-                url: "./majiang/buy",
-                type: "get",
-                data: "goodid",
-                success: function (JSON) {
-                    if (JSON.code == 0) {
-                        /!*重定向*!/
-                        /!*Http.open("/main");*!/
-                        console.log("成功")
-                        //window.location.href = "http://localhost:8080/user/";
-                    } else {
-                        alert(JSON.msg);
-                    }
-                }
-            });
-    });*/
+
 
      function send(ss) {
          $.ajax({
@@ -141,9 +118,10 @@
              success: function (JSON) {
                  console.log(JSON);
                  if (JSON.code == 0) {
-                     /*重定向*!/
-                     /!*Http.open("/main");*/
-                     getMU(ss.value)
+                     var s=ss.value;
+                     setTimeout(function () {
+                         getMU(s)
+                     }, 3000);
                  } else {
                      alert(JSON.msg)
                  }
@@ -153,6 +131,7 @@
 </script>
 <script>
     function getMU(ss) {
+        console.log("调用了getMU方法:"+ss);
         $.ajax({
             url: "/user/majiang/getMU",
             type: "get",
@@ -169,7 +148,7 @@
                         console.log("var r=confirm 判断为false")
                     }
                 } else {
-                    console.log("获取订单失败了")
+                    alert(JSON.msg)
                 }
             }
         });

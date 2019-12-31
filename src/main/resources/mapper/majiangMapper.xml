@@ -5,7 +5,7 @@
         KeyID,majiangNum,num,IsDelete,addTime,modifyTime
     </sql>
     <sql id="majianguser">
-        KeyID,userPhone,majiangKeyID,IsDelete,addTime,modifyTime
+        KeyID,userPhone,majiangKeyID,status,statusName,IsDelete,addTime,modifyTime
     </sql>
     <!--List<majiangBean> getAllmajiang();-->
     <select id="getAllmajiang" resultType="com.majiang.user.majianguser.bean.majiangBean">
@@ -60,9 +60,9 @@
     <insert id="addAllMajiangUserBean">
         insert into
          majign_user(
-            userPhone,majiangKeyID,IsDelete,addTime,modifyTime
+            userPhone,majiangKeyID,status,statusName,IsDelete,addTime,modifyTime
          )values(
-            #{userPhone},#{majiangKeyID},#{IsDelete},#{addTime},#{modifyTime}
+            #{userPhone},#{majiangKeyID},#{status},#{statusName},#{IsDelete},#{addTime},#{modifyTime}
          )
     </insert>
 
