@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
@@ -43,6 +44,7 @@ public class MQReceiver {
     @RabbitListener(queues = MyMqConfig.QUEUE_NAME)
     //@Transactional  //为什么在这里加事务注解，只能入一条相同的数据
     public void majiangorder(String massage, Channel channel, Message messages) throws IOException {
+        long start = System.currentTimeMillis();
         MajiangUserBean majiangUserBean = new Gson().fromJson(massage, MajiangUserBean.class);
         Integer majiangKeyID=majiangUserBean.getMajiangKeyID();
         String userPhone = majiangUserBean.getUserPhone();
@@ -59,6 +61,8 @@ public class MQReceiver {
                 System.out.println("已经存在了订单，直接结束方法");
                 return;
             }
+            //设置订单状态
+            majiangUserBean.setStatusandName(MajiangUserOrderEnum.ORDER_STAY_PAY);
             //  更新najianguserbean订单表的数据
             Integer count = majiangService.addAllMajiangUserBean(majiangUserBean);
             if (count != null) {
@@ -86,6 +90,8 @@ public class MQReceiver {
             channel.basicNack(messages.getMessageProperties().getDeliveryTag(),false,false);
         }finally {
             LOGGER.warn("mq队列里获取到的数据:"+massage);
+            long end = System.currentTimeMillis();
+            System.out.println("消费者消费数据共："+(end-start)+"毫秒");
         }
 
 

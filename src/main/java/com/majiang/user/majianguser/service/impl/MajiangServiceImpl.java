@@ -99,7 +99,7 @@ public class MajiangServiceImpl implements MajiangService {
                 length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
                 redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
                 System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
-                return majiangVo;
+              //  return majiangVo;
             }
             majiangVo=new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
         }catch (Exception e){
