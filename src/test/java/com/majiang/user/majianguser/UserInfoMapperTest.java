@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,10 +54,18 @@ public class UserInfoMapperTest {
     @Test
     public void upuser() {
 
-        Integer integer = userInfoMapper.upUser(new UserInfo().setName("hah").
+       /* Integer integer = userInfoMapper.upUser(new UserInfo().setName("hah").
                 setPhone("4EB61209FDE1D883D01BA5FC85C154AA").setPassWord("123456789").setIsDelete(0));
-        /*4EB61209FDE1D8830C6A7D811CD07067*/
-        System.out.println(integer);
+        *//*4EB61209FDE1D8830C6A7D811CD07067*//*
+        System.out.println(integer);*/
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = simpleDateFormat.format(date);
+        try {
+            System.out.println( simpleDateFormat.parse(format));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -70,7 +70,6 @@
     <!-- 内容主体区域 -->
     <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
     </div>
-
     <div class="top">
         <h4 style="text-align: center">订单详情页</h4>
     </div>
@@ -94,9 +93,13 @@
                         <span>订单状态</span>
                         <p id="orderStatus"></p>
                     </div>
+                    <div>
+                        <span>价格</span>
+                        <p id="unitprice"></p>
+                    </div>
                 </div>
                 <div class="count">
-                    <span>收货人：</span>
+                    <span>订桌人：</span>
                     <span>XXX  1383838483</span>
                 </div>
                 <div class="count">
@@ -123,6 +126,22 @@
         });
     });
 </script>
-
+<script>
+    $(function () {
+        //获取modelandview中的值
+        //var majiangKeyID1=[[${majiangKeyID}]];
+        $.ajax({
+            url: "/user/majiang/getMU",
+            type: "get",
+            data: "majiangKeyID="+[[${majiangKeyID}]],
+            contentType: "application/json;charset=utf-8",
+            success: function (JSON) {
+                if (JSON.code==0){
+                    console.log(JSON.date[0])
+                }
+            }
+        });
+    })
+</script>
 </body>
 </html>
