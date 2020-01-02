@@ -56,7 +56,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("进入MyShiroRealm.doGetAuthorizationInfo方法》》》》》》》》》》》》。");
         log.warn("权限配置MyShiroRealm.doGetAuthorizationInfo方法》》》》》》》》》》》》");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //获取在session中的用户数据
@@ -64,12 +63,10 @@ public class MyShiroRealm extends AuthorizingRealm {
         if(user!=null) {
             //System.out.println("shiro.session.user:" + user);
             List<Role> roles = roleMapper.findByUserPhone(user.getPhone());
-            System.out.println("根据用户手机号获取到的roles:" + roles);
             Set<String> collect = roles.stream().map(Role::getName).collect(Collectors.toSet());
             //System.out.println("获取到的角色名称" + collect);
             authorizationInfo.setRoles(collect);
             List<Permission> permission = permissionMapper.findByUserPhone(user.getPhone());
-            System.out.println("根据用户手机号获取到的权限:" + permission);
             Set<String> collect1 = permission.stream().map(Permission::getPermission).collect(Collectors.toSet());
             //System.out.println("获取到的权限Permission" + collect1);
             authorizationInfo.setStringPermissions(collect1);

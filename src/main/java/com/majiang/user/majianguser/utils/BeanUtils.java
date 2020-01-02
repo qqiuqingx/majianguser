@@ -71,10 +71,14 @@ public final class BeanUtils {
      *
      * @return 1
      */
-    private static Date getStartDate() {
+    public static String getFormatDate(Date date) {
         try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date parse = simpleDateFormat.parse(simpleDateFormat.format(date));
+            System.out.println(parse);
             //parse将指定的字符串转换为date类型
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-01 00:00:00");
+            //new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-01 00:00:00");
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

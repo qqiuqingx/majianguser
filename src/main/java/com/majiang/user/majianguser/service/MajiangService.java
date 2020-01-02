@@ -16,12 +16,31 @@ public interface MajiangService {
 
     majiangBean getMajiang(Integer KeyID);
 
+    /**
+     * 根据majiangkeyID和用户账号获取订单信息
+     * @param majiangKeyID
+     * @param UserPhone
+     * @return 获取订单信息
+     */
     MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
+
+
+
 
     MajiangVo getAllMajiangUserBean(String UserPhone);
 
+    /**
+     * 添加订单
+     * @param majiangUserBean 订单信息
+     * @return
+     */
     Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean);
 
+    /**
+     * 修改麻将桌
+     * @param majiangBean
+     * @return
+     */
     Integer updateMajiang(majiangBean majiangBean);
 
     MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie);
