@@ -53,7 +53,7 @@
         from
         majign_user
         where
-        userPhone=#{userPhone} and majiangKeyID=#{majiangKeyID} and IsDelete=0
+        userPhone=#{userPhone} and majiangKeyID=#{majiangKeyID} and IsDelete=0 order by modifyTime desc
     </select>
 
     <!--Integer addAllMajiangUserBean(MajiangUserBean majiangUserBean)-->

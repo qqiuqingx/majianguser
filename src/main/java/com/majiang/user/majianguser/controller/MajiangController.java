@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.controller;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.DesUtil;
@@ -34,14 +35,22 @@ public class MajiangController {
     public MajiangVo buyMajiang(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID,Integer num) {
         LOGGER.warn("MajiangController.buyMajiang>>>>>>>>>>>>>>>>" + majiangKeyID);
         MajiangVo majiangVo = null;
-        if (cookie != null) {
-            majiangVo = majiangService.buyMajiang(majiangKeyID, cookie,num);
-        } else {
-            LOGGER.warn("MajiangController.buyMajiang未进入service层");
-            majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
+        try {
+            if (cookie != null) {
+                majiangVo = majiangService.buyMajiang(majiangKeyID, cookie,num);
+            } else {
+                LOGGER.warn("MajiangController.buyMajiang未进入service层");
+                majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
+            }
+        }catch (Exception e){
+            LOGGER.error("系统异常",e);
+            majiangVo=new MajiangVo(UserEnum.application);
+        }finally {
+            LOGGER.warn("MajiangController.buyMajiang返回值:" + majiangVo);
+            return majiangVo;
         }
-        LOGGER.warn("MajiangController.buyMajiang返回值:" + majiangVo);
-        return majiangVo;
+
+
     }
 
 
@@ -58,7 +67,7 @@ public class MajiangController {
         if (cookie != null) {
             UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
             userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
-            majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone());
+            majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone(),1);
         } else {
             LOGGER.warn("MajiangController.getMU未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);

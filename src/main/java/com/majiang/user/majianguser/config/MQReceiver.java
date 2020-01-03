@@ -6,6 +6,7 @@ import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
@@ -53,6 +54,13 @@ public class MQReceiver {
         Integer newNum=null;
         System.out.println("majianguser:"+majiangUserBean);
         try {
+            //这个地方的数据是在程序启动时CommandLineRunner.run中添加的，进行预减
+            //num为自减1之后的结果
+            if (redisUtils.decr(majiangKeyID.toString()) < 0) {
+                redisUtils.set(majiangKeyID.toString(), 0);
+                throw new  Exception("redis中麻将自减错误");
+
+            }
             majiangBean majiang = majiangService.getMajiang(majiangKeyID);
             if (majiang.getNum() <= 0) {
                 //数据库中桌数少于0了 说明桌数已满，直接结束方法

@@ -16,14 +16,14 @@ public interface MajiangService {
 
     majiangBean getMajiang(Integer KeyID);
 
+
     /**
      * 根据majiangkeyID和用户账号获取订单信息
      * @param majiangKeyID
      * @param UserPhone
-     * @return 获取订单信息
+     * @param OrderStatus 订单的对应状态，若为空则查出所有的  0:已支付，1:待支付,2:已取消，3:已退款,4：逾期未支付
+     * @return
      */
-    MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
-
     MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone,Integer OrderStatus);
 
 

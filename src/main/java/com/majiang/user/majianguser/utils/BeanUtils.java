@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 //@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public final class BeanUtils {
-    private static  final     SimpleDateFormat SIMPLE_DATE_FORMAT= new SimpleDateFormat("YYYYMMddHHmmss");
+    private static  final     SimpleDateFormat SIMPLE_DATE_FORMAT= new SimpleDateFormat("YYYYMMddHHmmssS");
     /**
      * 构造函数.
      *

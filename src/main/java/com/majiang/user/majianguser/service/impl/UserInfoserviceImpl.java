@@ -49,7 +49,6 @@ public class UserInfoserviceImpl implements UserInfoservice {
         UserVO userVO = null;
         List<Role> roles=new ArrayList<>();
         try {
-            Logger logger = LoggerFactory.getLogger(getClass());
             System.out.println("用户传进来的:" + userReqVO);
             userInfo = new UserInfo();
             String desPhone = null;
@@ -77,13 +76,14 @@ public class UserInfoserviceImpl implements UserInfoservice {
             //加密密码
             userInfo.setPassWord(MD5.md5(userInfo.getPassWord())).setPhone(desPhone);
             System.out.println("加密后的密码：" + userInfo.getPassWord());
+
+            //userInfo.setPhone(desPhone);
             // 增加权限逻辑
             roles.add(new Role().setName("user"));
-            roleService.addUserRole(userInfo.getPhone(),roles);
-            //userInfo.setPhone(desPhone);
             //设置公共属性的值
             BeanUtils.setXXX(userInfo);
-            inserUser(userInfo);
+            userInfoMapper.inserUser(userInfo);
+            roleService.addUserRole(userInfo.getPhone(),roles);
             userInfo.setPassWord("");
             userVO = new UserVO<UserInfo>(userInfo, UserEnum.SUCSS);
             return userVO;

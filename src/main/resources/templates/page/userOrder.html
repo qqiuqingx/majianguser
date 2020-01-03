@@ -144,6 +144,7 @@
             success: function (JSON) {
                 if (JSON.code==0){
                     //时间格式化
+                    console.log(JSON);
                     var da=new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
                     $("#createDate").text(da);
                     $("#orderStatus").text(JSON.date[0].statusName);

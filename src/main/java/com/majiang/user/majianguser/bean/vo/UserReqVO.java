@@ -22,14 +22,7 @@ public class UserReqVO implements Serializable {
                 ", PassWord='" + PassWord + '\'' +
                 '}';
     }
-    /*  @Override
-    public String toString() {
-        return "UserReqVO{" +
-                "Name='" + Name + '\'' +
-                ", Phone='" + Phone + '\'' +
-                ", PassWord='" + PassWord + '\'' +
-                '}';
-    }*/
+
 
     public String getName() {
         return Name;
