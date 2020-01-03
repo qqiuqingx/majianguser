@@ -31,11 +31,11 @@ public class MajiangController {
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     //@RequiresRoles({"admin"})
     @ResponseBody
-    public MajiangVo buyMajiang(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID) {
+    public MajiangVo buyMajiang(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID,Integer num) {
         LOGGER.warn("MajiangController.buyMajiang>>>>>>>>>>>>>>>>" + majiangKeyID);
         MajiangVo majiangVo = null;
         if (cookie != null) {
-            majiangVo = majiangService.buyMajiang(majiangKeyID, cookie);
+            majiangVo = majiangService.buyMajiang(majiangKeyID, cookie,num);
         } else {
             LOGGER.warn("MajiangController.buyMajiang未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);

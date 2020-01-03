@@ -62,7 +62,8 @@ public class UserInfoMapperTest {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = simpleDateFormat.format(date);
         try {
-            System.out.println( simpleDateFormat.parse(format));
+            System.out.println(format);
+            System.out.println( simpleDateFormat.parse(format).toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }

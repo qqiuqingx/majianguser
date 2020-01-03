@@ -42,6 +42,10 @@
                 url: "/user/userLogin",
                 type: "post",
                 contentType: "application/json;charset=utf-8",
+                //JSON.stringify() 方法将 JavaScript 对象转换为字符串。
+               /* 封装一个方法： serializeObject()
+                返回对象JQuery("form").serializeObject()
+                {username:"123",passwoed:"123"}*/
                 data: JSON.stringify($("#form-login").serializeObject()),
                 dataType: "json",
                 success: function (JSON) {

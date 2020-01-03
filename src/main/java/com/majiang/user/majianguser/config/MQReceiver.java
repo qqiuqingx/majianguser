@@ -2,6 +2,7 @@ package com.majiang.user.majianguser.config;
 
 import com.google.gson.Gson;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
@@ -11,6 +12,7 @@ import com.majiang.user.majianguser.service.impl.UserInfoserviceImpl;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import com.rabbitmq.client.Channel;
+import com.sun.xml.internal.bind.v2.TODO;
 import io.lettuce.core.ScriptOutputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,17 +58,14 @@ public class MQReceiver {
                 //数据库中桌数少于0了 说明桌数已满，直接结束方法
                 return;
             }
-            majiangUserBean.setUserPhone(DesUtil.encode(DesUtil.KEY, userPhone));
             if (redisUtils.get(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone)+majiangKeyID )!=null){
                 System.out.println("已经存在了订单，直接结束方法");
                 return;
             }
-            //设置订单状态
-            majiangUserBean.setStatusandName(MajiangUserOrderEnum.ORDER_STAY_PAY);
+            System.out.println("要入库的majianguserBean:"+majiangUserBean);
             //  更新najianguserbean订单表的数据
             Integer count = majiangService.addAllMajiangUserBean(majiangUserBean);
             if (count != null) {
-                System.out.println("添加成功addAllMajiangUserBean:" + count);
                 redisUtils.set(userPhone + "_" + majiangKeyID, 1, 60 * 60 * 2);
                 //将订单信息添加到redis中
                 redisUtils.set(ORDERKEY+"_"+DesUtil.encode(DesUtil.KEY,userPhone) ,majiangUserBean,ORDER_OUT_TIME+new Random().nextInt(120)+60);

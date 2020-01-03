@@ -24,7 +24,7 @@ public interface MajiangService {
      */
     MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
 
-
+    MajiangVo getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone,Integer OrderStatus);
 
 
     MajiangVo getAllMajiangUserBean(String UserPhone);
@@ -43,6 +43,6 @@ public interface MajiangService {
      */
     Integer updateMajiang(majiangBean majiangBean);
 
-    MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie);
+    MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie,Integer num);
 
 }
