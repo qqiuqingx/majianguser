@@ -43,6 +43,6 @@ public interface MajiangService {
      */
     Integer updateMajiang(majiangBean majiangBean);
 
-    MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie);
+    MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie,Integer num);
 
 }

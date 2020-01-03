@@ -75,7 +75,7 @@ public final class BeanUtils {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date parse = simpleDateFormat.parse(simpleDateFormat.format(date));
-            System.out.println(parse);
+            System.out.println(parse.toString());
             //parse将指定的字符串转换为date类型
             //new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-01 00:00:00");
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);

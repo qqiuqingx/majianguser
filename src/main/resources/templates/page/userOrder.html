@@ -8,7 +8,7 @@
 
     <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
     <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
-
+    <script th:src="@{/js/OpenUtils.js}"></script>
 </head>
 <body>
 
@@ -70,6 +70,7 @@
     <!-- 内容主体区域 -->
     <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
     </div>
+    <br>
     <div class="top">
         <h4 style="text-align: center">订单详情页</h4>
     </div>
@@ -86,27 +87,31 @@
                 </p>
                 <div class="seckill_data">
                     <div>
-                        <span>下单时间</span>
-                        <p id="createDate"></p>
+                        <span>下单时间:</span>
+                        <span id="createDate">ss</span>
                     </div>
                     <div>
-                        <span>订单状态</span>
-                        <p id="orderStatus"></p>
+                        <span>订单状态:</span>
+                        <span id="orderStatus"></span>
                     </div>
                     <div>
-                        <span>价格</span>
-                        <p id="unitprice"></p>
+                        <span>单价:</span>
+                        <span id="unitprice"></span>
                     </div>
                 </div>
                 <div class="count">
                     <span>订桌人：</span>
-                    <span>XXX  1383838483</span>
+                    <span id="orderUser">XXX  1383838483</span>
                 </div>
                 <div class="count">
-                    <span>收货地址：</span>
-                    <span>北京市昌平区回龙观龙博一区</span>
+                    <span>数量：</span>
+                    <span id="majiangOrder_num">北京市昌平区回龙观龙博一区</span>
                 </div>
-
+                <div class="count">
+                    <span>总价：</span>
+                    <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
                 <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
             </div>
         </div>
@@ -133,11 +138,20 @@
         $.ajax({
             url: "/user/majiang/getMU",
             type: "get",
+            //取modelandview中的数据majiangKeYID
             data: "majiangKeyID="+[[${majiangKeyID}]],
             contentType: "application/json;charset=utf-8",
             success: function (JSON) {
                 if (JSON.code==0){
-                    console.log(JSON.date[0])
+                    //时间格式化
+                    var da=new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
+                    $("#createDate").text(da);
+                    $("#orderStatus").text(JSON.date[0].statusName);
+                    $("#orderUser").text(JSON.date[0].userName+" "+JSON.date[0].userPhone);
+                    $("#unitprice").text(JSON.date[0].price);
+                    $("#majiangOrder_num").text(JSON.date[0].num);
+                    $("#majiangOrdersum").text(JSON.date[0].sumPrice);
+
                 }
             }
         });

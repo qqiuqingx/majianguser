@@ -6,11 +6,13 @@ import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.MyMqConfig;
+import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.BeanUtils;
+import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +94,9 @@ public class MajiangServiceImpl implements MajiangService {
                 length = (long) new Gson().toJson(muByKeyIDandUserPhone).length();
                 System.out.println("从redis中获取到订单:"+m);
             } else {
-                muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, UserPhone);
+                //todo 增加判断订单状态逻辑
+
+                muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY,UserPhone));
                 if (muByKeyIDandUserPhone.size()<=0){
                     majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
                     return majiangVo;
@@ -100,10 +105,10 @@ public class MajiangServiceImpl implements MajiangService {
                 redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
                 System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
             }
+    /*        for (MajiangUserBean majiangUserBean : muByKeyIDandUserPhone) {
+                majiangUserBean.setUserPhone(DesUtil.decode(DesUtil.KEY,majiangUserBean.getUserPhone()));
+            }*/
 
-            for (MajiangUserBean majiangUserBean : muByKeyIDandUserPhone) {
-
-            }
             majiangVo=new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
         }catch (Exception e){
             LOGGER.error("获取订单异常:",e);
@@ -141,7 +146,7 @@ public class MajiangServiceImpl implements MajiangService {
      * @return 返回是否成功
      */
     @Override
-    public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie) {
+    public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie,Integer num) {
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:" + majiangKeyID + "cookie:" + cookie);
         MajiangUserBean majiangUserBean = null;
         try {
@@ -164,6 +169,23 @@ public class MajiangServiceImpl implements MajiangService {
                 redisUtils.set(majiangKeyID, 0);
                 return new MajiangVo(majiangEnum.MAJIANGNUM);
             }
+
+            //  TODO  设置客户名称，单价，总价以及数量
+            //TODO 设置单价为可配置
+            UserInfo userInfo1=(UserInfo)redisUtils.get(DesUtil.encode(DesUtil.KEY,majiangUserBean.getUserPhone()));
+            majiangUserBean.setUserName(userInfo1.getName());
+            //设置订单状态
+            majiangUserBean.setStatusandName(MajiangUserOrderEnum.ORDER_STAY_PAY);
+            //设置数量
+            majiangUserBean.setNum(num);
+            //设置单价
+            majiangUserBean.setPrice(new BigDecimal(15.00D).setScale(2));
+            System.out.println("设置的单价:"+majiangUserBean.getPrice());
+            //设置总价
+            double sumprice=15.00D*num;
+            majiangUserBean.setSumPrice(new BigDecimal(sumprice).setScale(2));
+            System.out.println("设置的总价:"+majiangUserBean.getSumPrice());
+
             BeanUtils.notNull(majiangUserBean, true);
             System.out.println("配置的amqp：" + amqpTemplate);
             amqpTemplate.convertAndSend(MyMqConfig.QUEUE_NAME, new Gson().toJson(majiangUserBean));

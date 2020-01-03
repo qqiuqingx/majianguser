@@ -114,7 +114,7 @@
          $.ajax({
              url: "/user/majiang/buy",
              type: "get",
-             data: "majiangKeyID="+ss.value,
+             data: "majiangKeyID="+ss.value+"&num=1",
              success: function (JSON) {
                  console.log(JSON);
                  if (JSON.code == 0) {

@@ -44,6 +44,16 @@ public class MajiangServiceTest {
     }
 
     @Test
+    public void getMu(){
+        MajiangVo muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone("1", "4EB61209FDE1D883CED65465F0C48295");
+        System.out.println(muByKeyIDandUserPhone);
+    }
+
+
+
+
+
+    @Test
     public void sd() {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2000, 5000, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(5000));
         CountDownLatch countDownLatch = new CountDownLatch(1);
