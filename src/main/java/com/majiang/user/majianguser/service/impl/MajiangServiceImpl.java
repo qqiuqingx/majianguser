@@ -120,6 +120,42 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
+    public MajiangVo getMUByKeyIDandUserPhone(String majiangKeyID, String UserPhone, Integer OrderStatus) {
+        List<MajiangUserBean> muByKeyIDandUserPhone = new ArrayList<>();
+        System.out.println("MajiangServiceImpl.getMUByKeyIDandUserPhone>>>>>>>>>>>>>>>>>>>>>>>");
+        MajiangVo majiangVo=null;
+        long length = 0;
+        try {
+            MajiangUserBean m = (MajiangUserBean) redisUtils.get(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID);
+            if (m != null) {
+                muByKeyIDandUserPhone.add(m);
+                length = (long) new Gson().toJson(muByKeyIDandUserPhone).length();
+                System.out.println("从redis中获取到订单:"+m);
+            } else {
+                //todo 增加判断订单状态逻辑
+
+                muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY,UserPhone));
+                if (muByKeyIDandUserPhone.size()<=0){
+                    majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
+                    return majiangVo;
+                }
+                length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
+                redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
+                System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
+            }
+                //todo 添加过滤状态不为orderStatus的逻辑，用stream
+
+            majiangVo=new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
+        }catch (Exception e){
+            LOGGER.error("获取订单异常:",e);
+            e.printStackTrace();
+        }finally {
+            LOGGER.warn("获取"+UserPhone+"对应订单,桌数为:"+majiangKeyID+",返回值:"+muByKeyIDandUserPhone);
+        }
+        return majiangVo;
+    }
+
+    @Override
     public MajiangVo getAllMajiangUserBean(String UserPhone) {
         return null;
     }
