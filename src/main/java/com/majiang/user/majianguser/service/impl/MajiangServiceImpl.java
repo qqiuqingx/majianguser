@@ -11,6 +11,7 @@ import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.MajiangService;
+import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.BeanUtils;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -40,13 +40,14 @@ public class MajiangServiceImpl implements MajiangService {
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
+    UserInfoservice userInfoservice;
+    @Autowired
     private majiangMapper majiangMapper;
+
     @Value("${majiang.redis.majiangs}")
     private String majiangs;
-
     @Value("${majiang.redis.ORDERKEY}")
     private String ORDERKEY;
-
     @Value("${majiang.redis.ORDER_OUT_TIME}")
     private Long ORDER_OUT_TIME;
     @Autowired
@@ -165,6 +166,9 @@ public class MajiangServiceImpl implements MajiangService {
                 return new MajiangVo(majiangEnum.REPEAT);
             }
             UserInfo userInfo1=(UserInfo)redisUtils.get(DesUtil.encode(DesUtil.KEY,majiangUserBean.getUserPhone()));
+            if (null ==userInfo1 ) {
+                userInfo1=userInfoservice.selectUser(DesUtil.encode(DesUtil.KEY,majiangUserBean.getUserPhone()));
+            }
             majiangUserBean.setUserName(userInfo1.getName());
             //设置订单状态
             majiangUserBean.setStatusandName(MajiangUserOrderEnum.ORDER_STAY_PAY);
