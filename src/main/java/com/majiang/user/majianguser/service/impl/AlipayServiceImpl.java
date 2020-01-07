@@ -16,7 +16,9 @@ public class AlipayServiceImpl implements AlipayService {
    /* DefaultAlipayClient alipayClient = new DefaultAlipayClient(
             AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);*/
 
-    AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
+    AlipayClient alipayClient = new DefaultAlipayClient(
+            AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
+
     /**
      * web端订单支付
      * @param OrderID    订单编号（唯一）
@@ -39,13 +41,11 @@ public class AlipayServiceImpl implements AlipayService {
 
         //装换格式
        // String body = alipayClient.execute(payRequest).getBody();
-        System.out.println("alipayClient:"+alipayClient);
-        System.out.println("payRequest:"+payRequest);
-        AlipayTradePagePayResponse response = alipayClient.pageExecute(payRequest);
-        System.out.println(response.toString());
+        String response = alipayClient.pageExecute(payRequest).getBody();
+        System.out.println(response);
         //System.out.println(body);
        // System.out.println(body1);
-        return null;
+        return response;
     }
 
     @Override

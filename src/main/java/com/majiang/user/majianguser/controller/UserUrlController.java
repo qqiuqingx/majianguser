@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 
+import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 
@@ -11,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +26,8 @@ public class UserUrlController {
     @Value("${majiang.redis.ORDERKEY}")
     private String ORDERKEY;
 
+    @Autowired
+    private AlipayService alipayService;
     @Autowired
     RedisUtils redisUtils;
     @Autowired
@@ -89,4 +90,18 @@ public class UserUrlController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/goPay",method = RequestMethod.POST)
+    @ResponseBody
+    public String goPay(){
+        String res=null;
+        try {
+            res= alipayService.webPagePay("11231231",15,"麻将");
+        } catch (Exception e) {
+            LOGGER.error("系统异常",e);
+            e.printStackTrace();
+        }finally {
+            LOGGER.warn("返回:"+res);
+        }
+        return res;
+    }
 }

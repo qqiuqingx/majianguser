@@ -112,7 +112,7 @@
                     <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
-                <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+                <button class="btn btn-primary btn-block"  type="submit" id="payButton" onclick="gopay()">立即支付</button>
             </div>
         </div>
     </div>
@@ -130,6 +130,11 @@
             layer.msg(elem.text());
         });
     });
+    function gopay() {
+        console.log("点击")
+        jQuery.post("/user/goPay")
+    }
+    
 </script>
 <script>
     $(function () {
