@@ -79,7 +79,7 @@
             <div class="goods_view">
                 <img  id="goodsImg"  width="560"/>
             </div>
-          <!-- <div class="goods_info">
+        <div class="goods_info">
                 <h2 id="goodsName"></h2>
                 <p class="title" text="${goods.goodsTitle}"></p>
                 <p>
@@ -113,9 +113,9 @@
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
                 <button class="btn btn-primary btn-block"   id="payButton" >立即支付</button>
-            </div>-->
+            </div>
 
-          <form id="payForm" method="post" action="/user/goPay">
+        <!--  <form id="payForm" method="post" action="/user/goPay">
                 <table>
                     <tr>
                         <td id="createDate">下单时间:</td>
@@ -140,7 +140,7 @@
                         <input type="submit" value="前往支付宝进行支付">
                     </tr>
                 </table>
-            </form>
+            </form>-->
 
             <div id="returnAli"></div>
         </div>
@@ -171,10 +171,15 @@
                     WIDbody : $('#WIDbody').val()
                 },*/
                 url : "/user/goPay",
+                dataType: "html",
                 success : function(data) {
                     alert(data);
                    console.log("获取到的数据:"+data);
-                    $('#returnAli').append(data);
+                   //$('#returnAli').append(data);
+                    var div = document.createElement('div');
+                    div.innerHTML = data; // html code
+                    document.body.appendChild(div);
+                    document.forms[0].submit();
                 },
                 error : function(da){
                 }

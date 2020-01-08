@@ -27,7 +27,7 @@ public class AlipayController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlipayController.class);
     @Autowired
     private AlipayService alipayService;
-
+//https://gitee.com/javen205/IJPay
     @RequestMapping(value = "/goPay",method = RequestMethod.POST,produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String goPay(Model model, HttpServletResponse response){
@@ -35,15 +35,15 @@ public class AlipayController {
         try {
             res= alipayService.webPagePay("11231231",15,"麻将");
             response.setContentType("text/html; charset=utf-8");
-            PrintWriter writer = response.getWriter();
-            writer.print(res);
+       /*     PrintWriter writer = response.getWriter();
+            writer.print(res);*/
         } catch (Exception e) {
             LOGGER.error("系统异常",e);
             e.printStackTrace();
         }finally {
             LOGGER.warn("返回:"+res);
         }
-        return null;
+        return res;
     }
     /**
      *

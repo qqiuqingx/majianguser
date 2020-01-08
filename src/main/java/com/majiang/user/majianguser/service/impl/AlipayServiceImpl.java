@@ -27,6 +27,7 @@ public class AlipayServiceImpl implements AlipayService {
      */
     @Override
     public String webPagePay(String OrderID, Integer totalAmount, String subject) throws Exception {
+        System.out.println("--------------------------"+AlipayConfig.gatewayUrl);
         AlipayTradePagePayRequest payRequest =new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
         payRequest.setReturnUrl(AlipayConfig.return_url);
