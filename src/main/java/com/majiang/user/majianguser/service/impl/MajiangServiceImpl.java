@@ -105,13 +105,18 @@ public class MajiangServiceImpl implements MajiangService {
                     return majiangVo;
                 }
                 length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
-                redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
+                //redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
                 System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
             }
                 // 过滤状态不为orderStatus的逻辑，也可以在sql中添加条件判断
             if (OrderStatus != null&&OrderStatus>=0&&OrderStatus<=4) {
                muByKeyIDandUserPhone = muByKeyIDandUserPhone.stream().filter(mu -> mu.getStatus() == OrderStatus).collect(Collectors.toList());
+               if (muByKeyIDandUserPhone.size()<=0){
+                   majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
+                   return majiangVo ;
+               }
             }
+            redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
             majiangVo=new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
         }catch (Exception e){
             LOGGER.error("获取订单异常:",e);

@@ -26,8 +26,7 @@ public class UserUrlController {
     @Value("${majiang.redis.ORDERKEY}")
     private String ORDERKEY;
 
-    @Autowired
-    private AlipayService alipayService;
+
     @Autowired
     RedisUtils redisUtils;
     @Autowired
@@ -90,18 +89,4 @@ public class UserUrlController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/goPay",method = RequestMethod.POST)
-    @ResponseBody
-    public String goPay(){
-        String res=null;
-        try {
-            res= alipayService.webPagePay("11231231",15,"麻将");
-        } catch (Exception e) {
-            LOGGER.error("系统异常",e);
-            e.printStackTrace();
-        }finally {
-            LOGGER.warn("返回:"+res);
-        }
-        return res;
-    }
 }

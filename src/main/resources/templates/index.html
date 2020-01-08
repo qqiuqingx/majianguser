@@ -121,7 +121,7 @@
                      var s=ss.value;
                      setTimeout(function () {
                          getMU(s)
-                     }, 3000);
+                     }, 1500);
                  } else {
                      alert(JSON.msg)
                  }
@@ -138,7 +138,7 @@
             data: "majiangKeyID="+ss,
             success: function (JSON) {
                 console.log("获取到对应的订单:"+JSON)
-                if (JSON.code == 0) {
+                if (JSON.code == 0 && JSON.msg!=null) {
                     console.log("获取订单成功");
                     var r=confirm("预定成功，是否前往订单界面？");
                     if (r==true){

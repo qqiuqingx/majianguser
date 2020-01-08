@@ -204,7 +204,7 @@ h2 {
 			<h2 id="tab5" name="tab">交 易 关 闭</h2>
 		</div>
 		<form name=alipayment action=alipay.trade.page.pay.jsp method=post
-			target="_blank">
+			  target="_blank">
 			<div id="body1" class="show" name="divcontent">
 				<dl class="content">
 					<dt>商户订单号 ：</dt>
@@ -238,7 +238,7 @@ h2 {
 			</div>
 		</form>
 		<form name=tradequery action=alipay.trade.query.jsp method=post
-			target="_blank">
+			  target="_blank">
 			<div id="body2" class="tab-content" name="divcontent">
 				<dl class="content">
 					<dt>商户订单号 ：</dt>
@@ -262,7 +262,7 @@ h2 {
 			</div>
 		</form>
 		<form name=traderefund action=alipay.trade.refund.jsp method=post
-			target="_blank">
+			  target="_blank">
 			<div id="body3" class="tab-content" name="divcontent">
 				<dl class="content">
 					<dt>商户订单号 ：</dt>
@@ -301,8 +301,8 @@ h2 {
 			</div>
 		</form>
 		<form name=traderefundquery
-			action=alipay.trade.fastpay.refund.query.jsp method=post
-			target="_blank">
+			  action=alipay.trade.fastpay.refund.query.jsp method=post
+			  target="_blank">
 			<div id="body4" class="tab-content" name="divcontent">
 				<dl class="content">
 					<dt>商户订单号 ：</dt>
@@ -331,7 +331,7 @@ h2 {
 			</div>
 		</form>
 		<form name=tradeclose action=alipay.trade.close.jsp method=post
-			target="_blank">
+			  target="_blank">
 			<div id="body5" class="tab-content" name="divcontent">
 				<dl class="content">
 					<dt>商户订单号 ：</dt>

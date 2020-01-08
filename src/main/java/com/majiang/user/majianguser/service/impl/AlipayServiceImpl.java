@@ -28,9 +28,9 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public String webPagePay(String OrderID, Integer totalAmount, String subject) throws Exception {
         AlipayTradePagePayRequest payRequest =new AlipayTradePagePayRequest();
-        /** 同步通知，支付完成后，支付成功页面*/
+        /* 同步通知，支付完成后，支付成功页面*/
         payRequest.setReturnUrl(AlipayConfig.return_url);
-        /** 异步通知，支付完成后，需要进行的异步处理*/
+        /* 异步通知，支付完成后，需要进行的异步处理*/
         payRequest.setNotifyUrl(AlipayConfig.notify_url);
         payRequest.setBizContent("{\"out_trade_no\":\""+ OrderID +"\","
                 + "\"total_amount\":\""+ totalAmount +"\","
@@ -40,11 +40,9 @@ public class AlipayServiceImpl implements AlipayService {
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
         //装换格式
-       // String body = alipayClient.execute(payRequest).getBody();
         String response = alipayClient.pageExecute(payRequest).getBody();
         System.out.println(response);
-        //System.out.println(body);
-       // System.out.println(body1);
+
         return response;
     }
 

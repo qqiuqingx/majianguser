@@ -79,7 +79,7 @@
             <div class="goods_view">
                 <img  id="goodsImg"  width="560"/>
             </div>
-            <div class="goods_info">
+          <!-- <div class="goods_info">
                 <h2 id="goodsName"></h2>
                 <p class="title" text="${goods.goodsTitle}"></p>
                 <p>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="count">
                     <span>订桌人：</span>
-                    <span id="orderUser">XXX  1383838483</span>
+                    <span id="orderUser" >XXX  1383838483</span>
                 </div>
                 <div class="count">
                     <span>数量：</span>
@@ -112,8 +112,37 @@
                     <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
-                <button class="btn btn-primary btn-block"  type="submit" id="payButton" onclick="gopay()">立即支付</button>
-            </div>
+                <button class="btn btn-primary btn-block"   id="payButton" >立即支付</button>
+            </div>-->
+
+          <form id="payForm" method="post" action="/user/goPay">
+                <table>
+                    <tr>
+                        <td id="createDate">下单时间:</td>
+                    </tr>
+                    <tr>
+                        <td id="orderStatus">订单状态:</td>
+                    </tr>
+                    <tr>
+                        <td id="unitprice">单价:</td>
+                    </tr>
+                    <tr>
+                        <td>订桌人:</td>
+                        <td id="orderUser"></td>
+                    </tr>
+                    <tr>
+                        <td id="majiangOrder_num">数量:</td>
+                    </tr>
+                    <tr>
+                        <td id="majiangOrdersum">总价:</td>
+                    </tr>
+                    <tr>
+                        <input type="submit" value="前往支付宝进行支付">
+                    </tr>
+                </table>
+            </form>
+
+            <div id="returnAli"></div>
         </div>
     </div>
     <br>
@@ -130,11 +159,30 @@
             layer.msg(elem.text());
         });
     });
-    function gopay() {
-        console.log("点击")
-        jQuery.post("/user/goPay")
-    }
-    
+    $(function (){
+        $("#payButton").on('click', function(){
+            alert("点击按钮");
+            $.ajax({
+                type : "post",
+             /*   data : {
+                    WIDout_trade_no : $('#out_trade_no').val(),
+                    WIDsubject : $('#WIDsubject').val(),
+                    WIDtotal_fee : $('#WIDtotal_fee').val(),
+                    WIDbody : $('#WIDbody').val()
+                },*/
+                url : "/user/goPay",
+                success : function(data) {
+                    alert(data);
+                   console.log("获取到的数据:"+data);
+                    $('#returnAli').append(data);
+                },
+                error : function(da){
+                }
+            });
+        })
+
+    });
+
 </script>
 <script>
     $(function () {
@@ -151,12 +199,12 @@
                     //时间格式化
                     console.log(JSON);
                     var da=new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
-                    $("#createDate").text(da);
-                    $("#orderStatus").text(JSON.date[0].statusName);
+                    $("#createDate").text("下单时间:"+da);
+                    $("#orderStatus").text("订单状态:"+JSON.date[0].statusName);
                     $("#orderUser").text(JSON.date[0].userName+" "+JSON.date[0].userPhone);
-                    $("#unitprice").text(JSON.date[0].price);
-                    $("#majiangOrder_num").text(JSON.date[0].num);
-                    $("#majiangOrdersum").text(JSON.date[0].sumPrice);
+                    $("#unitprice").text("单价:"+JSON.date[0].price+"元");
+                    $("#majiangOrder_num").text("数量:"+JSON.date[0].num);
+                    $("#majiangOrdersum").text("总价:"+JSON.date[0].sumPrice);
 
                 }
             }

@@ -46,7 +46,7 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/swagger-resources/**","anon");
         filterChainDefinitionMap.put("/v2/**","anon");
         filterChainDefinitionMap.put("/static/**", "anon");
-
+        //authc
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setLoginUrl("/login");
