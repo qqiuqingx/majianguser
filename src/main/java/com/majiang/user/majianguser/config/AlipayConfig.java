@@ -58,7 +58,7 @@ public class AlipayConfig {
     public void setCharset(String charset) {
         this.charset = charset;
     }
-    @Value("majiang.alipay.ALI_GATEWAYURL")
+    @Value("${majiang.alipay.ALI_GATEWAYURL}")
     public void setGatewayUrl(String gatewayUrl) {
         this.gatewayUrl = gatewayUrl;
     }

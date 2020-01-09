@@ -1,23 +1,19 @@
 package com.majiang.user.majianguser.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
+import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.service.AlipayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,13 +26,13 @@ public class AlipayController {
 //https://gitee.com/javen205/IJPay
     @RequestMapping(value = "/goPay",method = RequestMethod.POST,produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String goPay(Model model, HttpServletResponse response){
+    public String goPay(MajiangUserBean majiangUserBean){
         String res=null;
+        String OrderID=String.valueOf(majiangUserBean.getKeyID());
+        //Integer totalAmount=Integer.valueOf(majiangUserBean.)
         try {
-            res= alipayService.webPagePay("11231231",15,"麻将");
-            response.setContentType("text/html; charset=utf-8");
-       /*     PrintWriter writer = response.getWriter();
-            writer.print(res);*/
+            res= alipayService.webPagePay("",15,"麻将");
+
         } catch (Exception e) {
             LOGGER.error("系统异常",e);
             e.printStackTrace();

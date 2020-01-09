@@ -27,6 +27,9 @@ public class AlipayServiceImpl implements AlipayService {
      */
     @Override
     public String webPagePay(String OrderID, Integer totalAmount, String subject) throws Exception {
+        System.out.println("--------------------------AlipayConfig.gatewayUrl："+AlipayConfig.gatewayUrl);
+        System.out.println("--------------------------AlipayConfig.charset："+AlipayConfig.charset);
+        System.out.println("--------------------------AlipayConfig.gatewayUrl:"+AlipayConfig.app_id);
         System.out.println("--------------------------"+AlipayConfig.gatewayUrl);
         AlipayTradePagePayRequest payRequest =new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
@@ -37,7 +40,7 @@ public class AlipayServiceImpl implements AlipayService {
                 + "\"total_amount\":\""+ totalAmount +"\","
                 + "\"subject\":\""+ subject +"\","
                 + "\"body\":\"商品名称\","
-                + "\"timeout_express\":\"90m\","
+             /*   + "\"timeout_express\":\"90m\","*/
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
         //装换格式

@@ -127,11 +127,18 @@
         </dependency>
 
         <!--支付宝SDK-->
-        <dependency>
+      <!--  <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
             <version>3.1.0</version>
+        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.7.110.ALL</version>
         </dependency>
+
     </dependencies>
 
     <build>
