@@ -5,9 +5,13 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
+import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.AlipayConfig;
+import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.service.AlipayService;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
 
 @Service
 public class AlipayServiceImpl implements AlipayService {
@@ -26,10 +30,12 @@ public class AlipayServiceImpl implements AlipayService {
      * @param subject       商品名称
      */
     @Override
-    public String webPagePay(String OrderID, Integer totalAmount, String subject) throws Exception {
-        System.out.println("--------------------------AlipayConfig.gatewayUrl："+AlipayConfig.gatewayUrl);
-        System.out.println("--------------------------AlipayConfig.charset："+AlipayConfig.charset);
-        System.out.println("--------------------------AlipayConfig.gatewayUrl:"+AlipayConfig.app_id);
+    public MajiangVo webPagePay(String OrderID, Integer totalAmount, String subject,String majiangKeyID, Cookie cookie) throws Exception {
+        MajiangVo majiangVo=null;
+        if (cookie == null) {
+            return null;
+        }
+
         System.out.println("--------------------------"+AlipayConfig.gatewayUrl);
         AlipayTradePagePayRequest payRequest =new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
@@ -39,7 +45,7 @@ public class AlipayServiceImpl implements AlipayService {
         payRequest.setBizContent("{\"out_trade_no\":\""+ OrderID +"\","
                 + "\"total_amount\":\""+ totalAmount +"\","
                 + "\"subject\":\""+ subject +"\","
-                + "\"body\":\"商品名称\","
+                + "\"body\":\""+ "商品详细-------" +"\","
              /*   + "\"timeout_express\":\"90m\","*/
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
@@ -47,7 +53,8 @@ public class AlipayServiceImpl implements AlipayService {
         String response = alipayClient.pageExecute(payRequest).getBody();
         System.out.println(response);
 
-        return response;
+        majiangVo=new MajiangVo<>(UserEnum.SUCSS,(long)response.length(),response);
+        return majiangVo;
     }
 
     @Override

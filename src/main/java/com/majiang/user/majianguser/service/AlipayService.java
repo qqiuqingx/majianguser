@@ -1,6 +1,9 @@
 package com.majiang.user.majianguser.service;
 
 import com.alipay.api.AlipayApiException;
+import com.majiang.user.majianguser.bean.vo.MajiangVo;
+
+import javax.servlet.http.Cookie;
 
 public interface AlipayService {
 
@@ -10,7 +13,7 @@ public interface AlipayService {
      * @param totalAmount   订单价格
      * @param subject       商品名称
      */
-    String webPagePay(String OrderID,Integer totalAmount,String subject) throws Exception;
+    MajiangVo webPagePay(String OrderID, Integer totalAmount, String subject, String majiangKeyID, Cookie cookie) throws Exception;
 
     /**
      * 退款

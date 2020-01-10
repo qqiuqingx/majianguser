@@ -30,8 +30,8 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a  shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
-                <a  shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
+                <a shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
+                <a shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
             </li>
         </ul>
     </div>
@@ -64,8 +64,6 @@
         </ul>
     </div>
 </div>
-
-
 <div class="layui-body" id="majiangs-ss">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
@@ -77,70 +75,105 @@
     <div class="goods">
         <div class="containers">
             <div class="goods_view">
-                <img  id="goodsImg"  width="560"/>
+                <img id="goodsImg" width="560"/>
             </div>
-        <div class="goods_info">
-                <h2 id="goodsName"></h2>
-                <p class="title" text="${goods.goodsTitle}"></p>
-                <p>
-                    <span class="price1"  id="orderPrice"></span>
-                </p>
-                <div class="seckill_data">
-                    <div>
-                        <span>下单时间:</span>
-                        <span id="createDate">ss</span>
-                    </div>
-                    <div>
-                        <span>订单状态:</span>
-                        <span id="orderStatus"></span>
-                    </div>
-                    <div>
-                        <span>单价:</span>
-                        <span id="unitprice"></span>
-                    </div>
-                </div>
-                <div class="count">
-                    <span>订桌人：</span>
-                    <span id="orderUser" >XXX  1383838483</span>
-                </div>
-                <div class="count">
-                    <span>数量：</span>
-                    <span id="majiangOrder_num">北京市昌平区回龙观龙博一区</span>
-                </div>
-                <div class="count">
-                    <span>总价：</span>
-                    <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
-                </div>
-                <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
-                <button class="btn btn-primary btn-block"   id="payButton" >立即支付</button>
-            </div>
+            <!-- <div class="goods_info">
+                 <h2 id="goodsName"></h2>
+                 <p class="title" text="${goods.goodsTitle}"></p>
+                 <p>
+                     <span class="price1" id="orderPrice"></span>
+                 </p>
+                 <div class="seckill_data">
+                     <div>
+                         <span>下单时间:</span>
+                         <span id="createDate">ss</span>
+                     </div>
+                     <div>
+                         <span>订单状态:</span>
+                         <span id="orderStatus"></span>
+                     </div>
+                     <div>
+                         <span>单价:</span>
+                         <span id="unitprice"></span>
+                     </div>
+                 </div>
+                 <div class="count">
+                     <span>订桌人：</span>
+                     <span id="orderUser">XXX  1383838483</span>
+                 </div>
+                 <div class="count">
+                     <span>数量：</span>
+                     <span id="majiangOrder_num">北京市昌平区回龙观龙博一区</span>
+                 </div>
+                 <div class="count">
+                     <span>总价：</span>
+                     <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
+                 </div>
+                 <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
+                 <button class="btn btn-primary btn-block" id="payButton">立即支付</button>
+             </div>
+ -->
+            <!-- <form id="payForm" method="post" action="/user/goPay">
+                   <table>
+                       <tr>
+                           <td id="createDate">下单时间:</td>
+                       </tr>
+                       <tr>
+                           <td id="orderStatus">订单状态:</td>
+                       </tr>
+                       <tr>
+                           <td id="unitprice">单价:</td>
+                       </tr>
+                       <tr>
+                           <td>订桌人:</td>
+                           <td id="orderUser"></td>
+                       </tr>
+                       <tr>
+                           <td id="majiangOrder_num">数量:</td>
+                       </tr>
+                       <tr>
+                           <td id="majiangOrdersum">总价:</td>
+                       </tr>
+                       <tr>
+                           <input type="submit" value="前往支付宝进行支付">
+                       </tr>
+                   </table>
+               </form>-->
+            <form id="payForm" method="post" onsubmit="return false">
 
-         <!-- <form id="payForm" method="post" action="/user/goPay">
-                <table>
+                    <div>
+                        <input id="KeyID" name="KeyID"></input>
+                    </div>
+                    <div>
+
+                        <input id="createDate" name="addTime"></input>
+                        <input>时间:</input>
+                    </div>
+                    <div>
+                        <input id="orderStatus" name="statusName"></input>
+                    </div>
+                    <div>
+                        <input id="unitprice" name="price"></input>
+                    </div>
+                    <div>
+                        <input id="userName" name="userName"></input>
+                    </div>
+                    <div>
+                        <input id="userPhone" name="userPhone"> </input>
+                    </div>
+                    <div>
+                        <input id="majiangOrder_num" name="num"></input>
+                    </div>
+                    <div>
+                        <input id="majiangOrdersum" name="sumPrice"></input>
+                    </div>
                     <tr>
-                        <td id="createDate">下单时间:</td>
+                        <!--<input type="submit" value="前往支付宝进行支付">-->
+                        <button class="btn btn-primary btn-block" id="payButton">支付宝支付</button>
                     </tr>
-                    <tr>
-                        <td id="orderStatus">订单状态:</td>
-                    </tr>
-                    <tr>
-                        <td id="unitprice">单价:</td>
-                    </tr>
-                    <tr>
-                        <td>订桌人:</td>
-                        <td id="orderUser"></td>
-                    </tr>
-                    <tr>
-                        <td id="majiangOrder_num">数量:</td>
-                    </tr>
-                    <tr>
-                        <td id="majiangOrdersum">总价:</td>
-                    </tr>
-                    <tr>
-                        <input type="submit" value="前往支付宝进行支付">
-                    </tr>
-                </table>
-            </form>-->
+
+            </form>
+
 
             <div id="returnAli"></div>
         </div>
@@ -159,37 +192,11 @@
             layer.msg(elem.text());
         });
     });
-    $(function (){
-        $("#payButton").on('click', function(){
-            alert("点击按钮");
-            $.ajax({
-                type : "post",
-             /*   data : {
-                    WIDout_trade_no : $('#out_trade_no').val(),
-                    WIDsubject : $('#WIDsubject').val(),
-                    WIDtotal_fee : $('#WIDtotal_fee').val(),
-                    WIDbody : $('#WIDbody').val()
-                },*/
-                url : "/user/goPay",
-                dataType: "html",
-                success : function(data) {
-                    alert(data);
-                   console.log("获取到的数据:"+data);
-                   //$('#returnAli').append(data);
-                    var div = document.createElement('div');
-                    div.innerHTML = data; // html code
-                    document.body.appendChild(div);
-                    document.forms[0].submit();
-                },
-                error : function(da){
-                }
-            });
-        })
 
-    });
 
 </script>
 <script>
+    var order;
     $(function () {
         //获取modelandview中的值
         //var majiangKeyID1=[[${majiangKeyID}]];
@@ -197,24 +204,51 @@
             url: "/user/majiang/getMU",
             type: "get",
             //取modelandview中的数据majiangKeYID
-            data: "majiangKeyID="+[[${majiangKeyID}]],
+            data: "majiangKeyID=" + [[${majiangKeyID}]],
             contentType: "application/json;charset=utf-8",
             success: function (JSON) {
-                if (JSON.code==0){
+                if (JSON.code == 0) {
                     //时间格式化
                     console.log(JSON);
-                    var da=new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
-                    $("#createDate").text("下单时间:"+da);
-                    $("#orderStatus").text("订单状态:"+JSON.date[0].statusName);
-                    $("#orderUser").text(JSON.date[0].userName+" "+JSON.date[0].userPhone);
-                    $("#unitprice").text("单价:"+JSON.date[0].price+"元");
-                    $("#majiangOrder_num").text("数量:"+JSON.date[0].num);
-                    $("#majiangOrdersum").text("总价:"+JSON.date[0].sumPrice);
+                    var da = new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
+                    $("#createDate").val(da);
+                    $("#orderStatus").val( JSON.date[0].statusName);
+                    $("#userName").val(JSON.date[0].userName);
+                    $("#userPhone").val(JSON.date[0].userPhone);
+                    $("#unitprice").val(+ JSON.date[0].price );
+                    $("#majiangOrder_num").val(JSON.date[0].num);
+                    $("#majiangOrdersum").val(JSON.date[0].sumPrice);
+                    $("#KeyID").val(  JSON.date[0].keyID);
 
                 }
             }
         });
-    })
+    });
+    $(function () {
+        $("#payButton").on('click', function () {
+            console.log(JSON.stringify($("#payForm").serializeObject()))
+            $.ajax({
+                type: "post",
+                //contentType: "application/json;charset=utf-8",
+                //data: JSON.stringify($("#payForm").serializeObject()),
+                data: JSON.stringify($("#payForm").serializeObject()),
+                url: "/user/goPay",
+                dataType: "html",
+                success: function (data) {
+                    alert(data);
+                    console.log("获取到的数据:" + data);
+                    //$('#returnAli').append(data);
+                    var div = document.createElement('div');
+                    div.innerHTML = data; // html code
+                    document.body.appendChild(div);
+                    document.forms[0].submit();
+                },
+                error: function (da) {
+                }
+            });
+        })
+
+    });
 </script>
 </body>
 </html>

@@ -2,17 +2,18 @@ package com.majiang.user.majianguser.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.AlipayConfig;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,20 +27,22 @@ public class AlipayController {
 //https://gitee.com/javen205/IJPay
     @RequestMapping(value = "/goPay",method = RequestMethod.POST,produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String goPay(MajiangUserBean majiangUserBean){
-        String res=null;
-        String OrderID=String.valueOf(majiangUserBean.getKeyID());
-        //Integer totalAmount=Integer.valueOf(majiangUserBean.)
+    public MajiangVo goPay(@CookieValue(value = "token") Cookie cookie, String majiangKeyID){
+        MajiangVo majiangVo=null;
         try {
-            res= alipayService.webPagePay("",15,"麻将");
+        if (cookie == null) {
+            majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
+            return majiangVo;
+        }
 
+            majiangVo= alipayService.webPagePay("",1,"麻将",majiangKeyID,cookie);
         } catch (Exception e) {
             LOGGER.error("系统异常",e);
             e.printStackTrace();
         }finally {
-            LOGGER.warn("返回:"+res);
+            LOGGER.warn("返回:"+majiangVo);
         }
-        return res;
+        return majiangVo;
     }
     /**
      *
@@ -111,7 +114,7 @@ public class AlipayController {
             LOGGER.warn("支付, 验签失败...");
         }
 
-        return "return_url";
+        return "redirect:/";
     }
 
 
