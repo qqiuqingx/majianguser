@@ -1,6 +1,7 @@
 package com.majiang.user.majianguser.utils;
 
 
+import com.majiang.user.majianguser.bean.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,12 @@ public class RedisUtils {
     RedisTemplate<String,Object> redisTemplate;
     @Value("${majiang.redis.MAJIANG_TIME_OUT}")
     private long MAJIANG_TIME_OUT;
+    /**
+     * 根据token获取用户信息
+     */
+    public UserInfo getUser(String token){
+        return (UserInfo) get(token);
+    }
         /**
          26
          * 指定缓存失效时间

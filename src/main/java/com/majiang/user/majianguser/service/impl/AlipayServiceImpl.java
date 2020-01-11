@@ -5,18 +5,34 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
+import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.enums.UserEnum;
+import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
+import com.majiang.user.majianguser.service.MajiangService;
+import com.majiang.user.majianguser.utils.RedisUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import java.util.List;
 
 @Service
 public class AlipayServiceImpl implements AlipayService {
-
-    /** 调取支付宝接口 web端支付*/
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlipayServiceImpl.class);
+    @Autowired
+    private RedisUtils redisUtils;
+    @Autowired
+    private MajiangService majiangService;
+    /**
+     * 调取支付宝接口 web端支付
+     */
    /* DefaultAlipayClient alipayClient = new DefaultAlipayClient(
             AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);*/
 
@@ -25,36 +41,27 @@ public class AlipayServiceImpl implements AlipayService {
 
     /**
      * web端订单支付
-     * @param OrderID    订单编号（唯一）
-     * @param totalAmount   订单价格
-     * @param subject       商品名称
+     *
      */
     @Override
-    public MajiangVo webPagePay(String OrderID, Integer totalAmount, String subject,String majiangKeyID, Cookie cookie) throws Exception {
-        MajiangVo majiangVo=null;
+    public String webPagePay( Integer majiangKeyID, Cookie cookie) throws Exception {
+        //MajiangVo majiangVo = null;
         if (cookie == null) {
-            return null;
+            throw new Exception("支付未获取到对应cookie");
         }
-
-        System.out.println("--------------------------"+AlipayConfig.gatewayUrl);
-        AlipayTradePagePayRequest payRequest =new AlipayTradePagePayRequest();
-        /* 同步通知，支付完成后，支付成功页面*/
-        payRequest.setReturnUrl(AlipayConfig.return_url);
-        /* 异步通知，支付完成后，需要进行的异步处理*/
-        payRequest.setNotifyUrl(AlipayConfig.notify_url);
-        payRequest.setBizContent("{\"out_trade_no\":\""+ OrderID +"\","
-                + "\"total_amount\":\""+ totalAmount +"\","
-                + "\"subject\":\""+ subject +"\","
-                + "\"body\":\""+ "商品详细-------" +"\","
-             /*   + "\"timeout_express\":\"90m\","*/
-                + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
-
-        //装换格式
-        String response = alipayClient.pageExecute(payRequest).getBody();
+        UserInfo user = redisUtils.getUser(cookie.getValue());
+        MajiangVo muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), user.getPhone(), 1);
+        System.out.println("majiang"+muByKeyIDandUserPhone);
+       List<MajiangUserBean> lists= (List<MajiangUserBean>) muByKeyIDandUserPhone.getDate();
+        MajiangUserBean majiangUserBean =lists.get(0);
+      //  MajiangUserBean majiangUserBean = (MajiangUserBean) muByKeyIDandUserPhone.getDate();
+        if (majiangUserBean == null) {
+            throw new Exception("获取订单异常");
+        }
+        String response = webPay(majiangUserBean);
         System.out.println(response);
-
-        majiangVo=new MajiangVo<>(UserEnum.SUCSS,(long)response.length(),response);
-        return majiangVo;
+        //majiangVo = new MajiangVo<String>(UserEnum.SUCSS, (long) response.length(), response);
+        return response;
     }
 
     @Override
@@ -75,5 +82,30 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public String refundQuery(String OrderID, String outRequestNo) throws AlipayApiException {
         return null;
+    }
+
+    private String webPay(MajiangUserBean majiangUserBean) throws AlipayApiException {
+        LOGGER.warn(".webPay进入支付方法,入参:》》"+majiangUserBean);
+        AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
+        /* 同步通知，支付完成后，支付成功页面*/
+        payRequest.setReturnUrl(AlipayConfig.return_url);
+        /* 异步通知，支付完成后，需要进行的异步处理*/
+        payRequest.setNotifyUrl(AlipayConfig.notify_url);
+        //总价
+        Double totalAmount = majiangUserBean.getSumPrice().doubleValue();
+        //KeyID：订单号
+        //subject：商品名称
+        String subject = "麻将桌";
+        //商品详情
+        String body = "订座人:" + majiangUserBean.getUserName() + ",共:" + majiangUserBean.getNum() + "位置";
+        payRequest.setBizContent("{\"out_trade_no\":\"" + majiangUserBean.getKeyID() + "\","
+                + "\"total_amount\":\"" + totalAmount + "\","
+                + "\"subject\":\"" + subject + "\","
+                + "\"body\":\"" + body + "\","
+                  + "\"timeout_express\":\"15m\","
+                + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
+
+
+        return alipayClient.pageExecute(payRequest).getBody();
     }
 }

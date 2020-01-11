@@ -17,8 +17,8 @@ public class alipaySerbiceTest {
     @Test
     public  void alipay(){
         try {
-            String string = alipayService.webPagePay("1", 15, "什么");
-            System.out.println(string);
+           /* String string = alipayService.webPagePay("1", 15, "什么");
+            System.out.println(string);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

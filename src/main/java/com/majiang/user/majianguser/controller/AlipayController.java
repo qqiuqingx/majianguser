@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.controller;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.bean.vo.OrderVO;
 import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
@@ -25,24 +26,21 @@ public class AlipayController {
     @Autowired
     private AlipayService alipayService;
 //https://gitee.com/javen205/IJPay
-    @RequestMapping(value = "/goPay",method = RequestMethod.POST,produces = "text/html; charset=UTF-8")
+    @RequestMapping(value = "/goPay",method = RequestMethod.POST)
     @ResponseBody
-    public MajiangVo goPay(@CookieValue(value = "token") Cookie cookie, String majiangKeyID){
-        MajiangVo majiangVo=null;
-        try {
-        if (cookie == null) {
-            majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
-            return majiangVo;
-        }
+    public String goPay(@CookieValue(value = "token") Cookie cookie, OrderVO orderVO){
 
-            majiangVo= alipayService.webPagePay("",1,"麻将",majiangKeyID,cookie);
+        System.out.println("表单中的数据:"+orderVO);
+        String returnHtml="";
+        try {
+            returnHtml= alipayService.webPagePay(orderVO.getMajiangKeyID(),cookie);
         } catch (Exception e) {
             LOGGER.error("系统异常",e);
             e.printStackTrace();
         }finally {
-            LOGGER.warn("返回:"+majiangVo);
+            LOGGER.warn("返回:"+returnHtml);
         }
-        return majiangVo;
+        return returnHtml;
     }
     /**
      *

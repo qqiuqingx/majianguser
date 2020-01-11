@@ -140,7 +140,9 @@
                    </table>
                </form>-->
             <form id="payForm" method="post" onsubmit="return false">
-
+                <div type="hidden">
+                    <input type="hidden" id="majiangKeyID" name="majiangKeyID"></input>
+                </div>
                     <div>
                         <input id="KeyID" name="KeyID"></input>
                     </div>
@@ -193,10 +195,47 @@
         });
     });
 
+        $("#payButton").on('click', function () {
+            console.log($("#majiangKeyID").val());
+            $.ajax({
+                type: "post",
+                //contentType: "application/json;charset=utf-8",
+                //data: JSON.stringify($("#payForm").serializeObject()),
+                data: $("#payForm").serialize(),
+                url: "/user/goPay",
+                dataType: "html",
+                success: function (JSON) {
+                    console.log(JSON);
+                    console.log("获取到的数据:" + JSON);
+                    alert(JSON)
+                    /* // $('#returnAli').append(JSON);
+                    var div = document.createElement('div');
+                    div.innerHTML = JSON; // html code
+                    document.body.appendChild(div);
+                    document.forms[0].submit();*/
+                    //支付宝支付
+                    // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
+                  /*      var divForm = document.getElementsByTagName('divform')
+                        if (divForm.length) {
+                            document.body.removeChild(divForm[0])
+                        }
+                        var div=document.createElement('divform');
+                        div.innerHTML=JSON; // data就是接口返回的form 表单字符串
+                        document.body.appendChild(div);
+                        document.forms[0].setAttribute('target', '_blank'); // 新开窗口跳转
+                        document.forms[0].submit();*/
+
+                },
+                error: function (da) {
+                    alert("系统异常")
+                }
+            });
+        })
+
+
 
 </script>
 <script>
-    var order;
     $(function () {
         //获取modelandview中的值
         //var majiangKeyID1=[[${majiangKeyID}]];
@@ -219,36 +258,12 @@
                     $("#majiangOrder_num").val(JSON.date[0].num);
                     $("#majiangOrdersum").val(JSON.date[0].sumPrice);
                     $("#KeyID").val(  JSON.date[0].keyID);
-
+                    $("#majiangKeyID").val(  JSON.date[0].majiangKeyID);
                 }
             }
         });
     });
-    $(function () {
-        $("#payButton").on('click', function () {
-            console.log(JSON.stringify($("#payForm").serializeObject()))
-            $.ajax({
-                type: "post",
-                //contentType: "application/json;charset=utf-8",
-                //data: JSON.stringify($("#payForm").serializeObject()),
-                data: JSON.stringify($("#payForm").serializeObject()),
-                url: "/user/goPay",
-                dataType: "html",
-                success: function (data) {
-                    alert(data);
-                    console.log("获取到的数据:" + data);
-                    //$('#returnAli').append(data);
-                    var div = document.createElement('div');
-                    div.innerHTML = data; // html code
-                    document.body.appendChild(div);
-                    document.forms[0].submit();
-                },
-                error: function (da) {
-                }
-            });
-        })
 
-    });
 </script>
 </body>
 </html>
