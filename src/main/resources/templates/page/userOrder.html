@@ -143,36 +143,44 @@
                 <div type="hidden">
                     <input type="hidden" id="majiangKeyID" name="majiangKeyID"></input>
                 </div>
-                    <div>
-                        <input id="KeyID" name="KeyID"></input>
-                    </div>
-                    <div>
+                <div>
+                    <p style="display: inline">订单号:</p>
+                    <input id="KeyID" name="KeyID"></input>
+                </div>
+                <div>
+                    <p style="display: inline">时间:</p>
+                    <input id="createDate" name="addTime"></input>
 
-                        <input id="createDate" name="addTime"></input>
-                        <input>时间:</input>
-                    </div>
-                    <div>
-                        <input id="orderStatus" name="statusName"></input>
-                    </div>
-                    <div>
-                        <input id="unitprice" name="price"></input>
-                    </div>
-                    <div>
-                        <input id="userName" name="userName"></input>
-                    </div>
-                    <div>
-                        <input id="userPhone" name="userPhone"> </input>
-                    </div>
-                    <div>
-                        <input id="majiangOrder_num" name="num"></input>
-                    </div>
-                    <div>
-                        <input id="majiangOrdersum" name="sumPrice"></input>
-                    </div>
-                    <tr>
-                        <!--<input type="submit" value="前往支付宝进行支付">-->
-                        <button class="btn btn-primary btn-block" id="payButton">支付宝支付</button>
-                    </tr>
+                </div>
+                <div>
+                    <p style="display: inline">状态:</p>
+                    <input id="orderStatus" name="statusName"></input>
+                </div>
+
+                <div>
+                    <p style="display: inline">定桌人:</p>
+                    <input id="userName" name="userName"></input>
+                </div>
+                <div>
+                    <p style="display: inline">电话:</p>
+                    <input id="userPhone" name="userPhone"> </input>
+                </div>
+                <div>
+                    <p style="display: inline">单价:</p>
+                    <input id="unitprice" name="price"></input>
+                </div>
+                <div>
+                    <p style="display: inline">数量:</p>
+                    <input id="majiangOrder_num" name="num"></input>
+                </div>
+                <div>
+                    <p style="display: inline">总价:</p>
+                    <input id="majiangOrdersum" name="sumPrice"></input>
+                </div>
+                <tr>
+                    <!--<input type="submit" value="前往支付宝进行支付">-->
+                    <button class="btn btn-primary btn-block" id="payButton">支付宝支付</button>
+                </tr>
 
             </form>
 
@@ -195,44 +203,6 @@
         });
     });
 
-        $("#payButton").on('click', function () {
-            console.log($("#majiangKeyID").val());
-            $.ajax({
-                type: "post",
-                //contentType: "application/json;charset=utf-8",
-                //data: JSON.stringify($("#payForm").serializeObject()),
-                data: $("#payForm").serialize(),
-                url: "/user/goPay",
-                dataType: "html",
-                success: function (JSON) {
-                    console.log(JSON);
-                    console.log("获取到的数据:" + JSON);
-                    alert(JSON)
-                    /* // $('#returnAli').append(JSON);
-                    var div = document.createElement('div');
-                    div.innerHTML = JSON; // html code
-                    document.body.appendChild(div);
-                    document.forms[0].submit();*/
-                    //支付宝支付
-                    // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
-                  /*      var divForm = document.getElementsByTagName('divform')
-                        if (divForm.length) {
-                            document.body.removeChild(divForm[0])
-                        }
-                        var div=document.createElement('divform');
-                        div.innerHTML=JSON; // data就是接口返回的form 表单字符串
-                        document.body.appendChild(div);
-                        document.forms[0].setAttribute('target', '_blank'); // 新开窗口跳转
-                        document.forms[0].submit();*/
-
-                },
-                error: function (da) {
-                    alert("系统异常")
-                }
-            });
-        })
-
-
 
 </script>
 <script>
@@ -248,22 +218,51 @@
             success: function (JSON) {
                 if (JSON.code == 0) {
                     //时间格式化
-                    console.log(JSON);
+
                     var da = new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
-                    $("#createDate").val(da);
-                    $("#orderStatus").val( JSON.date[0].statusName);
-                    $("#userName").val(JSON.date[0].userName);
-                    $("#userPhone").val(JSON.date[0].userPhone);
-                    $("#unitprice").val(+ JSON.date[0].price );
-                    $("#majiangOrder_num").val(JSON.date[0].num);
-                    $("#majiangOrdersum").val(JSON.date[0].sumPrice);
-                    $("#KeyID").val(  JSON.date[0].keyID);
-                    $("#majiangKeyID").val(  JSON.date[0].majiangKeyID);
+                    $("#createDate").val(da).css("display", "inline");
+                    $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
+                    $("#userName").val(JSON.date[0].userName).css("display", "inline");
+                    $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
+                    $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
+                    $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
+                    $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
+                    $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
+                    $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");
+
                 }
             }
         });
     });
 
+    $("#payButton").on('click', function () {
+
+
+        $.ajax({
+            type: "post",
+            //contentType: "application/json;charset=utf-8",
+            //data: JSON.stringify($("#payForm").serializeObject()),
+            data: $("#payForm").serialize(),
+            url: "/user/goPay",
+            dataType: "html",
+            success: function (JSON) {
+
+                alert(JSON)
+                // $(document.body).html(JSON);
+                //window.open(JSON,'_blank');
+                //打开一个新页面
+                myWindow = window.open('', '');
+                //将返回的from表单写到新页面中
+                myWindow.document.write(JSON);
+                myWindow.focus();
+
+
+            },
+            error: function (da) {
+                alert("系统异常")
+            }
+        });
+    })
 </script>
 </body>
 </html>

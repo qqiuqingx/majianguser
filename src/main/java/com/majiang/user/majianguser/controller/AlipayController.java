@@ -29,7 +29,6 @@ public class AlipayController {
     @RequestMapping(value = "/goPay",method = RequestMethod.POST)
     @ResponseBody
     public String goPay(@CookieValue(value = "token") Cookie cookie, OrderVO orderVO){
-
         System.out.println("表单中的数据:"+orderVO);
         String returnHtml="";
         try {

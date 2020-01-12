@@ -51,7 +51,6 @@ public class AlipayServiceImpl implements AlipayService {
         }
         UserInfo user = redisUtils.getUser(cookie.getValue());
         MajiangVo muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), user.getPhone(), 1);
-        System.out.println("majiang"+muByKeyIDandUserPhone);
        List<MajiangUserBean> lists= (List<MajiangUserBean>) muByKeyIDandUserPhone.getDate();
         MajiangUserBean majiangUserBean =lists.get(0);
       //  MajiangUserBean majiangUserBean = (MajiangUserBean) muByKeyIDandUserPhone.getDate();
