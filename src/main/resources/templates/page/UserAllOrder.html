@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:shiro="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>麻将馆</title>
-
-    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
-
-    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
-    <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
-
+    <title>我的订单</title>
 </head>
 <body>
 
-<!--
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo"><a href="./" style="color: #009688">麻将馆</a></div>
-        &lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;
+        <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left" shiro:hasRole="admin">
             <li class="layui-nav-item"><a href="">管理</a></li>
             <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
@@ -40,7 +33,7 @@
 </div>
 <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
-        &lt;!&ndash; 左侧导航区域（可配合layui已有的垂直导航） &ndash;&gt;
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
         <ul class="layui-nav layui-nav-tree" lay-filter="test">
             <li class="layui-nav-item">
                 <a href="javascript:;" style="height: 55px">管理</a>
@@ -66,10 +59,8 @@
         </ul>
     </div>
 </div>
--->
-<!--<div id="pubhide"></div>-->
-<dav th:insert="page/pub/publicHtml :: top"></dav>
-<dav th:insert="page/pub/publeftHtml :: hre"></dav>
+
+
 <div class="layui-body" id="majiangs-ss">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
@@ -88,76 +79,6 @@
             layer.msg(elem.text());
         });
     });
-</script>
-<script>
-    $(function () {
-        //$("#pubhide").load("/user/publicHtml");
-        $.ajax({
-            url: "/user/pub/getAllMajiang",
-            type: "get",
-            contentType: "application/json;charset=utf-8",
-            success: function (JSON) {
-                if (JSON.code == 0) {
-                    var datas = JSON.date;
-                    for (var i = 0; i < JSON.date.length; i++) {
-                        $("#majiangs-ss").append('<button onclick="send(this)" class="a_majiang" style=\"height: 50px\" value=\"' + JSON.date[i].keyID + '\">第' + JSON.date[i].majiangNum + '桌</button><br>');
-                    }
-                    console.log("成功")
-                } else {
-                    alert(JSON.msg);
-                }
-            }
-        });
-    })
-</script>
-
-<script>
-
-
-    function send(ss) {
-        $.ajax({
-            url: "/user/majiang/buy",
-            type: "get",
-            data: "majiangKeyID=" + ss.value + "&num=1",
-            success: function (JSON) {
-                console.log(JSON);
-                if (JSON.code == 0) {
-                    var s = ss.value;
-                    setTimeout(function () {
-                        getMU(s)
-                    }, 1500);
-                } else {
-                    alert(JSON.msg)
-                }
-            }
-        });
-    }
-</script>
-<script>
-    function getMU(ss) {
-        console.log("调用了getMU方法:" + ss);
-        $.ajax({
-            url: "/user/majiang/getMU",
-            type: "get",
-            data: "majiangKeyID=" + ss,
-            success: function (JSON) {
-                console.log("获取到对应的订单:" + JSON)
-                if (JSON.code == 0 && JSON.msg != null) {
-                    console.log("获取订单成功");
-                    var r = confirm("预定成功，是否前往订单界面？");
-                    if (r == true) {
-                        console.log("var r=confirm 判断为true");
-                        window.location.href = "/user/userOrder?majiangKeyID=" + ss;
-                    } else {
-                        console.log("var r=confirm 判断为false")
-                    }
-                } else {
-                    alert(JSON.msg)
-                }
-            }
-        });
-    }
-
 </script>
 </body>
 </html>

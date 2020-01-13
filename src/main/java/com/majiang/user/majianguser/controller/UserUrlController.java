@@ -3,7 +3,6 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 
-import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 
@@ -88,5 +87,8 @@ public class UserUrlController {
         modelAndView.setViewName("page/userOrder");
         return modelAndView;
     }
+
+
+
 
 }
