@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.prefs.BackingStoreException;
 
 @Controller
 public class UserUrlController {
@@ -87,6 +88,12 @@ public class UserUrlController {
         modelAndView.addObject("majiangKeyID", majiangKeyID);
         modelAndView.setViewName("page/userOrder");
         return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/page/pub")
+    public String getpub(){
+        return "publicHtml";
     }
 
 }
