@@ -7,63 +7,14 @@
 </head>
 <body>
 
-<div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
-        <div class="layui-logo"><a href="./" style="color: #009688">麻将馆</a></div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left" shiro:hasRole="admin">
-            <li class="layui-nav-item"><a href="">管理</a></li>
-            <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" th:unless="${session.userinfo==null}" shiro:hasRole="user">
-                <a href="javascript:;" th:text="${session.userinfo.Phone}">
-                    名称
-                </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">个人资料</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
-                <a shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-        <ul class="layui-nav layui-nav-tree" lay-filter="test">
-            <li class="layui-nav-item">
-                <a href="javascript:;" style="height: 55px">管理</a>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a class="" href="javascript:;">所有商品</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">列表一</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="javascript:;">列表三</a></dd>
-                    <dd><a href="">超链接</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;" shiro:hasRole name="user">管理</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="http://localhost:8080/user/login">我的订单</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="">超链接</a></dd>
 
-                </dl>
-            </li>
-        </ul>
-    </div>
-</div>
-
+<dav th:insert="page/pub/publicHtml :: top"></dav>
+<dav th:insert="page/pub/publeftHtml :: hre"></dav>
 
 <div class="layui-body" id="majiangs-ss">
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
+    <div style="padding: 15px;">
+        这里是为了避免下面的内容呗遮盖
     </div>
     <br>
 </div>
@@ -80,5 +31,39 @@
         });
     });
 </script>
+
+<script>
+    $(function () {
+        //$("#pubhide").load("/user/publicHtml");
+        $.ajax({
+            url: "/user/majiang/getMU",
+            type: "get",
+            //取modelandview中的数据majiangKeYID
+            data: "majiangKeyID=" + [[${majiangKeyID}]]+"&OrderStatus= ",
+            contentType: "application/json;charset=utf-8",
+            success: function (JSON) {
+                if (JSON.code == 0) {
+                    //时间格式化
+                    var da = new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
+                    $("#createDate").val(da).css("display", "inline");
+                    $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
+                    $("#userName").val(JSON.date[0].userName).css("display", "inline");
+                    $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
+                    $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
+                    $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
+                    $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
+                    $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
+                    $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");
+                }else{
+                    alert(JSON.msg);
+                    window.location.href = "/user/";
+                }
+            }
+        });
+    });
+
+
+</script>
+
 </body>
 </html>

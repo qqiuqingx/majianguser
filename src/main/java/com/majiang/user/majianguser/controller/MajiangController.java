@@ -55,19 +55,20 @@ public class MajiangController {
 
 
     /**
-     * 获取单
-     *
+     * 获取指定桌数指定人员的订单
+     * @param cookie
+     * @param majiangKeyID  对应的订单
      * @return
      */
     @RequestMapping(value = "/getMU",method = RequestMethod.GET)
     @ResponseBody
-    public MajiangVo getMU(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID) {
+    public MajiangVo getMU(@CookieValue(required = false, value = "token") Cookie cookie, String majiangKeyID,Integer OrderStatus ) {
         LOGGER.warn("MajiangController.getMU>>>>>>>>>>>>>>>>" + majiangKeyID);
         MajiangVo majiangVo = null;
         if (cookie != null) {
             UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
             userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
-            majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone(),1);
+            majiangVo = majiangService.getMUByKeyIDandUserPhone(majiangKeyID, userInfo.getPhone(),OrderStatus);
         } else {
             LOGGER.warn("MajiangController.getMU未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
@@ -77,6 +78,22 @@ public class MajiangController {
     }
 
 
+
+    @RequestMapping(value = "getAllOrder")
+    public MajiangVo getAllOrder(@CookieValue(required = false,value = "token")Cookie cookie){
+        LOGGER.warn("MajiangController.getAllOrder>>>>>>>>>>>>>>>>" );
+        MajiangVo majiangVo = null;
+        if (cookie!=null){
+            UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
+            userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
+            majiangService.getAllMajiangUserBean(  userInfo.getPhone());
+        }else {
+            LOGGER.warn("MajiangController.getAllOrder未进入service层");
+            majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
+        }
+
+        return majiangVo;
+    }
 
     @RequestMapping(value = "" ,method = RequestMethod.POST)
     public MajiangUserBean getUserOrderByMajiangKeyID(){

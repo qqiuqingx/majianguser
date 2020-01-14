@@ -12,61 +12,13 @@
 </head>
 <body>
 
-<div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
-        <div class="layui-logo"><a href="./" style="color: #009688">麻将馆</a></div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left" shiro:hasRole="admin">
-            <li class="layui-nav-item"><a href="">管理</a></li>
-            <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" th:unless="${session.userinfo==null}" shiro:hasRole="user">
-                <a href="javascript:;" th:text="${session.userinfo.Phone}">
-                    名称
-                </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">个人资料</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
-                <a shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-        <ul class="layui-nav layui-nav-tree" lay-filter="test">
-            <li class="layui-nav-item">
-                <a href="javascript:;" style="height: 55px">管理</a>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a class="" href="javascript:;">所有商品</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">列表一</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="javascript:;">列表三</a></dd>
-                    <dd><a href="">超链接</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;" shiro:hasRole name="user">管理</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="http://localhost:8080/user/login">我的订单</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="">超链接</a></dd>
 
-                </dl>
-            </li>
-        </ul>
-    </div>
-</div>
+<dav th:insert="page/pub/publicHtml :: top"></dav>
+<dav th:insert="page/pub/publeftHtml :: hre"></dav>
 <div class="layui-body" id="majiangs-ss">
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;"> 这里是为了避免下面的内容呗遮盖
+    <div style="padding: 15px;">
+        这里是为了避免下面的内容呗遮盖
     </div>
     <br>
     <div class="top">
@@ -77,68 +29,6 @@
             <div class="goods_view">
                 <img id="goodsImg" width="560"/>
             </div>
-            <!-- <div class="goods_info">
-                 <h2 id="goodsName"></h2>
-                 <p class="title" text="${goods.goodsTitle}"></p>
-                 <p>
-                     <span class="price1" id="orderPrice"></span>
-                 </p>
-                 <div class="seckill_data">
-                     <div>
-                         <span>下单时间:</span>
-                         <span id="createDate">ss</span>
-                     </div>
-                     <div>
-                         <span>订单状态:</span>
-                         <span id="orderStatus"></span>
-                     </div>
-                     <div>
-                         <span>单价:</span>
-                         <span id="unitprice"></span>
-                     </div>
-                 </div>
-                 <div class="count">
-                     <span>订桌人：</span>
-                     <span id="orderUser">XXX  1383838483</span>
-                 </div>
-                 <div class="count">
-                     <span>数量：</span>
-                     <span id="majiangOrder_num">北京市昌平区回龙观龙博一区</span>
-                 </div>
-                 <div class="count">
-                     <span>总价：</span>
-                     <span id="majiangOrdersum">北京市昌平区回龙观龙博一区</span>
-                 </div>
-                 <button class="btn btn-primary btn-block" type="submit" id="NotpayButton">取消订单</button>
-                 <button class="btn btn-primary btn-block" id="payButton">立即支付</button>
-             </div>
- -->
-            <!-- <form id="payForm" method="post" action="/user/goPay">
-                   <table>
-                       <tr>
-                           <td id="createDate">下单时间:</td>
-                       </tr>
-                       <tr>
-                           <td id="orderStatus">订单状态:</td>
-                       </tr>
-                       <tr>
-                           <td id="unitprice">单价:</td>
-                       </tr>
-                       <tr>
-                           <td>订桌人:</td>
-                           <td id="orderUser"></td>
-                       </tr>
-                       <tr>
-                           <td id="majiangOrder_num">数量:</td>
-                       </tr>
-                       <tr>
-                           <td id="majiangOrdersum">总价:</td>
-                       </tr>
-                       <tr>
-                           <input type="submit" value="前往支付宝进行支付">
-                       </tr>
-                   </table>
-               </form>-->
             <form id="payForm" method="post" onsubmit="return false">
                 <div type="hidden">
                     <input type="hidden" id="majiangKeyID" name="majiangKeyID"></input>
@@ -213,7 +103,7 @@
             url: "/user/majiang/getMU",
             type: "get",
             //取modelandview中的数据majiangKeYID
-            data: "majiangKeyID=" + [[${majiangKeyID}]],
+            data: "majiangKeyID=" + [[${majiangKeyID}]]+"&OrderStatus="+1,
             contentType: "application/json;charset=utf-8",
             success: function (JSON) {
                 if (JSON.code == 0) {
@@ -230,6 +120,9 @@
                     $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
                     $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");
 
+                }else{
+                    alert(JSON.msg);
+                    window.location.href = "/user/";
                 }
             }
         });

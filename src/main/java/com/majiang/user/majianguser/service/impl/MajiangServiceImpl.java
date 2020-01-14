@@ -100,19 +100,20 @@ public class MajiangServiceImpl implements MajiangService {
                 System.out.println("从redis中获取到订单:"+m);
             } else {
                 muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY,UserPhone));
-                if (muByKeyIDandUserPhone.size()<=0){
+            /*    if (muByKeyIDandUserPhone.size()<=0){
                     majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
                     return majiangVo;
-                }
+                }*/
                 length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
-                //redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
+
                 System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
             }
+
                 // 过滤状态不为orderStatus的逻辑，也可以在sql中添加条件判断
             if (OrderStatus != null&&OrderStatus>=0&&OrderStatus<=4) {
                muByKeyIDandUserPhone = muByKeyIDandUserPhone.stream().filter(mu -> mu.getStatus() == OrderStatus).collect(Collectors.toList());
                if (muByKeyIDandUserPhone.size()<=0){
-                   majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
+                   majiangVo=new MajiangVo(majiangEnum.DEFEATED);
                    return majiangVo ;
                }
             }

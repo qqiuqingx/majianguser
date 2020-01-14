@@ -3,7 +3,6 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 
-import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 
@@ -79,21 +78,21 @@ public class UserUrlController {
         return "page/userList";
     }
 
-
+    /**
+     * 订单页面
+     * @param majiangKeyID
+     * @return
+     */
     @RequestMapping(value = "/userOrder", method = RequestMethod.GET)
     public ModelAndView getUserOrder(String majiangKeyID) {
-        System.out.println("前端传进来的majiangkeyID" + majiangKeyID);
-        System.out.println("majiangKeyID:" + majiangKeyID.getClass());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("majiangKeyID", majiangKeyID);
         modelAndView.setViewName("page/userOrder");
         return modelAndView;
     }
 
-
-    @RequestMapping(value = "/page/pub")
-    public String getpub(){
-        return "publicHtml";
+    @RequestMapping(value = "/userAllOrder",method = RequestMethod.GET)
+    public String getAllUserOrder(){
+        return "page/UserAllOrder";
     }
-
 }
