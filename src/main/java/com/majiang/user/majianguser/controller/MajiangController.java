@@ -79,14 +79,15 @@ public class MajiangController {
 
 
 
-    @RequestMapping(value = "getAllOrder")
+    @RequestMapping(value = "/getAllOrder",method = RequestMethod.GET)
+    @ResponseBody
     public MajiangVo getAllOrder(@CookieValue(required = false,value = "token")Cookie cookie){
         LOGGER.warn("MajiangController.getAllOrder>>>>>>>>>>>>>>>>" );
         MajiangVo majiangVo = null;
         if (cookie!=null){
             UserInfo userInfo = (UserInfo)redisUtils.get(cookie.getValue());
             userInfo.setPhone(DesUtil.encode(DesUtil.KEY,userInfo.getPhone()));
-            majiangService.getAllMajiangUserBean(  userInfo.getPhone());
+            majiangVo=majiangService.getAllMajiangUserBean(userInfo.getPhone());
         }else {
             LOGGER.warn("MajiangController.getAllOrder未进入service层");
             majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);

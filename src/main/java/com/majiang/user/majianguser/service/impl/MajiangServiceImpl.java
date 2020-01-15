@@ -129,8 +129,25 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
-    public MajiangVo getAllMajiangUserBean(String UserPhone) {
-        return null;
+    public MajiangVo getAllMajiangUserBean(String token) {
+        MajiangVo majiangVo=null;
+        List<MajiangUserBean> allOrder=null;
+        UserInfo userInfo=null;
+        try{
+            userInfo=redisUtils.getUser(token);
+            allOrder = majiangMapper.getAllMajiangUserBean(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
+            if(allOrder.size()<=0){
+                majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
+                return majiangVo;
+            }
+            majiangVo=new MajiangVo(UserEnum.SUCSS,100L,allOrder);
+        }catch (Exception e){
+            LOGGER.error("系统错误",e);
+            majiangVo=new MajiangVo(UserEnum.application);
+        }finally {
+            LOGGER.warn(userInfo.getName()+"获取所有订单:"+allOrder);
+        }
+        return majiangVo;
     }
 
     @Override

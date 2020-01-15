@@ -31,6 +31,7 @@ public class MajiangVo<T> {
         this.date = date;
     }
 
+
     public MajiangVo(UserEnum userEnum) {
         this.code = userEnum.getCode();
         this.msg = userEnum.getMessage();

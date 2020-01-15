@@ -3,7 +3,12 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>我的订单</title>
+    <title>所有订单</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+
+    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
+    <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
+    <script th:src="@{/js/OpenUtils.js}"></script>
 </head>
 <body>
 
@@ -36,27 +41,66 @@
     $(function () {
         //$("#pubhide").load("/user/publicHtml");
         $.ajax({
-            url: "/user/majiang/getMU",
+            url: "/user/majiang/getAllOrder",
             type: "get",
-            //取modelandview中的数据majiangKeYID
-            data: "majiangKeyID=" + [[${majiangKeyID}]]+"&OrderStatus= ",
-            contentType: "application/json;charset=utf-8",
+            //contentType: "application/json;charset=utf-8",
             success: function (JSON) {
                 if (JSON.code == 0) {
                     //时间格式化
-                    var da = new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
-                    $("#createDate").val(da).css("display", "inline");
-                    $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
-                    $("#userName").val(JSON.date[0].userName).css("display", "inline");
-                    $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
-                    $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
-                    $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
-                    $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
-                    $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
-                    $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");
+                    console.log(JSON)
+                    for (var i=0;i<JSON.date.length;i++){
+                        var da = new Date(JSON.date[i].addTime).Format("yyyy-MM-dd hh:mm:ss");
+
+
+                        var from=' <form id=\"'+"payFrom"+i+'\" method="post" onsubmit="return false">\n' +
+                            '                <div type="hidden">\n' +
+                            '                    <input type="hidden" id="majiangKeyID" name="majiangKeyID" value=\"'+JSON.date[i].majiangKeyID+'\"></input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">订单号:</p>\n' +
+                            '                    <input id="KeyID" name="KeyID"></input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">时间:</p>\n' +
+                            '                    <input id="createDate" name="addTime" value=\"'+da+'\"></input>\n' +
+                            '\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">状态:</p>\n' +
+                            '                    <input id="orderStatus" name="statusName"></input>\n' +
+                            '                </div>\n' +
+                            '\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">定桌人:</p>\n' +
+                            '                    <input id="userName" name="userName"></input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">电话:</p>\n' +
+                            '                    <input id="userPhone" name="userPhone"> </input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">单价:</p>\n' +
+                            '                    <input id="unitprice" name="price"></input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">数量:</p>\n' +
+                            '                    <input id="majiangOrder_num" name="num"></input>\n' +
+                            '                </div>\n' +
+                            '                <div>\n' +
+                            '                    <p style="display: inline">总价:</p>\n' +
+                            '                    <input id="majiangOrdersum" name="sumPrice"></input>\n' +
+                            '                </div>\n' +
+                            '                <tr>\n' +
+                            '                    <!--<input type="submit" value="前往支付宝进行支付">-->\n' +
+                            '                    <button class="btn btn-primary btn-block" id="payButton"+i+">支付宝支付</button>\n' +
+                            '                </tr>\n' +
+                            '\n' +
+                            '            </form>';
+                        $("#majiangs-ss").append(from);
+                    }
                 }else{
                     alert(JSON.msg);
-                    window.location.href = "/user/";
+                   // window.location.href = "/user/";
                 }
             }
         });

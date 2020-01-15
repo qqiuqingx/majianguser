@@ -13,6 +13,7 @@ import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.service.MajiangService;
+import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class AlipayServiceImpl implements AlipayService {
             throw new Exception("支付未获取到对应cookie");
         }
         UserInfo user = redisUtils.getUser(cookie.getValue());
-        MajiangVo muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), user.getPhone(), 1);
+        MajiangVo muByKeyIDandUserPhone = majiangService.getMUByKeyIDandUserPhone(String.valueOf(majiangKeyID), DesUtil.encode(DesUtil.KEY,user.getPhone()), 1);
        List<MajiangUserBean> lists= (List<MajiangUserBean>) muByKeyIDandUserPhone.getDate();
         MajiangUserBean majiangUserBean =lists.get(0);
       //  MajiangUserBean majiangUserBean = (MajiangUserBean) muByKeyIDandUserPhone.getDate();

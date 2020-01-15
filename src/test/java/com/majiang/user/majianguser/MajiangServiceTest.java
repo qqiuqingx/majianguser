@@ -41,6 +41,9 @@ public class MajiangServiceTest {
     public void getAll() {
         MajiangVo allmajiang = majiangService.getAllmajiang();
         System.out.println(allmajiang);
+
+        MajiangVo allMajiangUserBean = majiangService.getAllMajiangUserBean("18881014683");
+        System.out.println(allMajiangUserBean);
     }
 
     @Test
