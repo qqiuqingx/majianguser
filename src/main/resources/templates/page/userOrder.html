@@ -188,13 +188,14 @@
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-                // $(document.body).html(JSON);
+
+                 $(document.body).html(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
-                myWindow = window.open('', '');
+            /*    myWindow = window.open('', '');
                 //将返回的from表单写到新页面中
                 myWindow.document.write(JSON);
-                myWindow.focus();
+                myWindow.focus();*/
             },
             error: function (da) {
                 alert("系统异常")

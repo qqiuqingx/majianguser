@@ -37,4 +37,17 @@ majiang:
     #支付宝正式网关： https://openapi.alipay.com/gateway.do
 
 
+
+
+   #应用公钥证书路径
+    ALI_CERT_PATH: \src\main\resources\templates\CRT\appCertPublicKey_2016101600702065.crt
+
+
+   # 支付宝公钥证书文件路径
+    ALIPAY_CERT_PATH: \src\main\resources\templates\CRT\alipayCertPublicKey_RSA2.crt
+
+   #支付宝CA根证书文件路径
+    ALI_ROOT_PATH: \src\main\resources\templates\CRT\alipayRootCert.crt
+
+
     #https://blog.csdn.net/qq_21067307/article/details/100730808   公钥证书方式接入

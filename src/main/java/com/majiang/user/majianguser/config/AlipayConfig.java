@@ -30,6 +30,39 @@ public class AlipayConfig {
     //	https://openapi.alipay.com/gateway.do
     public  static String gatewayUrl;
 
+
+    /**
+     * 应用公钥证书路径
+     */
+    public static String app_cert_path ;
+
+    /**
+     * 支付宝公钥证书文件路径
+     */
+    public static String alipay_cert_path ;
+
+    /**
+     * 支付宝CA根证书文件路径
+     */
+    public static String alipay_root_cert_path ;
+
+
+
+
+
+    @Value("${majiang.alipay.ALI_CERT_PATH}")
+    public  void setApp_cert_path(String app_cert_path) {
+        this.app_cert_path = System.getProperty("user.dir")+app_cert_path;
+    }
+    @Value("${majiang.alipay.ALIPAY_CERT_PATH}")
+    public  void setAlipay_cert_path(String alipay_cert_path) {
+        this.alipay_cert_path = System.getProperty("user.dir")+alipay_cert_path;
+    }
+    @Value("${majiang.alipay.ALI_ROOT_PATH}")
+    public  void setAlipay_root_cert_path(String alipay_root_cert_path) {
+        this.alipay_root_cert_path = System.getProperty("user.dir")+alipay_root_cert_path;
+    }
+
     @Value("${majiang.alipay.ALI_APPID}")
     public void setApp_id(String app_id) {
         this.app_id = app_id;

@@ -10,11 +10,11 @@ public interface AlipayService {
     /**
      *
      * @param majiangKeyID 麻将的KeyID
-     * @param cookie 当前用户的cookie
+     * @param token token
      * @return
      * @throws Exception
      */
-    String webPagePay( Integer majiangKeyID, Cookie cookie) throws Exception;
+    String webPagePay( Integer majiangKeyID, String token) throws Exception;
 
     /**
      * 退款
