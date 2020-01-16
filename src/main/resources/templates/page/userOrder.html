@@ -24,76 +24,76 @@
     <div class="top">
         <h4 style="text-align: center">订单详情页</h4>
     </div>
-   <!-- <div class="goods">
-        <div class="containers">
-            <div class="goods_view">
-                <img id="goodsImg" width="560"/>
-            </div>
-            <form id="payForm" method="post" onsubmit="return false">
-                <div type="hidden">
-                    <input type="hidden" id="majiangKeyID" name="majiangKeyID"></input>
-                </div>
-                <div>
-                    <p style="display: inline">订单号:</p>
-                    <input id="KeyID" name="KeyID"></input>
-                </div>
-                <div>
-                    <p style="display: inline">时间:</p>
-                    <input id="createDate" name="addTime"></input>
+    <!-- <div class="goods">
+         <div class="containers">
+             <div class="goods_view">
+                 <img id="goodsImg" width="560"/>
+             </div>
+             <form id="payForm" method="post" onsubmit="return false">
+                 <div type="hidden">
+                     <input type="hidden" id="majiangKeyID" name="majiangKeyID"></input>
+                 </div>
+                 <div>
+                     <p style="display: inline">订单号:</p>
+                     <input id="KeyID" name="KeyID"></input>
+                 </div>
+                 <div>
+                     <p style="display: inline">时间:</p>
+                     <input id="createDate" name="addTime"></input>
 
-                </div>
-                <div>
-                    <p style="display: inline">状态:</p>
-                    <input id="orderStatus" name="statusName"></input>
-                </div>
+                 </div>
+                 <div>
+                     <p style="display: inline">状态:</p>
+                     <input id="orderStatus" name="statusName"></input>
+                 </div>
 
-                <div>
-                    <p style="display: inline">定桌人:</p>
-                    <input id="userName" name="userName"></input>
-                </div>
-                <div>
-                    <p style="display: inline">电话:</p>
-                    <input id="userPhone" name="userPhone"> </input>
-                </div>
-                <div>
-                    <p style="display: inline">单价:</p>
-                    <input id="unitprice" name="price"></input>
-                </div>
-                <div>
-                    <p style="display: inline">数量:</p>
-                    <input id="majiangOrder_num" name="num"></input>
-                </div>
-                <div>
-                    <p style="display: inline">总价:</p>
-                    <input id="majiangOrdersum" name="sumPrice"></input>
-                </div>
-                <tr>
-                    &lt;!&ndash;<input type="submit" value="前往支付宝进行支付">&ndash;&gt;
-                    <button class="btn btn-primary btn-block" id="payButton">支付宝支付</button>
-                </tr>
+                 <div>
+                     <p style="display: inline">定桌人:</p>
+                     <input id="userName" name="userName"></input>
+                 </div>
+                 <div>
+                     <p style="display: inline">电话:</p>
+                     <input id="userPhone" name="userPhone"> </input>
+                 </div>
+                 <div>
+                     <p style="display: inline">单价:</p>
+                     <input id="unitprice" name="price"></input>
+                 </div>
+                 <div>
+                     <p style="display: inline">数量:</p>
+                     <input id="majiangOrder_num" name="num"></input>
+                 </div>
+                 <div>
+                     <p style="display: inline">总价:</p>
+                     <input id="majiangOrdersum" name="sumPrice"></input>
+                 </div>
+                 <tr>
+                     &lt;!&ndash;<input type="submit" value="前往支付宝进行支付">&ndash;&gt;
+                     <button class="btn btn-primary btn-block" id="payButton">支付宝支付</button>
+                 </tr>
 
-            </form>
+             </form>
 
 
-            <div id="returnAli"></div>
-        </div>
-    </div>-->
+             <div id="returnAli"></div>
+         </div>
+     </div>-->
     <br>
 
     <table id="pay_table" class="orders-table" width="100%">
         <thead>
         <tr>
-            <th >订单号</th>
-            <th >时间</th>
-            <th >状态</th>
-            <th >定桌人</th>
-            <th >电话</th>
-            <th >单价</th>
-            <th >数量</th>
-            <th >总价</th>
+            <th>订单号</th>
+            <th>时间</th>
+            <th>状态</th>
+            <th>定桌人</th>
+            <th>电话</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>总价</th>
         </tr>
         </thead>
-        <tbody class="orders-body">
+        <tbody class="orders-body" id="pay_tbody">
         <tr>
             <td style="text-align:center;vertical-align:middle;" id="KeyID">KeyID</td>
             <td style="text-align:center;vertical-align:middle;" id="createDate">createDate</td>
@@ -103,10 +103,9 @@
             <td style="text-align:center;vertical-align:middle;" id="unitprice">unitprice</td>
             <td style="text-align:center;vertical-align:middle;" id="majiangOrder_num">majiangOrder_num</td>
             <td style="text-align:center;vertical-align:middle;" id="majiangOrdersum">majiangOrdersum</td>
-            <td  style="visibility: hidden"  id="majiangKeyID">majiangKeyID</td>
-            <td >
-                <button id="payButton"  class="a_majiang" style="height: 40px" > 支付宝支付</button>
-
+            <td style="visibility: hidden" id="majiangKeyID">majiangKeyID</td>
+            <td>
+                <button id="payButton" class="a_majiang" style="height: 40px"> 支付宝支付</button>
             </td>
         </tr>
         </tbody>
@@ -135,12 +134,11 @@
             url: "/user/majiang/getMU",
             type: "get",
             //取modelandview中的数据majiangKeYID
-            data: "majiangKeyID=" + [[${majiangKeyID}]]+"&OrderStatus="+1,
+            data: "majiangKeyID=" + [[${majiangKeyID}]] + "&OrderStatus=" + 0,
             contentType: "application/json;charset=utf-8",
             success: function (JSON) {
                 if (JSON.code == 0) {
                     //时间格式化
-
                     var da = new Date(JSON.date[0].addTime).Format("yyyy-MM-dd hh:mm:ss");
                     $("#createDate").text(da);
                     $("#orderStatus").text(JSON.date[0].statusName);
@@ -151,18 +149,16 @@
                     $("#majiangOrdersum").text(JSON.date[0].sumPrice);
                     $("#KeyID").text(JSON.date[0].keyID);
                     $("#majiangKeyID").text(JSON.date[0].majiangKeyID);
-
-                  /*  $("#createDate").val(da).css("display", "inline");
-                    $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
-                    $("#userName").val(JSON.date[0].userName).css("display", "inline");
-                    $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
-                    $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
-                    $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
-                    $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
-                    $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
-                    $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");*/
-
-                }else{
+                    /*  $("#createDate").val(da).css("display", "inline");
+                      $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
+                      $("#userName").val(JSON.date[0].userName).css("display", "inline");
+                      $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
+                      $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
+                      $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
+                      $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
+                      $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
+                      $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");*/
+                } else {
                     alert(JSON.msg);
                     window.location.href = "/user/";
                 }
@@ -173,33 +169,32 @@
     $("#payButton").on('click', function () {
 
 
-      $.ajax({
+        $.ajax({
             type: "post",
             //contentType: "application/json;charset=utf-8",
             //data: JSON.stringify($("#payForm").serializeObject()),
-           // data: $("#payForm").serialize(),
-          data:{
-              "addTime":$("#createDate").text(),
-       "statusName": $("#orderStatus").text(),
-       "userName": $("#userName").text(),
-        "userPhone":$("#userPhone").text(),
-       "price": $("#unitprice").text(),
-        "num":$("#majiangOrder_num").text(),
-        "sumPrice":$("#majiangOrdersum").text(),
-        "KeyID":$("#KeyID").text(),
-        "majiangKeyID":$("#majiangKeyID").text(),
-          },
+            // data: $("#payForm").serialize(),
+            data: {
+                "addTime": $("#createDate").text(),
+                "statusName": $("#orderStatus").text(),
+                "userName": $("#userName").text(),
+                "userPhone": $("#userPhone").text(),
+                "price": $("#unitprice").text(),
+                "num": $("#majiangOrder_num").text(),
+                "sumPrice": $("#majiangOrdersum").text(),
+                "KeyID": $("#KeyID").text(),
+                "majiangKeyID": $("#majiangKeyID").text(),
+            },
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-                alert(JSON);
                 // $(document.body).html(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
-         /*       myWindow = window.open('', '');
+                myWindow = window.open('', '');
                 //将返回的from表单写到新页面中
                 myWindow.document.write(JSON);
-                myWindow.focus();*/
+                myWindow.focus();
             },
             error: function (da) {
                 alert("系统异常")

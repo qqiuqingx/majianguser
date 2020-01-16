@@ -89,7 +89,7 @@
         $.ajax({
             url: "/user/majiang/getMU",
             type: "get",
-            data: "majiangKeyID=" + ss+"&OrderStatus="+1,
+            data: "majiangKeyID=" + ss+"&OrderStatus="+0,
             success: function (JSON) {
                 console.log("获取到对应的订单:" + JSON)
                 if (JSON.code == 0 && JSON.msg != null) {

@@ -111,7 +111,7 @@ public class AlipayController {
             LOGGER.warn("支付, 验签失败...");
         }
 
-        return "redirect:/";
+        return "/userAllOrder";
     }
 
 
@@ -132,7 +132,7 @@ public class AlipayController {
     public String alipayNotifyNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
 
         LOGGER.warn("支付成功, 进入异步通知接口...");
-
+        System.out.println("异步通知》》》》》》》》》》》》》》》》》》》。");
         //获取支付宝POST过来反馈信息
         Map<String,String> params = new HashMap<String,String>();
         Map<String,String[]> requestParams = request.getParameterMap();

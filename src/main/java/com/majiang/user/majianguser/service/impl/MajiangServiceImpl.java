@@ -22,13 +22,12 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -140,6 +139,8 @@ public class MajiangServiceImpl implements MajiangService {
                 majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
                 return majiangVo;
             }
+            //排序，按照订单状态进行排，升序
+            allOrder=allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList());
             majiangVo=new MajiangVo(UserEnum.SUCSS,100L,allOrder);
         }catch (Exception e){
             LOGGER.error("系统错误",e);
