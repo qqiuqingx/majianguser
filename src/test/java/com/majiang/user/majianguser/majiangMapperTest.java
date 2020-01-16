@@ -31,7 +31,7 @@ public class majiangMapperTest {
 
     @Test
     public  void getAllmajianguser(){
-        List<MajiangUserBean> allMajiangUserBean = majiangMapper.getAllMajiangUserBean();
+        List<MajiangUserBean> allMajiangUserBean = majiangMapper.getAllMajiangUserBean("18881014683");
         allMajiangUserBean.stream().forEach(System.out::println);
     }
 

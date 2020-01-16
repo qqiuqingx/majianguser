@@ -14,7 +14,7 @@ public interface majiangMapper {
 
     Integer addMajiang(majiangBean majiang);
 
-    List<MajiangUserBean> getAllMajiangUserBean();
+    List<MajiangUserBean> getAllMajiangUserBean(String userPhone);
 
     List<MajiangUserBean> getMUByKeyIDandUserPhone(@Param("majiangKeyID") String majiangKeyID, @Param("userPhone") String UserPhone);
 

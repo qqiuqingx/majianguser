@@ -43,7 +43,7 @@
         from
         majign_user
         where
-        IsDelete=0
+        userPhone=#{userPhone} and  IsDelete=0
     </select>
 
     <!--MajiangUserBean getMUByKeyIDandUserPhone(String KeyID,String UserPhone);-->

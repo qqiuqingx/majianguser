@@ -1,8 +1,8 @@
 package com.majiang.user.majianguser.enums;
 
 public enum MajiangUserOrderEnum {
-    Order_PAY(0,"已支付"),
-    ORDER_STAY_PAY(1,"待支付"),
+    Order_PAY(1,"已支付"),
+    ORDER_STAY_PAY(0,"待支付"),
     ORDER_CANCEL(2,"已取消"),
     ORDER_REFUND(3,"已退款")
     ;

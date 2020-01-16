@@ -2,10 +2,13 @@ package com.majiang.user.majianguser.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
+import com.majiang.user.majianguser.bean.vo.OrderVO;
 import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
+import com.majiang.user.majianguser.utils.DesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +28,22 @@ public class AlipayController {
     @Autowired
     private AlipayService alipayService;
 //https://gitee.com/javen205/IJPay
-    @RequestMapping(value = "/goPay",method = RequestMethod.POST,produces = "text/html; charset=UTF-8")
+    @RequestMapping(value = "/goPay",method = RequestMethod.POST)
     @ResponseBody
-    public MajiangVo goPay(@CookieValue(value = "token") Cookie cookie, String majiangKeyID){
-        MajiangVo majiangVo=null;
+    public String goPay(@CookieValue(value = "token") Cookie cookie, OrderVO orderVO){
+        System.out.println("表单中的数据:"+orderVO);
+        String returnHtml="";
         try {
-        if (cookie == null) {
-            majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
-            return majiangVo;
-        }
+            if (cookie != null) {
+                returnHtml=alipayService.webPagePay(orderVO.getMajiangKeyID(), cookie.getValue());
+            } else {
+                LOGGER.warn("MajiangController.getMU未进入service层");
 
-            majiangVo= alipayService.webPagePay("",1,"麻将",majiangKeyID,cookie);
-        } catch (Exception e) {
-            LOGGER.error("系统异常",e);
-            e.printStackTrace();
-        }finally {
-            LOGGER.warn("返回:"+majiangVo);
+            }
+        }catch (Exception e){
+            LOGGER.error("系统错误：",e);
         }
-        return majiangVo;
+        return returnHtml;
     }
     /**
      *
@@ -114,7 +115,7 @@ public class AlipayController {
             LOGGER.warn("支付, 验签失败...");
         }
 
-        return "redirect:/";
+        return "/userAllOrder";
     }
 
 
@@ -135,7 +136,7 @@ public class AlipayController {
     public String alipayNotifyNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
 
         LOGGER.warn("支付成功, 进入异步通知接口...");
-
+        System.out.println("异步通知》》》》》》》》》》》》》》》》》》》。");
         //获取支付宝POST过来反馈信息
         Map<String,String> params = new HashMap<String,String>();
         Map<String,String[]> requestParams = request.getParameterMap();

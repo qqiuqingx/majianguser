@@ -8,12 +8,13 @@ import javax.servlet.http.Cookie;
 public interface AlipayService {
 
     /**
-     * web端订单支付
-     * @param OrderID    订单编号（唯一）
-     * @param totalAmount   订单价格
-     * @param subject       商品名称
+     *
+     * @param majiangKeyID 麻将的KeyID
+     * @param token token
+     * @return
+     * @throws Exception
      */
-    MajiangVo webPagePay(String OrderID, Integer totalAmount, String subject, String majiangKeyID, Cookie cookie) throws Exception;
+    String webPagePay( Integer majiangKeyID, String token) throws Exception;
 
     /**
      * 退款

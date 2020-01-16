@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.bean;
 import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class MajiangUserBean  extends  PrentBean {
     private  Integer keyID;
@@ -28,6 +29,36 @@ public class MajiangUserBean  extends  PrentBean {
                 ", sumPrice=" + sumPrice +
                 ", num=" + num +
                 "} " + super.toString();
+    }
+
+    @Override
+    public Date getAddTime() {
+        return super.getAddTime();
+    }
+
+    @Override
+    public PrentBean setAddTime(Date addTime) {
+        return super.setAddTime(addTime);
+    }
+
+    @Override
+    public Date getModifyTime() {
+        return super.getModifyTime();
+    }
+
+    @Override
+    public PrentBean setModifyTime(Date modifyTime) {
+        return super.setModifyTime(modifyTime);
+    }
+
+    @Override
+    public Integer getIsDelete() {
+        return super.getIsDelete();
+    }
+
+    @Override
+    public PrentBean setIsDelete(Integer isDelete) {
+        return super.setIsDelete(isDelete);
     }
 
     public String getUserName() {

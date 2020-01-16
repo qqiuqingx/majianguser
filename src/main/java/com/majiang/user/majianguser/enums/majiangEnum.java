@@ -4,7 +4,9 @@ public enum majiangEnum {
 
      MAJIANGNUM("座位已满,请重新选座",10001)
     ,REPEAT("请勿重复预定",10003)
-    ,LOGINFORNOW("请先登录",10002);
+    ,DEFEATED("订桌失败",10004)
+    ,LOGINFORNOW("请先登录",10002)
+    ,NO_ORDER("没有订单",10005);
     private String message;
     private Integer code;
 

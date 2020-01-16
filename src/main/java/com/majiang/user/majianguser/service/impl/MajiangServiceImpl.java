@@ -22,13 +22,12 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -100,19 +99,20 @@ public class MajiangServiceImpl implements MajiangService {
                 System.out.println("从redis中获取到订单:"+m);
             } else {
                 muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY,UserPhone));
-                if (muByKeyIDandUserPhone.size()<=0){
+            /*    if (muByKeyIDandUserPhone.size()<=0){
                     majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
                     return majiangVo;
-                }
+                }*/
                 length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
-                //redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
+
                 System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
             }
+
                 // 过滤状态不为orderStatus的逻辑，也可以在sql中添加条件判断
             if (OrderStatus != null&&OrderStatus>=0&&OrderStatus<=4) {
                muByKeyIDandUserPhone = muByKeyIDandUserPhone.stream().filter(mu -> mu.getStatus() == OrderStatus).collect(Collectors.toList());
                if (muByKeyIDandUserPhone.size()<=0){
-                   majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
+                   majiangVo=new MajiangVo(majiangEnum.DEFEATED);
                    return majiangVo ;
                }
             }
@@ -128,8 +128,27 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
     @Override
-    public MajiangVo getAllMajiangUserBean(String UserPhone) {
-        return null;
+    public MajiangVo getAllMajiangUserBean(String token) {
+        MajiangVo majiangVo=null;
+        List<MajiangUserBean> allOrder=null;
+        UserInfo userInfo=null;
+        try{
+            userInfo=redisUtils.getUser(token);
+            allOrder = majiangMapper.getAllMajiangUserBean(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
+            if(allOrder.size()<=0){
+                majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
+                return majiangVo;
+            }
+            //排序，按照订单状态进行排，升序
+            allOrder=allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList());
+            majiangVo=new MajiangVo(UserEnum.SUCSS,100L,allOrder);
+        }catch (Exception e){
+            LOGGER.error("系统错误",e);
+            majiangVo=new MajiangVo(UserEnum.application);
+        }finally {
+            LOGGER.warn(userInfo.getName()+"获取所有订单:"+allOrder);
+        }
+        return majiangVo;
     }
 
     @Override
