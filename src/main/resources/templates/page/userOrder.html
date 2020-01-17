@@ -111,7 +111,7 @@
         </tbody>
     </table>
 </div>
-
+    <div id="asd"></div>
 
 <script th:src="@{/layui/layui.js}"></script>
 <script>
@@ -149,15 +149,7 @@
                     $("#majiangOrdersum").text(JSON.date[0].sumPrice);
                     $("#KeyID").text(JSON.date[0].keyID);
                     $("#majiangKeyID").text(JSON.date[0].majiangKeyID);
-                    /*  $("#createDate").val(da).css("display", "inline");
-                      $("#orderStatus").val(JSON.date[0].statusName).css("display", "inline");
-                      $("#userName").val(JSON.date[0].userName).css("display", "inline");
-                      $("#userPhone").val(JSON.date[0].userPhone).css("display", "inline");
-                      $("#unitprice").val(+JSON.date[0].price).css("display", "inline");
-                      $("#majiangOrder_num").val(JSON.date[0].num).css("display", "inline");
-                      $("#majiangOrdersum").val(JSON.date[0].sumPrice).css("display", "inline");
-                      $("#KeyID").val(JSON.date[0].keyID).css("display", "inline");
-                      $("#majiangKeyID").val(JSON.date[0].majiangKeyID).css("display", "inline");*/
+
                 } else {
                     alert(JSON.msg);
                     window.location.href = "/user/";
@@ -188,13 +180,20 @@
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-                // $(document.body).html(JSON);
+
+                 //$(document.body).html(JSON);
+                // $("#asd").append(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
-                myWindow = window.open('', '');
+            /*    myWindow = window.open('', '');
                 //将返回的from表单写到新页面中
                 myWindow.document.write(JSON);
-                myWindow.focus();
+                myWindow.focus();*/
+                const div=document.createElement('divform');
+                div.innerHTML=JSON;
+                document.body.appendChild(div);
+                document.forms[0].acceptCharset='utf-8';
+                document.forms[0].submit();
             },
             error: function (da) {
                 alert("系统异常")

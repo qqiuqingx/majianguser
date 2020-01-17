@@ -112,7 +112,7 @@
         </tbody>
     </table>
 </div>
-
+<div id="ssd"></div>
 
 <script th:src="@{/layui/layui.js}"></script>
 <script>
@@ -198,13 +198,21 @@
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-                // $(document.body).html(JSON);
+                console.log(JSON);
+                $("#ssd").append(JSON);
+
+               //$(document.body).html(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
-                myWindow = window.open('', '');
-                //将返回的from表单写到新页面中
-                myWindow.document.write(JSON);
-                myWindow.focus();
+                   /*myWindow = window.open('', '');
+                             //将返回的from表单写到新页面中
+                             myWindow.document.write(JSON);
+                             myWindow.focus();*/
+       /*         const div=document.createElement('divform');
+                div.innerHTML=JSON;
+                document.body.appendChild(div);
+                document.forms[0].acceptCharset='utf-8';
+                document.forms[0].submit();*/
             },
             error: function (da) {
                 alert("系统异常")
@@ -214,7 +222,7 @@
 
 
 
-    $("#payButton").on('click', function () {
+    $("#12211212").on('click', function () {
         $.ajax({
             type: "post",
             //contentType: "application/json;charset=utf-8",
@@ -234,13 +242,14 @@
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-                // $(document.body).html(JSON);
+                console.log(JSON);
+                 $(document.body).html(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
-                myWindow = window.open('', '');
+             /*   myWindow = window.open('', '');
                 //将返回的from表单写到新页面中
                 myWindow.document.write(JSON);
-                myWindow.focus();
+                myWindow.focus();*/
             },
             error: function (da) {
                 alert("系统异常")

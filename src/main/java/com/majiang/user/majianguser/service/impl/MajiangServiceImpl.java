@@ -134,6 +134,7 @@ public class MajiangServiceImpl implements MajiangService {
         UserInfo userInfo=null;
         try{
             userInfo=redisUtils.getUser(token);
+
             allOrder = majiangMapper.getAllMajiangUserBean(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
             if(allOrder.size()<=0){
                 majiangVo=new MajiangVo(majiangEnum.NO_ORDER);

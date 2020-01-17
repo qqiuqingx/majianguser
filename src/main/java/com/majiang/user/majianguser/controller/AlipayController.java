@@ -2,11 +2,13 @@ package com.majiang.user.majianguser.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
+import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.bean.vo.OrderVO;
 import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
+import com.majiang.user.majianguser.utils.DesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,18 +32,21 @@ public class AlipayController {
 //https://gitee.com/javen205/IJPay
     @RequestMapping(value = "/goPay",method = RequestMethod.POST)
     @ResponseBody
-    public String goPay(@CookieValue(value = "token") Cookie cookie, OrderVO orderVO){
+    public String goPay(@CookieValue(value = "token") Cookie cookie, OrderVO orderVO, HttpServletResponse response){
         System.out.println("表单中的数据:"+orderVO);
         String returnHtml="";
         try {
-            returnHtml= alipayService.webPagePay(orderVO.getMajiangKeyID(),cookie);
-        } catch (Exception e) {
-            LOGGER.error("系统异常",e);
-            e.printStackTrace();
-        }finally {
-            LOGGER.warn("返回:"+returnHtml);
+            if (cookie != null) {
+                returnHtml=alipayService.webPagePay(orderVO.getMajiangKeyID(), cookie.getValue());
+            } else {
+                LOGGER.warn("MajiangController.getMU未进入service层");
+               throw  new Exception("MajiangController.getMU未进入service层");
+            }
+
+        }catch (Exception e){
+            LOGGER.error("系统错误：",e);
         }
-        return returnHtml;
+       return returnHtml;
     }
     /**
      *
