@@ -196,11 +196,11 @@
                 "majiangKeyID": $("#majiangKeyID"+id).text(),
             },
             url: "/user/goPay",
-            dataType: "html",
+            dataType: "text",
             success: function (JSON) {
                 console.log(JSON);
                 $("#ssd").append(JSON);
-
+               // document.getElementById("ssd").innerHTML=JSON;
                //$(document.body).html(JSON);
                 //window.open(JSON,'_blank');
                 //打开一个新页面
