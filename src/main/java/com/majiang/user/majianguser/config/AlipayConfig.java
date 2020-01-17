@@ -5,8 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
- *给静态属性赋值一定要在类上加@Component并且使用set方法设置
+ * 给静态属性赋值一定要在类上加@Component并且使用set方法设置
  */
 @Component
 public class AlipayConfig {
@@ -25,85 +26,109 @@ public class AlipayConfig {
     // 签名方式
     public static String sign_type;
     // 字符编码格式
-    public static  String charset;
+    public static String charset;
     // 支付宝网关
     //	https://openapi.alipay.com/gateway.do
-    public  static String gatewayUrl;
+    public static String gatewayUrl;
 
 
     /**
      * 应用公钥证书路径
      */
-    public static String app_cert_path ;
+    public static String app_cert_path;
 
     /**
      * 支付宝公钥证书文件路径
      */
-    public static String alipay_cert_path ;
+    public static String alipay_cert_path;
 
     /**
      * 支付宝CA根证书文件路径
      */
-    public static String alipay_root_cert_path ;
+    public static String alipay_root_cert_path;
 
 
+    public static String merchant_private_key_rsa;
+    public static String alipay_public_key_rsa;
+    public static String sign_type_rsa;
 
+    @Value("${majiang.alipay.ALI_MERCHANT_PRIVATE_KEY_RSA}")
+    public void setMerchant_private_key_rsa(String merchant_private_key_rsa) {
+        this.merchant_private_key_rsa = merchant_private_key_rsa;
+    }
+
+    @Value("${majiang.alipay.ALI_ALIPAY_PUBLIC_KEY_RSA}")
+    public void setAlipay_public_key_rsa(String alipay_public_key_rsa) {
+        this.alipay_public_key_rsa = alipay_public_key_rsa;
+    }
+
+    @Value("${majiang.alipay.ALI_SIGN_TYPE_RSA}")
+    public void setSign_type_rsa(String sign_type_rsa) {
+        this.sign_type_rsa = sign_type_rsa;
+    }
 
 
     @Value("${majiang.alipay.ALI_CERT_PATH}")
-    public  void setApp_cert_path(String app_cert_path) {
-        this.app_cert_path = System.getProperty("user.dir")+app_cert_path;
+    public void setApp_cert_path(String app_cert_path) {
+        this.app_cert_path = System.getProperty("user.dir") + app_cert_path;
+        // this.app_cert_path = app_cert_path;
     }
+
     @Value("${majiang.alipay.ALIPAY_CERT_PATH}")
-    public  void setAlipay_cert_path(String alipay_cert_path) {
-        this.alipay_cert_path = System.getProperty("user.dir")+alipay_cert_path;
+    public void setAlipay_cert_path(String alipay_cert_path) {
+        this.alipay_cert_path = System.getProperty("user.dir") + alipay_cert_path;
+        // this.alipay_cert_path = alipay_cert_path;
+
     }
+
     @Value("${majiang.alipay.ALI_ROOT_PATH}")
-    public  void setAlipay_root_cert_path(String alipay_root_cert_path) {
-        this.alipay_root_cert_path = System.getProperty("user.dir")+alipay_root_cert_path;
+    public void setAlipay_root_cert_path(String alipay_root_cert_path) {
+        this.alipay_root_cert_path = System.getProperty("user.dir") + alipay_root_cert_path;
+        // this.alipay_root_cert_path = alipay_root_cert_path;
     }
 
     @Value("${majiang.alipay.ALI_APPID}")
     public void setApp_id(String app_id) {
         this.app_id = app_id;
     }
+
     @Value("${majiang.alipay.ALI_MERCHANT_PRIVATE_KEY}")
     public void setMerchant_private_key(String merchant_private_key) {
         this.merchant_private_key = merchant_private_key;
     }
+
     @Value("${majiang.alipay.ALI_ALIPAY_PUBLIC_KEY}")
     public void setAlipay_public_key(String alipay_public_key) {
         this.alipay_public_key = alipay_public_key;
     }
+
     @Value("${majiang.alipay.ALI_NOTIFY_URL}")
     public void setNotify_url(String notify_url) {
         this.notify_url = notify_url;
     }
+
     @Value("${majiang.alipay.ALI_RETURN_URL}")
     public void setReturn_url(String return_url) {
         this.return_url = return_url;
     }
+
     @Value("${majiang.alipay.ALI_SIGN_TYPE}")
     public void setSign_type(String sign_type) {
         this.sign_type = sign_type;
     }
+
     @Value("${majiang.alipay.ALI_CHARSET}")
     public void setCharset(String charset) {
         this.charset = charset;
     }
+
     @Value("${majiang.alipay.ALI_GATEWAYURL}")
     public void setGatewayUrl(String gatewayUrl) {
         this.gatewayUrl = gatewayUrl;
     }
 
 
-
-
-
-
-
     public static String log_path = "C:\\";
-
 
 
     /**

@@ -180,20 +180,17 @@
             url: "/user/goPay",
             dataType: "html",
             success: function (JSON) {
-
-                 //$(document.body).html(JSON);
-                // $("#asd").append(JSON);
-                //window.open(JSON,'_blank');
-                //打开一个新页面
-            /*    myWindow = window.open('', '');
-                //将返回的from表单写到新页面中
-                myWindow.document.write(JSON);
-                myWindow.focus();*/
-                const div=document.createElement('divform');
-                div.innerHTML=JSON;
-                document.body.appendChild(div);
-                document.forms[0].acceptCharset='utf-8';
-                document.forms[0].submit();
+                if (JSON!=0){
+                    //可以用
+                    // $("#ssd").append(JSON);
+                    var div=document.createElement('divform');
+                    div.innerHTML=JSON;
+                    document.body.appendChild(div);
+                    document.forms[0].acceptCharset='gbk';
+                    document.forms[0].submit();
+                }else {
+                    alert("系统错误，请联系管理员")
+                }
             },
             error: function (da) {
                 alert("系统异常")

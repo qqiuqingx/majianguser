@@ -14,7 +14,7 @@ public interface AlipayService {
      * @return
      * @throws Exception
      */
-    String webPagePay( Integer majiangKeyID, String token) throws Exception;
+    String webPagePay( Integer majiangKeyID, String token) ;
 
     /**
      * 退款
