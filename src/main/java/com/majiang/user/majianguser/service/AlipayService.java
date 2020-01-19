@@ -4,6 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 public interface AlipayService {
 
@@ -44,5 +45,12 @@ public interface AlipayService {
      */
     String refundQuery(String OrderID,String outRequestNo) throws AlipayApiException;
 
+    /**
+     * 支付宝支付同步回调通知接口
+     * @param request
+     * @param response
+     * @return
+     */
+    String alipayReturnNotice(HttpServletRequest request, HttpServletRequest response);
 
 }

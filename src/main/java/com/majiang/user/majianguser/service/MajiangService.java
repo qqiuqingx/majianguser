@@ -49,4 +49,11 @@ public interface MajiangService {
 
     MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie,Integer num);
 
+
+    /**
+     * 根据订单号获取订单星系
+     * @param OrderID 订单号(KeyID)
+     * @return
+     */
+    MajiangVo getOrderByOrderID(String OrderID);
 }

@@ -76,4 +76,16 @@
          KeyID=#{KeyID}
     </update>
 
+
+    <!--MajiangUserBean getOrderByOrderID(String OrderID);-->
+    <select id="getOrderByOrderID" resultType="com.majiang.user.majianguser.bean.MajiangUserBean">
+        select
+        <include refid="majianguser"/>
+        from
+        majign_user
+        where
+        KeyID=#{OrderID}  and IsDelete=0 order by modifyTime desc limit 1
+    </select>
+
+
 </mapper>

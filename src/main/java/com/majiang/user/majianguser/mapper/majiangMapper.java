@@ -22,4 +22,8 @@ public interface majiangMapper {
 
     Integer updateMajiang(majiangBean majiangBean);
 
+    MajiangUserBean getOrderByOrderID(String OrderID);
+
+    Integer upOrder(MajiangUserBean majiangUserBean);
+
 }

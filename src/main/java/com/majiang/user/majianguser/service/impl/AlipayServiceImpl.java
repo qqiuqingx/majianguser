@@ -2,6 +2,7 @@ package com.majiang.user.majianguser.service.impl;
 
 import com.alipay.api.*;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
@@ -12,6 +13,7 @@ import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.AlipayConfig;
+import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
@@ -23,9 +25,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AlipayServiceImpl implements AlipayService {
@@ -34,6 +41,8 @@ public class AlipayServiceImpl implements AlipayService {
     private RedisUtils redisUtils;
     @Autowired
     private MajiangService majiangService;
+    @Value("${majiang.redis.ORDERKEY}")
+    private String ORDERKEY;
     /**
      * 调取支付宝接口 web端支付
      * RSA2只能用公钥证书方式，现改为RSA公钥方式
@@ -84,6 +93,86 @@ public class AlipayServiceImpl implements AlipayService {
 
     @Override
     public String refundQuery(String OrderID, String outRequestNo) throws AlipayApiException {
+        return null;
+    }
+
+    @Override
+    public String alipayReturnNotice(HttpServletRequest request, HttpServletRequest response) {
+        LOGGER.warn("支付成功, 进入同步通知接口service层...");
+        try {
+            //获取支付宝GET过来反馈信息
+            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String[]> requestParams = request.getParameterMap();
+            for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                //乱码解决，这段代码在出现乱码时使用
+                valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+                params.put(name, valueStr);
+            }
+
+            boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key_rsa, AlipayConfig.charset, AlipayConfig.sign_type_rsa); //调用SDK验证签名
+
+            ModelAndView mv = new ModelAndView("alipaySuccess");
+            //——请在这里编写您的程序（以下代码仅作参考）——
+            if (signVerified) {
+                LOGGER.warn("支付成功, 同步验证签名返回值:" + signVerified);
+                Map<String, String[]> parameterMap = request.getParameterMap();
+                for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
+                    System.out.println(map.getKey() + ":" + new String(request.getParameter(map.getKey()).getBytes("ISO-8859-1"), "UTF-8"));
+                }
+                //商户订单号
+                String majianguserKeyID = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+                System.out.println("majianguserKeyID-订单号:" + majianguserKeyID);
+                //支付宝交易号
+                String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+                System.out.println("trade_no" + trade_no);
+                //付款金额
+                String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
+                System.out.println("total_amount" + total_amount);
+                // todo 修改叮当状态，改为 支付成功，已付款; 同时新增支付流水
+                //根据订单号(KeyID)获取到对应 订单信息
+                MajiangVo orderByOrderID = majiangService.getOrderByOrderID(majianguserKeyID);
+                if (orderByOrderID.getCode()==0){
+                    MajiangUserBean majiangUserBean = (MajiangUserBean)orderByOrderID.getDate();
+                    MajiangUserBean majiangUserBean1=(MajiangUserBean)redisUtils.get(ORDERKEY+"_"+DesUtil.decode(DesUtil.KEY,majiangUserBean.getUserPhone())+"_"+majiangUserBean.getMajiangKeyID());
+                    if (majiangUserBean1!=null&&majiangUserBean1.getKeyID().equals(majianguserKeyID)){
+                        majiangUserBean1.setStatusandName(MajiangUserOrderEnum.Order_PAY);
+
+                    }
+
+
+
+                }
+
+
+
+        /*    log.info("********************** 支付成功(支付宝同步通知) **********************");
+            log.info("* 订单号: {}", out_trade_no);
+            log.info("* 支付宝交易号: {}", trade_no);
+            log.info("* 实付金额: {}", total_amount);
+            log.info("* 购买产品: {}", product.getName());
+            log.info("***************************************************************");
+
+
+            mv.addObject("out_trade_no", out_trade_no);
+            mv.addObject("trade_no", trade_no);
+            mv.addObject("total_amount", total_amount);
+            mv.addObject("productName", product.getName());*/
+
+            } else {
+                LOGGER.warn("支付, 验签失败...");
+            }
+        }catch (Exception e){
+
+        }finally {
+
+        }
         return null;
     }
 

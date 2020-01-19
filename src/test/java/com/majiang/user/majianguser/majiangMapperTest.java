@@ -64,5 +64,10 @@ public class majiangMapperTest {
         System.out.println("majiangupdate:"+majiangBean+"更新:"+integer);
     }
 
+    @Test
+    public void getMajiangOrder(){
+        MajiangUserBean orderByOrderID = majiangMapper.getOrderByOrderID("190");
+        System.out.println(orderByOrderID);
+    }
 
 }

@@ -34,6 +34,7 @@
         <tr>
             <th>订单号</th>
             <th>时间</th>
+            <th>桌数</th>
             <th>状态</th>
             <th>定桌人</th>
             <th>电话</th>
@@ -79,13 +80,13 @@
                         var ta='  <tr>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="KeyID'+i+'">'+JSON.date[i].keyID+'</td>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="createDate'+i+'">'+da+'</td>\n' +
+                            '<td style="text-align:center;vertical-align:middle;" id="majiangKeyID'+i+'">'+JSON.date[i].majiangKeyID+'</td>\n'+
                             '<td style="text-align:center;vertical-align:middle;" id="orderStatus'+i+'">'+JSON.date[i].statusName+'</td>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="userName'+i+'">'+JSON.date[i].userName+'</td>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="userPhone'+i+'">'+JSON.date[i].userPhone+'</td>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="unitprice'+i+'">'+JSON.date[i].price+'</td>\n' +
                             '<td style="text-align:center;vertical-align:middle;" id="majiangOrder_num'+i+'">'+JSON.date[i].num+'</td>\n' +
-                            '<td style="text-align:center;vertical-align:middle;" id="majiangOrdersum'+i+'">'+JSON.date[i].sumPrice+'</td>\n' +
-                            '<td style="visibility: hidden" id="majiangKeyID'+i+'">'+JSON.date[i].majiangKeyID+'</td>\n'
+                            '<td style="text-align:center;vertical-align:middle;" id="majiangOrdersum'+i+'">'+JSON.date[i].sumPrice+'</td>\n'
                              ;
                         if (stat == 0){
                        var but=' <td>\n' +
@@ -94,7 +95,7 @@
                             '</tr>'
                         }else {
                             var but=' <td>\n' +
-                                '                <button id="payButton'+i+' " class="a_majiang" style="height: 30px">'+JSON.date[i].statusName+'</button>\n' +
+                                '                <p id="payButton'+i+' " class="a_majiang" style="height: 30px">'+JSON.date[i].statusName+'</p>\n' +
                                 '            </td>\n' +
                                 '        </tr>'
                         }
