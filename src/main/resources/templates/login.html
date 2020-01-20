@@ -28,7 +28,7 @@
         <label><input type="checkbox" value="remember-me"/> 记住我</label>
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn-login">登录</button>
-    <a th:href="@{/getss}">跳到注册</a>
+    <a th:href="@{/Sing}">跳到注册</a>
     <p class="mt-5 mb-3 text-muted">© 2018-2019</p>
 
 </form>
@@ -36,7 +36,6 @@
 
 <script type="text/javascript">
     $("#btn-login").click(function () {
-        console.log("jinru");
         console.log(JSON.stringify($("#form-login").serialized)),
             console.log(JSON.stringify($("#form-login").serializeObject())),
             console.log($("#form-login").serializeObject()),

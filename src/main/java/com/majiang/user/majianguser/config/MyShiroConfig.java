@@ -38,6 +38,8 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/majiang/**", "anon");
         filterChainDefinitionMap.put("/page/**", "anon");
         filterChainDefinitionMap.put("/addUser", "anon");
+        filterChainDefinitionMap.put("/public/**", "anon");
+        filterChainDefinitionMap.put("/Sing", "anon");
 
         //对swagger放行
         filterChainDefinitionMap.put("/swagger-ui.html","anon");

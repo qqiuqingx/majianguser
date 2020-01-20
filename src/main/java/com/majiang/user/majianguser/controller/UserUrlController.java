@@ -97,7 +97,7 @@ public class UserUrlController {
     }
 
 
-    @RequestMapping(value = "/getss",method = RequestMethod.GET)
+    @RequestMapping(value = "/Sing",method = RequestMethod.GET)
     public String getss(){
         System.out.println("进入方法");
         return "page/register";
