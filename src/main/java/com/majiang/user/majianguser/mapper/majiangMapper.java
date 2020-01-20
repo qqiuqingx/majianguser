@@ -24,6 +24,12 @@ public interface majiangMapper {
 
     MajiangUserBean getOrderByOrderID(String OrderID);
 
+
+    /**
+     * 根据订单号KeyiD更新订单
+     * @param majiangUserBean
+     * @return
+     */
     Integer upOrder(MajiangUserBean majiangUserBean);
 
 }

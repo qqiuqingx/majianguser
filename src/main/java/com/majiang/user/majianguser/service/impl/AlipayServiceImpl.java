@@ -25,14 +25,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AlipayServiceImpl implements AlipayService {
@@ -43,6 +42,8 @@ public class AlipayServiceImpl implements AlipayService {
     private MajiangService majiangService;
     @Value("${majiang.redis.ORDERKEY}")
     private String ORDERKEY;
+    @Value("${majiang.redis.ORDER_OUT_TIME}")
+    private Long ORDER_OUT_TIME;
     /**
      * 调取支付宝接口 web端支付
      * RSA2只能用公钥证书方式，现改为RSA公钥方式
@@ -70,7 +71,7 @@ public class AlipayServiceImpl implements AlipayService {
             new MajiangVo<String>(UserEnum.SUCSS, (long) response.length(), response);
         } catch (Exception e) {
             LOGGER.error("系统错误", e);
-            response="1";
+            response = "1";
         }
 
         return response;
@@ -122,56 +123,41 @@ public class AlipayServiceImpl implements AlipayService {
             //——请在这里编写您的程序（以下代码仅作参考）——
             if (signVerified) {
                 LOGGER.warn("支付成功, 同步验证签名返回值:" + signVerified);
-                Map<String, String[]> parameterMap = request.getParameterMap();
+             /*   Map<String, String[]> parameterMap = request.getParameterMap();
                 for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
                     System.out.println(map.getKey() + ":" + new String(request.getParameter(map.getKey()).getBytes("ISO-8859-1"), "UTF-8"));
-                }
+                }*/
                 //商户订单号
-                String majianguserKeyID = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
-                System.out.println("majianguserKeyID-订单号:" + majianguserKeyID);
+                String OrderID = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+                System.out.println("majianguserKeyID-订单号:" + OrderID);
                 //支付宝交易号
                 String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
                 System.out.println("trade_no" + trade_no);
                 //付款金额
                 String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
                 System.out.println("total_amount" + total_amount);
-                // todo 修改叮当状态，改为 支付成功，已付款; 同时新增支付流水
+                // todo 新增支付流水  更新订单状态
                 //根据订单号(KeyID)获取到对应 订单信息
-                MajiangVo orderByOrderID = majiangService.getOrderByOrderID(majianguserKeyID);
-                if (orderByOrderID.getCode()==0){
-                    MajiangUserBean majiangUserBean = (MajiangUserBean)orderByOrderID.getDate();
-                    MajiangUserBean majiangUserBean1=(MajiangUserBean)redisUtils.get(ORDERKEY+"_"+DesUtil.decode(DesUtil.KEY,majiangUserBean.getUserPhone())+"_"+majiangUserBean.getMajiangKeyID());
-                    if (majiangUserBean1!=null&&majiangUserBean1.getKeyID().equals(majianguserKeyID)){
+                MajiangVo orderByOrderID = majiangService.getOrderByOrderID(OrderID);
+                System.out.println("获取到的订单信息："+orderByOrderID);
+                if (orderByOrderID.getCode() == 0) {
+                    MajiangUserBean majiangUserBean = (MajiangUserBean) orderByOrderID.getDate();
+                    MajiangUserBean majiangUserBean1 = (MajiangUserBean) redisUtils.get(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, majiangUserBean.getUserPhone()) + "_" + majiangUserBean.getMajiangKeyID());
+                    System.out.println("从redis中获取到的订单那信息："+majiangUserBean1);
+                    if (majiangUserBean1 != null && majiangUserBean1.getKeyID().equals(majiangUserBean.getKeyID())) {
                         majiangUserBean1.setStatusandName(MajiangUserOrderEnum.Order_PAY);
-
+                        majiangUserBean1.setAddTime(null);
+                        majiangUserBean1.setModifyTime(null);
+                        updateUserOrder(majiangUserBean1, majiangUserBean1.getUserPhone());
                     }
-
-
-
                 }
-
-
-
-        /*    log.info("********************** 支付成功(支付宝同步通知) **********************");
-            log.info("* 订单号: {}", out_trade_no);
-            log.info("* 支付宝交易号: {}", trade_no);
-            log.info("* 实付金额: {}", total_amount);
-            log.info("* 购买产品: {}", product.getName());
-            log.info("***************************************************************");
-
-
-            mv.addObject("out_trade_no", out_trade_no);
-            mv.addObject("trade_no", trade_no);
-            mv.addObject("total_amount", total_amount);
-            mv.addObject("productName", product.getName());*/
-
             } else {
                 LOGGER.warn("支付, 验签失败...");
             }
-        }catch (Exception e){
-
-        }finally {
-
+        } catch (Exception e) {
+            LOGGER.error("系统异常：",e);
+        } finally {
+            LOGGER.warn("wanbi");
         }
         return null;
     }
@@ -272,7 +258,18 @@ public class AlipayServiceImpl implements AlipayService {
         return restul;
     }
 
-    {
-
+    /**
+     * 更新Order 包括redis和数据库
+     *
+     * @param majiangUserBean
+     */
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRED)
+    public void updateUserOrder(MajiangUserBean majiangUserBean, String userPhone) throws Exception {
+        LOGGER.warn("AlipayServiceImpl.updateUserOrder..........");
+       redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone) + "_" + majiangUserBean.getMajiangKeyID(), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
+        redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
+        //更新数据库
+        System.out.println("将要更新的majianguserBean:"+majiangUserBean);
+        majiangService.updateOrder(majiangUserBean);
     }
 }

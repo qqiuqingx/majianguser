@@ -22,6 +22,8 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
@@ -140,8 +142,10 @@ public class MajiangServiceImpl implements MajiangService {
                 majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
                 return majiangVo;
             }
-            //排序，按照订单时间进行排，升序
-            allOrder=allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getAddTime)).collect(Collectors.toList());
+            //排序，先按照的订单状态进行升序，再按照订单添加时间进行降序
+            allOrder=allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList()).
+                    stream().sorted(Comparator.comparing(MajiangUserBean::getAddTime).reversed()).collect(Collectors.toList());
+            System.out.println("排序后的所有订单号:"+allOrder);
             majiangVo=new MajiangVo(UserEnum.SUCSS,100L,allOrder);
         }catch (Exception e){
             LOGGER.error("系统错误",e);
@@ -222,16 +226,23 @@ public class MajiangServiceImpl implements MajiangService {
     @Override
     public MajiangVo getOrderByOrderID(String OrderID) {
         MajiangVo majiangVo=null;
-
-
-
         MajiangUserBean orderByOrderID = majiangMapper.getOrderByOrderID(OrderID);
         if (orderByOrderID == null) {
           majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
           return  majiangVo;
         }
-
         majiangVo=new MajiangVo(UserEnum.SUCSS,(long)orderByOrderID.toString().length(),orderByOrderID);
         return majiangVo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRED)
+    public void updateOrder(MajiangUserBean majiangUserBean) throws Exception {
+        if (majiangUserBean.getKeyID()==null){
+            throw new Exception("订单号(KeyID)不能为空");
+        }
+        Integer integer = majiangMapper.upOrder(majiangUserBean);
+        LOGGER.warn("更新订单数据，入参"+majiangUserBean);
+        LOGGER.warn("更新订单数据，返回值"+integer);
     }
 }

@@ -44,7 +44,7 @@ public class AlipayController {
             returnHtml = alipayService.webPagePay(orderVO.getMajiangKeyID(), cookie.getValue());
         } else {
             LOGGER.warn("MajiangController.getMU未进入service层");
-            returnHtml="1";
+            returnHtml = "1";
         }
         return returnHtml;
     }
@@ -64,7 +64,7 @@ public class AlipayController {
 
         LOGGER.warn("支付成功, 进入同步通知接口controller层...");
 
-       alipayService.alipayReturnNotice(request,response);
+        alipayService.alipayReturnNotice(request, response);
 
         return "page/UserAllOrder";
     }

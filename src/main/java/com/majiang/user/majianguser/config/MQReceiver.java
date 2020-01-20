@@ -81,11 +81,9 @@ public class MQReceiver {
 
             //  更新麻将表中的桌数
             newNum = (Integer) redisUtils.get(String.valueOf(majiangKeyID));
-            System.out.println("redis中的num:"+newNum);
             if (null==newNum){throw new Exception("根据majiangkeyID获取到redis中麻将的桌数:"+newNum);}
             majiang.setNum(newNum);
             Integer integer = majiangService.updateMajiang(majiang);
-            System.out.println("majiangService.updateMajiang的返回值:"+integer);
             //  更新redis中的数据
             redisUtils.set(String.valueOf(majiangKeyID), newNum);
             //手动确认消息，需要先配置:acknowledge-mode: manual

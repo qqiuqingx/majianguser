@@ -56,4 +56,6 @@ public interface MajiangService {
      * @return
      */
     MajiangVo getOrderByOrderID(String OrderID);
+
+    void updateOrder(MajiangUserBean majiangUserBean) throws Exception;
 }

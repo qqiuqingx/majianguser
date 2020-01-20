@@ -1,5 +1,6 @@
 package com.majiang.user.majianguser;
 
+import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.service.MajiangService;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.Random;
@@ -127,5 +129,27 @@ public class MajiangServiceTest {
 
     }
 
+
+    @Test
+    public void  uporder(){
+        MajiangUserBean majiangUserBean = new MajiangUserBean();
+        majiangUserBean.setKeyID(206);
+        majiangUserBean.setUserName("子安");
+        majiangUserBean.setUserPhone("18881014683");
+        majiangUserBean.setPrice(new BigDecimal(15.00));
+        majiangUserBean.setSumPrice(new BigDecimal(15.00));
+        majiangUserBean.setNum(1);
+        majiangUserBean.setMajiangKeyID(2);
+        majiangUserBean.setStatus(0);
+        majiangUserBean.setStatusName("待支付");
+        majiangUserBean.setAddTime(null);
+        majiangUserBean.setModifyTime(null);
+        try {
+            majiangService.updateOrder(majiangUserBean);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
 
 }

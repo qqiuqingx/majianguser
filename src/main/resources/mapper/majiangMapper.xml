@@ -87,5 +87,47 @@
         KeyID=#{OrderID}  and IsDelete=0 order by modifyTime desc limit 1
     </select>
 
+    <!--Integer upOrder(MajiangUserBean majiangUserBean);-->
+    <update id="upOrder">
+        update
+         majign_user
+        <trim prefix="set" suffixOverrides=",">
+        <if test="userName!=null and userName!=''">
+            userName=#{userName},
+        </if>
+        <if test="userPhone!=null and userPhone!=''">
+            userPhone=#{userPhone},
+        </if>
+        <if test="price!=null and price!=''">
+            price=#{price},
+        </if>
+        <if test="majiangKeyID!=null and majiangKeyID!=''">
+            majiangKeyID=#{majiangKeyID},
+        </if>
+        <if test="Status!=null and Status!=''">
+            status=#{Status},
+        </if>
+        <if test="statusName!=null and statusName!=''">
+            statusName=#{statusName},
+        </if>
+        <if test="sumPrice!=null and sumPrice!=''">
+            sumPrice=#{sumPrice},
+        </if>
+        <if test="num!=null and num!=''">
+            num=#{num},
+        </if>
+        <if test="addTime!=null ">
+            addTime=#{addTime},
+        </if>
+        <if test="modifyTime!=null ">
+            modifyTime=#{modifyTime},
+        </if>
+        <if test="IsDelete!=null and IsDelete!=''">
+            IsDelete=#{IsDelete},
+        </if>
+        </trim>
+        WHERE
+        KeyID=#{keyID}
+    </update>
 
 </mapper>

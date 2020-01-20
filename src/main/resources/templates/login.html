@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!--xmlns:th="http://www.w3.org/1999/xhtml" -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
     <meta charset="UTF-8">
@@ -27,6 +28,7 @@
         <label><input type="checkbox" value="remember-me"/> 记住我</label>
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn-login">登录</button>
+    <a th:href="@{/getss}">跳到注册</a>
     <p class="mt-5 mb-3 text-muted">© 2018-2019</p>
 
 </form>

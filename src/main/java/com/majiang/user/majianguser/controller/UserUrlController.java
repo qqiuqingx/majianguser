@@ -95,4 +95,12 @@ public class UserUrlController {
     public String getAllUserOrder(){
         return "page/UserAllOrder";
     }
+
+
+    @RequestMapping(value = "/getss",method = RequestMethod.GET)
+    public String getss(){
+        System.out.println("进入方法");
+        return "page/register";
+    }
+
 }

@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -68,6 +70,21 @@ public class majiangMapperTest {
     public void getMajiangOrder(){
         MajiangUserBean orderByOrderID = majiangMapper.getOrderByOrderID("190");
         System.out.println(orderByOrderID);
+    }
+    @Test
+    public void getallOrder(){
+        List<MajiangUserBean> allMajiangUserBean = majiangMapper.getAllMajiangUserBean("18881014683");
+        System.out.println("排序前：");
+        for (MajiangUserBean majiangUserBean : allMajiangUserBean) {
+            System.out.println(majiangUserBean);
+        }
+
+        System.out.println("排序后：");
+        allMajiangUserBean=allMajiangUserBean.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList()).
+                stream().sorted(Comparator.comparing(MajiangUserBean::getAddTime).reversed()).collect(Collectors.toList());
+        for (MajiangUserBean majiangUserBean : allMajiangUserBean) {
+            System.out.println(majiangUserBean);
+        }
     }
 
 }
