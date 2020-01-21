@@ -32,7 +32,6 @@ import java.security.NoSuchAlgorithmException;
                         i += 256;
                     }
                     if (i < 16) {
-
                         buf.append("0");
                     }
                     buf.append(Integer.toHexString(i));

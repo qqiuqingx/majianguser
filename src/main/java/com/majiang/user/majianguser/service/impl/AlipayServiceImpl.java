@@ -263,13 +263,13 @@ public class AlipayServiceImpl implements AlipayService {
      *
      * @param majiangUserBean
      */
-    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRED)
     public void updateUserOrder(MajiangUserBean majiangUserBean, String userPhone) throws Exception {
         LOGGER.warn("AlipayServiceImpl.updateUserOrder..........");
-       redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone) + "_" + majiangUserBean.getMajiangKeyID(), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
-        redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
         //更新数据库
         System.out.println("将要更新的majianguserBean:"+majiangUserBean);
         majiangService.updateOrder(majiangUserBean);
+        //先更新数据库再更新redis（redis不会会滚）
+        redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone) + "_" + majiangUserBean.getMajiangKeyID(), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
+        redisUtils.set(ORDERKEY + "_" + DesUtil.encode(DesUtil.KEY, userPhone), majiangUserBean, ORDER_OUT_TIME + new Random().nextInt(120) + 60);
     }
 }
