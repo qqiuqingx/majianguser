@@ -1,7 +1,6 @@
 package com.majiang.user.majianguser.service.impl;
 
 import com.majiang.user.majianguser.bean.Role;
-import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.mapper.RoleMapper;
 import com.majiang.user.majianguser.service.RoleService;
 import org.slf4j.Logger;

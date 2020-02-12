@@ -13,6 +13,7 @@ import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.config.AlipayConfig;
+import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 import com.majiang.user.majianguser.enums.UserEnum;
 import com.majiang.user.majianguser.enums.majiangEnum;
@@ -166,9 +167,11 @@ public class AlipayServiceImpl implements AlipayService {
         LOGGER.warn(".webPay进入支付方法,入参:》》" + majiangUserBean);
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
-        payRequest.setReturnUrl(AlipayConfig.return_url);
+        payRequest.setReturnUrl(MyServerConfig.getUrl()+AlipayConfig.return_url);
         /* 异步通知，支付完成后，需要进行的异步处理*/
-        payRequest.setNotifyUrl(AlipayConfig.notify_url);
+        payRequest.setNotifyUrl(MyServerConfig.getUrl()+AlipayConfig.notify_url);
+        System.out.println("设置的完整的NotifyUrl:"+payRequest.getNotifyUrl());
+        System.out.println("ReturnUrl:"+payRequest.getReturnUrl());
         //总价
         Double totalAmount = majiangUserBean.getSumPrice().doubleValue();
         //KeyID：订单号

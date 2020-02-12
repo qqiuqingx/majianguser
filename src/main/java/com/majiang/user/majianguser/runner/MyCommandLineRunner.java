@@ -4,6 +4,7 @@ import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.impl.MajiangServiceImpl;
 import com.majiang.user.majianguser.utils.RedisUtils;
+import org.omg.CORBA.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.stream.Collectors;
+import java.net.InetAddress;
 
 
 @Component
@@ -44,5 +46,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
         for(majiangBean ma:maps.values()){
             redisUtils.set(String.valueOf(ma.getKeyID()),ma.getNum(),MAJIANG_TIME_OUT);
         }
+
+
     }
 }

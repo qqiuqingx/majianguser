@@ -30,7 +30,7 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a shiro:lacksPermission="sys:user:user" href="http://localhost:8080/user/login">登录</a>
+                <a shiro:lacksPermission="sys:user:user" th:href="@{/login}">登录</a>
                 <a shiro:hasPermission="sys:user:user" th:href="@{/outApp}">退出</a>
             </li>
         </ul>

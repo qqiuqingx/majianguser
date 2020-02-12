@@ -1,6 +1,7 @@
 package com.majiang.user.majianguser.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
@@ -9,7 +10,7 @@ import java.io.IOException;
 /**
  * 给静态属性赋值一定要在类上加@Component并且使用set方法设置
  */
-@Component
+@Configuration
 public class AlipayConfig {
 
 

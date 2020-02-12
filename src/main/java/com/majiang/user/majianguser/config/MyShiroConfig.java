@@ -40,6 +40,8 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/addUser", "anon");
         filterChainDefinitionMap.put("/public/**", "anon");
         filterChainDefinitionMap.put("/Sing", "anon");
+        //支付宝支付成功同步返回接口
+        filterChainDefinitionMap.put("/ali/**", "anon");
 
         //对swagger放行
         filterChainDefinitionMap.put("/swagger-ui.html","anon");

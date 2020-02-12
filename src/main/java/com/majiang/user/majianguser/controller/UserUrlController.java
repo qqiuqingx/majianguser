@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 
+import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 

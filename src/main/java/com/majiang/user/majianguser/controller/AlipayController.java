@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/ali")
 public class AlipayController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlipayController.class);
     @Autowired
