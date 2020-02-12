@@ -38,6 +38,8 @@ import java.util.*;
 public class AlipayServiceImpl implements AlipayService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlipayServiceImpl.class);
     @Autowired
+    MyServerConfig myServerConfig;
+    @Autowired
     private RedisUtils redisUtils;
     @Autowired
     private MajiangService majiangService;
@@ -167,9 +169,9 @@ public class AlipayServiceImpl implements AlipayService {
         LOGGER.warn(".webPay进入支付方法,入参:》》" + majiangUserBean);
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
-        payRequest.setReturnUrl(MyServerConfig.getUrl()+AlipayConfig.return_url);
+        payRequest.setReturnUrl(myServerConfig.getUrl()+AlipayConfig.return_url);
         /* 异步通知，支付完成后，需要进行的异步处理*/
-        payRequest.setNotifyUrl(MyServerConfig.getUrl()+AlipayConfig.notify_url);
+        payRequest.setNotifyUrl(myServerConfig.getUrl()+AlipayConfig.notify_url);
         System.out.println("设置的完整的NotifyUrl:"+payRequest.getNotifyUrl());
         System.out.println("ReturnUrl:"+payRequest.getReturnUrl());
         //总价

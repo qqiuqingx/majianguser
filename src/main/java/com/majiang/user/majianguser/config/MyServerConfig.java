@@ -12,8 +12,8 @@ import java.net.UnknownHostException;
 @Configuration
 public class MyServerConfig implements ApplicationListener<WebServerInitializedEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyServerConfig.class);
-    private static int serverport;
-    public static String getUrl(){
+    private  int serverport;
+    public  String getUrl(){
         InetAddress localHost = null;
         try {
             localHost = InetAddress.getLocalHost();
@@ -25,5 +25,6 @@ public class MyServerConfig implements ApplicationListener<WebServerInitializedE
     @Override
     public void onApplicationEvent(WebServerInitializedEvent webServerInitializedEvent) {
         serverport=webServerInitializedEvent.getWebServer().getPort();
+        System.out.println("端口:"+serverport);
     }
 }

@@ -7,6 +7,7 @@ import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 
+import org.omg.CORBA.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,8 @@ public class UserUrlController {
 
     @Value("${majiang.redis.ORDERKEY}")
     private String ORDERKEY;
-
+    @Autowired
+    MyServerConfig myServerConfig;
 
     @Autowired
     RedisUtils redisUtils;
@@ -46,6 +48,7 @@ public class UserUrlController {
                 session.setAttribute("userinfo", user);
             }
         }
+        System.out.println("完整的IP端口："+myServerConfig.getUrl());
         return "index";
     }
 
