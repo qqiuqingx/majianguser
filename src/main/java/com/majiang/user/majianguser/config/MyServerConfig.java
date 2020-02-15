@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+/**
+ * 获取服务器的IP和端口，由于只能获取到内置的tomcat的端口所以暂时不用
+ */
 @Configuration
 public class MyServerConfig implements ApplicationListener<WebServerInitializedEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyServerConfig.class);

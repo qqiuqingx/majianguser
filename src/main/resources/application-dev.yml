@@ -31,8 +31,10 @@ majiang:
     ALI_ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtugDnu6SOzKwXh7kf40pVJg6nbOJkQM9CoVpAt6cfIi07YG5ieAuEIEMVIZauEZLl4MR3GyD71Lkbk8jyW6J56/7RiVu5PzUTgVY8cD6E5s0GglZC/UNY7hiKxXL9AQPTxuOnmq1fZLZ6QDFKaBJg41mJi4C7eFalH3dkG4zNEKCNyRA/2M7p0b4+04ixDmKeXAzeuxW/I1xdBoUvtwrZgiY8YMrTl6W24Es4kqK6lFUKOucIjuJuCfTBwj3qPKWlfJTeNFexNKCeWytz4ekND/S2BCIL60WL8/Pirs+EVlKiluNLvD7eUuFCeCds+kOAFPkPOdKbo4bN675YlM7JQIDAQAB
     ALI_ALIPAY_PUBLIC_KEY_RSA: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIgHnOn7LLILlKETd6BFRJ0GqgS2Y3mn1wMQmyh9zEyWlz5p1zrahRahbXAfCfSqshSNfqOmAQzSHRVjCqjsAw1jyqrXaPdKBmr90DIpIxmIyKXv4GGAkPyJ/6FTFY99uhpiq0qadD/uSzQsefWo0aTvP/65zi3eof7TcZ32oWpwIDAQAB
     #这两个值得属性完整得应该是IP+端口+请求路径
-    ALI_NOTIFY_URL: /user/ali/alipayNotifyNotice
-    ALI_RETURN_URL: /user/ali/alipayReturnNotice
+    ALI_NOTIFY_URL:  http://47.104.237.81:8080/user/ali/alipayNotifyNotice
+    ALI_RETURN_URL:  http://47.104.237.81:8080/user/ali/alipayReturnNotice
+    #ALI_NOTIFY_URL:  http://localhost:8080/user/ali/alipayNotifyNotice
+    #ALI_RETURN_URL:  http://localhost:8080/user/ali/alipayReturnNotice
     #ALI_NOTIFY_URL:  http://localhost:8080/user/page/ali/notify_url.jsp
     #ALI_RETURN_URL: http://localhost:8080/user/page/ali/return_url.jsp
     ALI_SIGN_TYPE: RSA2

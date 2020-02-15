@@ -67,7 +67,7 @@
     $(function () {
         //$("#pubhide").load("/user/publicHtml");
         $.ajax({
-            url: "/user/majiang/getAllOrder",
+            url: "/majiang/getAllOrder",
             type: "get",
             //contentType: "application/json;charset=utf-8",
             success: function (JSON) {
@@ -132,7 +132,7 @@
                 "KeyID": $("#KeyID"+id).text(),
                 "majiangKeyID": $("#majiangKeyID"+id).text(),
             },
-            url: "/user/ali/goPay",
+            url: "/ali/goPay",
             dataType: "html",
             success: function (JSON) {
                 if (JSON!=0){
@@ -172,7 +172,7 @@
                 "KeyID": $("#KeyID").text(),
                 "majiangKeyID": $("#majiangKeyID").text(),
             },
-            url: "/user/goPay",
+            url: "/goPay",
             dataType: "html",
             success: function (JSON) {
                 console.log(JSON);

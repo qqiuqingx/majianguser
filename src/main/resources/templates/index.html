@@ -41,7 +41,7 @@
     $(function () {
         //$("#pubhide").load("/user/publicHtml");
         $.ajax({
-            url: "/user/pub/getAllMajiang",
+            url: "/pub/getAllMajiang",
             type: "get",
             contentType: "application/json;charset=utf-8",
             success: function (JSON) {
@@ -66,7 +66,7 @@
 
     function send(ss) {
         $.ajax({
-            url: "/user/majiang/buy",
+            url: "/majiang/buy",
             type: "get",
             data: "majiangKeyID=" + ss.value + "&num=1",
             success: function (JSON) {
@@ -87,7 +87,7 @@
     function getMU(ss) {
         console.log("调用了getMU方法:" + ss);
         $.ajax({
-            url: "/user/majiang/getMU",
+            url: "/majiang/getMU",
             type: "get",
             data: "majiangKeyID=" + ss+"&OrderStatus="+0,
             success: function (JSON) {
@@ -97,7 +97,7 @@
                     var r = confirm("预定成功，是否前往订单界面？");
                     if (r == true) {
                         console.log("var r=confirm 判断为true");
-                        window.location.href = "/user/userOrder?majiangKeyID=" + ss;
+                        window.location.href = "/userOrder?majiangKeyID=" + ss;
                     } else {
                         console.log("var r=confirm 判断为false")
                     }

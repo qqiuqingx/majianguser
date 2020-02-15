@@ -3,6 +3,7 @@ package com.majiang.user.majianguser.controller;
 
 import com.majiang.user.majianguser.bean.UserInfo;
 
+import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
@@ -48,7 +49,7 @@ public class UserUrlController {
                 session.setAttribute("userinfo", user);
             }
         }
-        System.out.println("完整的IP端口："+myServerConfig.getUrl());
+        System.out.println("完整的IP端口："+ AlipayConfig.return_url);
         return "index";
     }
 

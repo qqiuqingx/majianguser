@@ -40,7 +40,7 @@
             console.log(JSON.stringify($("#form-login").serializeObject())),
             console.log($("#form-login").serializeObject()),
             $.ajax({
-                url: "/user/userLogin",
+                url: "/userLogin",
                 type: "post",
                 contentType: "application/json;charset=utf-8",
                 //JSON.stringify() 方法将 JavaScript 对象转换为字符串。
@@ -54,7 +54,7 @@
                         /*重定向*/
                         /*Http.open("/main");*/
                         console.log("成功")
-                        window.location.href = "/user/";
+                        window.location.href = "/";
                     } else {
                         alert(JSON.msg);
                     }
