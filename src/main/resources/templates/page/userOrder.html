@@ -9,6 +9,7 @@
     <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
     <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
     <script th:src="@{/js/openUtils.js}"></script>
+
 </head>
 <body>
 
@@ -133,7 +134,7 @@
         //获取modelandview中的值
         //var majiangKeyID1=[[${majiangKeyID}]];
         $.ajax({
-            url: "/user/majiang/getMU",
+            url: "/majiang/getMU",
             type: "get",
             //取modelandview中的数据majiangKeYID
             data: "majiangKeyID=" + [[${majiangKeyID}]] + "&OrderStatus=" + 0,

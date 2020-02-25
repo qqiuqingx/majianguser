@@ -5,10 +5,6 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradeQueryRequest;
-import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.majiang.user.majianguser.bean.MajiangUserBean;
 import com.majiang.user.majianguser.bean.UserInfo;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
@@ -16,7 +12,6 @@ import com.majiang.user.majianguser.config.AlipayConfig;
 import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.enums.MajiangUserOrderEnum;
 import com.majiang.user.majianguser.enums.UserEnum;
-import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.service.MajiangService;
 import com.majiang.user.majianguser.utils.DesUtil;
@@ -26,11 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -179,6 +171,7 @@ public class AlipayServiceImpl implements AlipayService {
         payRequest.setNotifyUrl(AlipayConfig.notify_url);
         System.out.println("设置的完整的NotifyUrl:"+payRequest.getNotifyUrl());
         System.out.println("ReturnUrl:"+payRequest.getReturnUrl());
+        System.out.println("编码:"+AlipayConfig.charset);
         //总价
         Double totalAmount = majiangUserBean.getSumPrice().doubleValue();
         //KeyID：订单号

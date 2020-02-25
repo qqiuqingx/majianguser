@@ -4,7 +4,6 @@ import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.mapper.majiangMapper;
 import com.majiang.user.majianguser.service.impl.MajiangServiceImpl;
 import com.majiang.user.majianguser.utils.RedisUtils;
-import org.omg.CORBA.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

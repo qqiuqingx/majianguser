@@ -8,7 +8,7 @@ import com.majiang.user.majianguser.config.MyServerConfig;
 import com.majiang.user.majianguser.service.UserInfoservice;
 import com.majiang.user.majianguser.utils.RedisUtils;
 
-import org.omg.CORBA.Environment;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.prefs.BackingStoreException;
 
 @Controller
 public class UserUrlController {

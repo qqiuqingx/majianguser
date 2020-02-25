@@ -1,28 +1,22 @@
 package com.majiang.user.majianguser.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
-import com.majiang.user.majianguser.bean.MajiangUserBean;
-import com.majiang.user.majianguser.bean.UserInfo;
-import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.bean.vo.OrderVO;
 import com.majiang.user.majianguser.config.AlipayConfig;
-import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
-import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,7 +77,7 @@ public class AlipayController {
      * @date 2017年8月23日 下午8:51:13
      * @version V1.0
      */
-    @RequestMapping(value = "/alipayNotifyNotice", method = RequestMethod.POST,produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "/alipayNotifyNotice", method = RequestMethod.POST,produces = "text/plain;charset=gbk")
     @ResponseBody
     public String alipayNotifyNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
 
@@ -102,13 +96,13 @@ public class AlipayController {
             }
             LOGGER.warn("转码前的name:" + name + ",转码前的value：" + valueStr);
             //乱码解决，这段代码在出现乱码时使用
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
             LOGGER.warn("转码后的name:" + name + ",转码后的value：" + valueStr);
             params.put(name, valueStr);
         }
         System.out.println("获取到的subject编码为gbk" + params.get("subject"));
         System.out.println("获取到的body编码为gbk" + params.get("body"));
-        String s = new String(params.get("subject").getBytes("ISO-8859-1"), "utf-8");
+        String s = new String(params.get("subject").getBytes("ISO-8859-1"), "gbk");
         System.out.println("转成utf-8的subject" + s);
         System.out.println("异步验签的params");
         Set<Map.Entry<String, String>> entries = params.entrySet();
