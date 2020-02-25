@@ -10,6 +10,7 @@ import com.majiang.user.majianguser.enums.majiangEnum;
 import com.majiang.user.majianguser.service.AlipayService;
 import com.majiang.user.majianguser.utils.DesUtil;
 import com.majiang.user.majianguser.utils.RedisUtils;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/ali")
@@ -81,7 +83,7 @@ public class AlipayController {
      * @date 2017年8月23日 下午8:51:13
      * @version V1.0
      */
-    @RequestMapping(value = "/alipayNotifyNotice")
+    @RequestMapping(value = "/alipayNotifyNotice", method = RequestMethod.POST,produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String alipayNotifyNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
 
@@ -98,13 +100,23 @@ public class AlipayController {
                 valueStr = (i == values.length - 1) ? valueStr + values[i]
                         : valueStr + values[i] + ",";
             }
+            LOGGER.warn("转码前的name:" + name + ",转码前的value：" + valueStr);
             //乱码解决，这段代码在出现乱码时使用
-//			valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            LOGGER.warn("转码后的name:" + name + ",转码后的value：" + valueStr);
             params.put(name, valueStr);
         }
-
+        System.out.println("获取到的subject编码为gbk" + params.get("subject"));
+        System.out.println("获取到的body编码为gbk" + params.get("body"));
+        String s = new String(params.get("subject").getBytes("ISO-8859-1"), "utf-8");
+        System.out.println("转成utf-8的subject" + s);
+        System.out.println("异步验签的params");
+        Set<Map.Entry<String, String>> entries = params.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+        }
         boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key_rsa, AlipayConfig.charset, AlipayConfig.sign_type_rsa); //调用SDK验证签名
-
+        System.out.println("验签返回值:" + signVerified);
         //——请在这里编写您的程序（以下代码仅作参考）——
 
 		/* 实际验证过程建议商户务必添加以下校验：
