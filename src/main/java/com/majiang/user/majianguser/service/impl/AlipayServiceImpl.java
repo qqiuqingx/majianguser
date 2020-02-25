@@ -119,6 +119,11 @@ public class AlipayServiceImpl implements AlipayService {
                 valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
                 params.put(name, valueStr);
             }
+            System.out.println("同步验签的params");
+            Set<Map.Entry<String, String>> entries = params.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                System.out.println(entry.getKey()+":"+entry.getValue());
+            }
 
             boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key_rsa, AlipayConfig.charset, AlipayConfig.sign_type_rsa); //调用SDK验证签名
 
@@ -169,9 +174,9 @@ public class AlipayServiceImpl implements AlipayService {
         LOGGER.warn(".webPay进入支付方法,入参:》》" + majiangUserBean);
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         /* 同步通知，支付完成后，支付成功页面*/
-        payRequest.setReturnUrl(myServerConfig.getUrl()+AlipayConfig.return_url);
+        payRequest.setReturnUrl(AlipayConfig.return_url);
         /* 异步通知，支付完成后，需要进行的异步处理*/
-        payRequest.setNotifyUrl(myServerConfig.getUrl()+AlipayConfig.notify_url);
+        payRequest.setNotifyUrl(AlipayConfig.notify_url);
         System.out.println("设置的完整的NotifyUrl:"+payRequest.getNotifyUrl());
         System.out.println("ReturnUrl:"+payRequest.getReturnUrl());
         //总价

@@ -36,13 +36,14 @@ public class MyCommandLineRunner implements CommandLineRunner {
         LOGGER.warn("MyCommandLineRunner.run>>>>>>>>>>>>>>>>>>>.");
         List<majiangBean> allmajiang = majiangMapper.getAllmajiang();
         System.out.println("过期时间"+MAJIANG_TIME_OUT);
+        //将整个麻将信息更新到redis
         redisUtils.set(majiangs,allmajiang,Long.valueOf(MAJIANG_TIME_OUT));
         //以MajiangNum为k   majiangBean为value 改为map
         Map<Integer,majiangBean> maps=allmajiang.stream().collect(Collectors.toMap(majiangBean::getMajiangNum,(p)->p));
         LOGGER.warn("MyCommandLineRunner.run:maps:"+maps);
         LOGGER.warn("MyCommandLineRunner.run:allmajiang:"+allmajiang);
 
-        //只遍历value
+        //只遍历value  将桌数更新到redis
         for(majiangBean ma:maps.values()){
             redisUtils.set(String.valueOf(ma.getKeyID()),ma.getNum(),MAJIANG_TIME_OUT);
         }
