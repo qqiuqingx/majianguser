@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
@@ -86,7 +87,7 @@ public class MajiangServiceImpl implements MajiangService {
      */
     @Transactional(rollbackFor =Exception.class )
     @Override
-    public MajiangVo addMajiang(Integer majiangnum) throws Exception {
+    public MajiangVo addMajiang(Integer majiangnum)  {
         List<majiangBean> majiangBeans = new ArrayList<>(majiangnum);
         MajiangVo majiangVo = null;
         int newMajiangNum=1;
@@ -104,12 +105,14 @@ public class MajiangServiceImpl implements MajiangService {
                 bean.setNum(4);
                 //这里会setKeyID  但是后面的升库没有将其写入数据库中
                 BeanUtils.setXXX(bean);
+                Thread.sleep(2000);
                 majiangMapper.addMajiang(bean);
                 newMajiangNum++;
             }
         } catch (Exception e) {
             LOGGER.error("添加麻将出现错误,系统异常", e);
-            throw  new Exception(e);
+            //事务手动回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         } finally {
             LOGGER.warn("添加的麻将数量为:" + majiangnum);
         }

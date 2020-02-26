@@ -15,7 +15,7 @@ import javax.servlet.http.Cookie;
 public interface MajiangService {
     MajiangVo getAllmajiang();
 
-    MajiangVo addMajiang(Integer majiangnum) throws Exception;
+    MajiangVo addMajiang(Integer majiangnum) ;
 
     majiangBean getMajiang(Integer KeyID);
 
