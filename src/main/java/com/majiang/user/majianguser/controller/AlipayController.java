@@ -47,14 +47,8 @@ public class AlipayController {
     }
 
     /**
-     * @Title: AlipayController.java
-     * @Package com.sihai.controller
+
      * @Description: 支付宝同步通知页面
-     * Copyright: Copyright (c) 2017
-     * Company:FURUIBOKE.SCIENCE.AND.TECHNOLOGY
-     * @author sihai
-     * @date 2017年8月23日 下午8:51:01
-     * @version V1.0
      */
     @RequestMapping(value = "/alipayReturnNotice")
     public String alipayReturnNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
@@ -68,14 +62,7 @@ public class AlipayController {
 
 
     /**
-     * @Title: AlipayController.java
-     * @Package com.sihai.controller
      * @Description: 支付宝异步 通知页面
-     * Copyright: Copyright (c) 2017
-     * Company:FURUIBOKE.SCIENCE.AND.TECHNOLOGY
-     * @author sihai
-     * @date 2017年8月23日 下午8:51:13
-     * @version V1.0
      */
     @RequestMapping(value = "/alipayNotifyNotice", method = RequestMethod.POST,produces = "text/plain;charset=gbk")
     @ResponseBody
@@ -94,16 +81,12 @@ public class AlipayController {
                 valueStr = (i == values.length - 1) ? valueStr + values[i]
                         : valueStr + values[i] + ",";
             }
-            LOGGER.warn("转码前的name:" + name + ",转码前的value：" + valueStr);
+            System.out.println("转码前的name:" + name + ",转码前的value：" + valueStr);
             //乱码解决，这段代码在出现乱码时使用
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
-            LOGGER.warn("转码后的name:" + name + ",转码后的value：" + valueStr);
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
+            //LOGGER.warn("转码后的name:" + name + ",转码后的value：" + valueStr);
             params.put(name, valueStr);
         }
-        System.out.println("获取到的subject编码为gbk" + params.get("subject"));
-        System.out.println("获取到的body编码为gbk" + params.get("body"));
-        String s = new String(params.get("subject").getBytes("ISO-8859-1"), "gbk");
-        System.out.println("转成utf-8的subject" + s);
         System.out.println("异步验签的params");
         Set<Map.Entry<String, String>> entries = params.entrySet();
         for (Map.Entry<String, String> entry : entries) {

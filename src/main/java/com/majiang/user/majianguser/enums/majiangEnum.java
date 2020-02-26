@@ -6,7 +6,8 @@ public enum majiangEnum {
     ,REPEAT("请勿重复预定",10003)
     ,DEFEATED("订桌失败",10004)
     ,LOGINFORNOW("请先登录",10002)
-    ,NO_ORDER("没有订单",10005);
+    ,NO_ORDER("没有订单",10005)
+    ,IS_EMPY("未传入具体的数据",10006);
     private String message;
     private Integer code;
 

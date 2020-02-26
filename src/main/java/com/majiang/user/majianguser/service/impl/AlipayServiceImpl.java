@@ -92,6 +92,14 @@ public class AlipayServiceImpl implements AlipayService {
         return null;
     }
 
+    /**
+     *@描述  支付成功，支付宝调用的同步接口
+     *@参数  [request, response]
+     *@返回值  java.lang.String  返回对应的页面
+     *@创建人  qiuqingx
+     *@创建时间  2020-02-26 17:07:54
+     *@修改人和其它信息
+     */
     @Override
     public String alipayReturnNotice(HttpServletRequest request, HttpServletRequest response) {
         LOGGER.warn("支付成功, 进入同步通知接口service层...");
@@ -161,7 +169,14 @@ public class AlipayServiceImpl implements AlipayService {
         }
         return null;
     }
-
+    /**
+     *@描述
+     *@参数  [majiangUserBean]
+     *@返回值  java.lang.String
+     *@创建人  qiuqingx
+     *@创建时间  2020-02-26 17:07:13
+     *@修改人和其它信息
+     */
     private String webPay(MajiangUserBean majiangUserBean) throws AlipayApiException {
         LOGGER.warn(".webPay进入支付方法,入参:》》" + majiangUserBean);
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
@@ -186,6 +201,7 @@ public class AlipayServiceImpl implements AlipayService {
                 + "\"timeout_express\":\"2m\","
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
+        System.out.println("发送支付宝订单支付信息:"+payRequest.getBizContent());
         return alipayClient.pageExecute(payRequest).getBody();
     }
 

@@ -76,8 +76,43 @@ public class MajiangServiceImpl implements MajiangService {
 
     }
 
+    /**
+     * @描述
+     * @参数 [majiangnum]
+     * @返回值 com.majiang.user.majianguser.bean.vo.MajiangVo
+     * @创建人 qiuqingx
+     * @创建时间 2020-02-26 17:16:18
+     * @修改人和其它信息
+     */
+    @Transactional(rollbackFor =Exception.class )
     @Override
-    public Integer addMajiang(majiangBean majiang) {
+    public MajiangVo addMajiang(Integer majiangnum) throws Exception {
+        List<majiangBean> majiangBeans = new ArrayList<>(majiangnum);
+        MajiangVo majiangVo = null;
+        int newMajiangNum=1;
+        try {
+            //先获取所有的麻将，在获取麻将中最大的num，后面新增的每新增一次自加1
+            MajiangVo allmajiang = getAllmajiang();
+            List<majiangBean> majiangs = (List<majiangBean>) allmajiang.getDate();
+            //reversed（）降序，
+            majiangs= majiangs.stream().sorted(Comparator.comparing(majiangBean::getMajiangNum).reversed()).collect(Collectors.toList());
+            if (majiangs.size()>=0){
+                newMajiangNum=majiangs.get(0).getMajiangNum();
+            }
+            for (com.majiang.user.majianguser.bean.majiangBean bean : majiangBeans) {
+                bean.setMajiangNum(newMajiangNum);
+                bean.setNum(4);
+                //这里会setKeyID  但是后面的升库没有将其写入数据库中
+                BeanUtils.setXXX(bean);
+                majiangMapper.addMajiang(bean);
+                newMajiangNum++;
+            }
+        } catch (Exception e) {
+            LOGGER.error("添加麻将出现错误,系统异常", e);
+            throw  new Exception(e);
+        } finally {
+            LOGGER.warn("添加的麻将数量为:" + majiangnum);
+        }
         return null;
     }
 
@@ -87,71 +122,70 @@ public class MajiangServiceImpl implements MajiangService {
     }
 
 
-
     @Override
     public MajiangVo getMUByKeyIDandUserPhone(String majiangKeyID, String UserPhone, Integer OrderStatus) {
         List<MajiangUserBean> muByKeyIDandUserPhone = new ArrayList<>();
-        MajiangVo majiangVo=null;
+        MajiangVo majiangVo = null;
         long length = 0;
         try {
             MajiangUserBean m = (MajiangUserBean) redisUtils.get(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID);
             if (m != null) {
                 muByKeyIDandUserPhone.add(m);
                 length = (long) new Gson().toJson(muByKeyIDandUserPhone).length();
-                System.out.println("从redis中获取到订单:"+m);
+                System.out.println("从redis中获取到订单:" + m);
             } else {
-                muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY,UserPhone));
+                muByKeyIDandUserPhone = majiangMapper.getMUByKeyIDandUserPhone(majiangKeyID, DesUtil.decode(DesUtil.KEY, UserPhone));
             /*    if (muByKeyIDandUserPhone.size()<=0){
                     majiangVo=new MajiangVo(majiangEnum.MAJIANGNUM);
                     return majiangVo;
                 }*/
-                length= (long) new Gson().toJson(muByKeyIDandUserPhone).length();
+                length = (long) new Gson().toJson(muByKeyIDandUserPhone).length();
 
-                System.out.println("从数据库中获取到订单:"+muByKeyIDandUserPhone);
+                System.out.println("从数据库中获取到订单:" + muByKeyIDandUserPhone);
             }
 
-                // 过滤状态不为orderStatus的逻辑，也可以在sql中添加条件判断
-            if (OrderStatus != null&&OrderStatus>=0&&OrderStatus<=4) {
-               muByKeyIDandUserPhone = muByKeyIDandUserPhone.stream().filter(mu -> mu.getStatus() == OrderStatus).collect(Collectors.toList());
-               if (muByKeyIDandUserPhone.size()<=0){
-                   majiangVo=new MajiangVo(majiangEnum.DEFEATED);
-                   return majiangVo ;
-               }
+            // 过滤状态不为orderStatus的逻辑，也可以在sql中添加条件判断
+            if (OrderStatus != null && OrderStatus >= 0 && OrderStatus <= 4) {
+                muByKeyIDandUserPhone = muByKeyIDandUserPhone.stream().filter(mu -> mu.getStatus() == OrderStatus).collect(Collectors.toList());
+                if (muByKeyIDandUserPhone.size() <= 0) {
+                    majiangVo = new MajiangVo(majiangEnum.DEFEATED);
+                    return majiangVo;
+                }
             }
-            redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID,muByKeyIDandUserPhone.get(0),ORDER_OUT_TIME+new Random().nextInt(120)+60);
-            majiangVo=new MajiangVo(UserEnum.SUCSS,length,muByKeyIDandUserPhone);
-        }catch (Exception e){
-            LOGGER.error("获取订单异常:",e);
+            redisUtils.set(ORDERKEY + "_" + UserPhone + "_" + majiangKeyID, muByKeyIDandUserPhone.get(0), ORDER_OUT_TIME + new Random().nextInt(120) + 60);
+            majiangVo = new MajiangVo(UserEnum.SUCSS, length, muByKeyIDandUserPhone);
+        } catch (Exception e) {
+            LOGGER.error("获取订单异常:", e);
             e.printStackTrace();
-        }finally {
-            LOGGER.warn("获取"+UserPhone+"对应订单,桌数为:"+majiangKeyID+",返回值:"+muByKeyIDandUserPhone);
+        } finally {
+            LOGGER.warn("获取" + UserPhone + "对应订单,桌数为:" + majiangKeyID + ",返回值:" + muByKeyIDandUserPhone);
         }
         return majiangVo;
     }
 
     @Override
     public MajiangVo getAllMajiangUserBean(String token) {
-        MajiangVo majiangVo=null;
-        List<MajiangUserBean> allOrder=null;
-        UserInfo userInfo=null;
-        try{
-            userInfo=redisUtils.getUser(token);
+        MajiangVo majiangVo = null;
+        List<MajiangUserBean> allOrder = null;
+        UserInfo userInfo = null;
+        try {
+            userInfo = redisUtils.getUser(token);
 
-            allOrder = majiangMapper.getAllMajiangUserBean(DesUtil.decode(DesUtil.KEY,userInfo.getPhone()));
-            if(allOrder.size()<=0){
-                majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
+            allOrder = majiangMapper.getAllMajiangUserBean(DesUtil.decode(DesUtil.KEY, userInfo.getPhone()));
+            if (allOrder.size() <= 0) {
+                majiangVo = new MajiangVo(majiangEnum.NO_ORDER);
                 return majiangVo;
             }
             //排序，先按照的订单状态进行升序，再按照订单添加时间进行降序
-            allOrder=allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList()).
+            allOrder = allOrder.stream().sorted(Comparator.comparing(MajiangUserBean::getStatus)).collect(Collectors.toList()).
                     stream().sorted(Comparator.comparing(MajiangUserBean::getAddTime).reversed()).collect(Collectors.toList());
-            System.out.println("排序后的所有订单号:"+allOrder);
-            majiangVo=new MajiangVo(UserEnum.SUCSS,100L,allOrder);
-        }catch (Exception e){
-            LOGGER.error("系统错误",e);
-            majiangVo=new MajiangVo(UserEnum.application);
-        }finally {
-            LOGGER.warn(userInfo.getName()+"获取所有订单:"+allOrder);
+            System.out.println("排序后的所有订单号:" + allOrder);
+            majiangVo = new MajiangVo(UserEnum.SUCSS, 100L, allOrder);
+        } catch (Exception e) {
+            LOGGER.error("系统错误", e);
+            majiangVo = new MajiangVo(UserEnum.application);
+        } finally {
+            LOGGER.warn(userInfo.getName() + "获取所有订单:" + allOrder);
         }
         return majiangVo;
     }
@@ -166,6 +200,7 @@ public class MajiangServiceImpl implements MajiangService {
     @Override
     public Integer updateMajiang(majiangBean majiangBean) {
         LOGGER.warn("MajiangServiceImpl.updateMajiang" + majiangBean);
+
         return majiangMapper.updateMajiang(majiangBean);
     }
 
@@ -179,26 +214,30 @@ public class MajiangServiceImpl implements MajiangService {
      */
     @Override
     //@Transactional(rollbackFor = {Exception.class})
-    public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie,Integer num) {
+    public MajiangVo buyMajiang(String majiangKeyID, @CookieValue(required = false, value = "token") Cookie cookie, Integer num) {
         LOGGER.warn("MajiangServiceImpl.buyMajiang>>>>>>>>>>>>:majiang:" + majiangKeyID + "cookie:" + cookie);
         MajiangUserBean majiangUserBean = null;
-        MajiangVo majiangVo=null;
+        MajiangVo majiangVo = null;
         try {
             UserInfo userInfo = (UserInfo) redisUtils.get(cookie.getValue());
             if (SecurityUtils.getSubject().getSession() == null || userInfo == null) {
-                majiangVo=new MajiangVo(majiangEnum.LOGINFORNOW);
+                majiangVo = new MajiangVo(majiangEnum.LOGINFORNOW);
                 return majiangVo;
             }
             majiangUserBean = new MajiangUserBean().setMajiangKeyID(Integer.valueOf(majiangKeyID)).setUserPhone(userInfo.getPhone());
             //判断是否重复预定
             Object o = redisUtils.get(userInfo.getPhone() + "_" + majiangKeyID);
             if (o != null) {
-                majiangVo= new MajiangVo(majiangEnum.REPEAT);
+                majiangVo = new MajiangVo(majiangEnum.REPEAT);
                 return majiangVo;
             }
-            UserInfo userInfo1=(UserInfo)redisUtils.get(DesUtil.encode(DesUtil.KEY,majiangUserBean.getUserPhone()));
-            if (null ==userInfo1 ) {
-                userInfo1=userInfoservice.selectUser(DesUtil.encode(DesUtil.KEY,majiangUserBean.getUserPhone()));
+            UserInfo userInfo1 = (UserInfo) redisUtils.get(DesUtil.encode(DesUtil.KEY, majiangUserBean.getUserPhone()));
+            if (null == userInfo1) {
+                userInfo1 = userInfoservice.selectUser(DesUtil.encode(DesUtil.KEY, majiangUserBean.getUserPhone()));
+            }
+            if ((Integer) redisUtils.get(majiangKeyID) <= 0) {
+                majiangVo = new MajiangVo(majiangEnum.MAJIANGNUM);
+                return majiangVo;
             }
             majiangUserBean.setUserName(userInfo1.getName());
             //设置订单状态
@@ -208,14 +247,14 @@ public class MajiangServiceImpl implements MajiangService {
             //设置单价
             majiangUserBean.setPrice(new BigDecimal(15.00D).setScale(2));
             //设置总价
-            double sumprice=15.00D*num;
+            double sumprice = 15.00D * num;
             majiangUserBean.setSumPrice(new BigDecimal(sumprice).setScale(2));
             BeanUtils.notNull(majiangUserBean, true);
             amqpTemplate.convertAndSend(MyMqConfig.QUEUE_NAME, new Gson().toJson(majiangUserBean));
-            majiangVo=new MajiangVo(UserEnum.SUCSS);
+            majiangVo = new MajiangVo(UserEnum.SUCSS);
         } catch (Exception e) {
             LOGGER.error("点击定桌时异常:", e);
-            majiangVo=new MajiangVo(UserEnum.application);
+            majiangVo = new MajiangVo(UserEnum.application);
             return majiangVo;
         } finally {
             LOGGER.warn("要订桌的用户:" + majiangVo);
@@ -225,24 +264,24 @@ public class MajiangServiceImpl implements MajiangService {
 
     @Override
     public MajiangVo getOrderByOrderID(String OrderID) {
-        MajiangVo majiangVo=null;
+        MajiangVo majiangVo = null;
         MajiangUserBean orderByOrderID = majiangMapper.getOrderByOrderID(OrderID);
         if (orderByOrderID == null) {
-          majiangVo=new MajiangVo(majiangEnum.NO_ORDER);
-          return  majiangVo;
+            majiangVo = new MajiangVo(majiangEnum.NO_ORDER);
+            return majiangVo;
         }
-        majiangVo=new MajiangVo(UserEnum.SUCSS,(long)orderByOrderID.toString().length(),orderByOrderID);
+        majiangVo = new MajiangVo(UserEnum.SUCSS, (long) orderByOrderID.toString().length(), orderByOrderID);
         return majiangVo;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void updateOrder(MajiangUserBean majiangUserBean) throws Exception {
-        if (majiangUserBean.getKeyID()==null){
+        if (majiangUserBean.getKeyID() == null) {
             throw new Exception("订单号(KeyID)不能为空");
         }
         Integer integer = majiangMapper.upOrder(majiangUserBean);
-        LOGGER.warn("更新订单数据，入参"+majiangUserBean);
-        LOGGER.warn("更新订单数据，返回值"+integer);
+        LOGGER.warn("更新订单数据，入参" + majiangUserBean);
+        LOGGER.warn("更新订单数据，返回值" + integer);
     }
 }

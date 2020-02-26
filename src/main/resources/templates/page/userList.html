@@ -9,30 +9,9 @@
     <script th:src="@{/layui/layui.js}"></script>
 </head>
 <body>
-<div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
-        <div class="layui-logo"><a href="./" style="color: #009688">麻将馆</a></div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left" shiro:hasPermission="sys:user:query">
-            <li class="layui-nav-item"><a href="">管理</a></li>
-            <li class="layui-nav-item"><a href="./getUserList">用户管理</a></li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" th:unless="${session.userinfo==null}">
-                <a href="javascript:;" th:text="${session.userinfo.Phone}">
-                    名称
-                </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">个人资料</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a th:if="${session.userinfo ==null}" href="http://localhost:8080/user/login">登录</a>
-                <a th:unless="${session.userinfo==null}" th:href="@{/outApp}">退出</a>
-            </li>
-        </ul>
-    </div>
-</div>
+
+<dav th:insert="page/pub/publicHtml :: top"></dav>
+<dav th:insert="page/pub/publeftHtml :: hre"></dav>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>

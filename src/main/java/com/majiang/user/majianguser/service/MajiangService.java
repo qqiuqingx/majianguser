@@ -7,12 +7,15 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.Cookie;
-import java.util.List;
-
+/**
+*
+* @author qiuqingx
+* @date 2020-02-26 16:59:51
+**/
 public interface MajiangService {
     MajiangVo getAllmajiang();
 
-    Integer addMajiang(majiangBean majiang);
+    MajiangVo addMajiang(Integer majiangnum) throws Exception;
 
     majiangBean getMajiang(Integer KeyID);
 
