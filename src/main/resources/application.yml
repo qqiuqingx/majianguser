@@ -1,7 +1,7 @@
 
 #server:
   #servlet:
-  #  context-path: /user
+    #context-path: /user
 
 
 spring:

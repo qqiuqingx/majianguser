@@ -5,16 +5,12 @@ import com.majiang.user.majianguser.bean.majiangBean;
 import com.majiang.user.majianguser.bean.vo.MajiangVo;
 import com.majiang.user.majianguser.service.MajiangService;
 import net.minidev.json.JSONObject;
-import org.apache.http.Header;
-
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +18,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
 import java.math.BigDecimal;
-import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,9 +39,11 @@ public class MajiangServiceTest {
     public void getAll() {
         MajiangVo allmajiang = majiangService.getAllmajiang();
         System.out.println(allmajiang);
+        List<majiangBean> majiangs = (List<majiangBean>) allmajiang.getDate();
+        System.out.println("排序前："+majiangs);
+        majiangs= majiangs.stream().sorted(Comparator.comparing(majiangBean::getMajiangNum).reversed()).collect(Collectors.toList());
+        System.out.println("排序后："+majiangs);
 
-        MajiangVo allMajiangUserBean = majiangService.getAllMajiangUserBean("18881014683");
-        System.out.println(allMajiangUserBean);
     }
 
     @Test
@@ -62,13 +60,13 @@ public class MajiangServiceTest {
     public void sd() {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2000, 5000, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(5000));
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        for (int i = 1; i < 100; i++) {
+    /*    for (int i = 1; i < 100; i++) {
             UserTest userTest = new UserTest(countDownLatch);
             threadPoolExecutor.execute(userTest);
 
-        }
+        }*/
         //计数器减一，所有线程释放，并发访问
-        countDownLatch.countDown();
+        //countDownLatch.countDown();
     }
 
 

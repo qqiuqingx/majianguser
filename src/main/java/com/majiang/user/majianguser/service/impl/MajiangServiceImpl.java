@@ -85,22 +85,44 @@ public class MajiangServiceImpl implements MajiangService {
      * @创建时间 2020-02-26 17:16:18
      * @修改人和其它信息
      */
-    @Transactional(rollbackFor =Exception.class )
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public MajiangVo addMajiang(Integer majiangnum)  {
-        List<majiangBean> majiangBeans = new ArrayList<>(majiangnum);
+    public MajiangVo addMajiang(Integer majiangnum) {
+        // List<majiangBean> majiangBeans = new ArrayList<>(majiangnum);
         MajiangVo majiangVo = null;
-        int newMajiangNum=1;
+        int newMajiangNum = 1;
+        majiangBean Bean = null;
         try {
+            if (majiangnum <= 0) {
+                majiangVo = new MajiangVo(majiangEnum.IS_EMPY);
+                return majiangVo;
+            }
             //先获取所有的麻将，在获取麻将中最大的num，后面新增的每新增一次自加1
             MajiangVo allmajiang = getAllmajiang();
+            System.out.println("获取的所有麻将："+allmajiang);
             List<majiangBean> majiangs = (List<majiangBean>) allmajiang.getDate();
             //reversed（）降序，
-            majiangs= majiangs.stream().sorted(Comparator.comparing(majiangBean::getMajiangNum).reversed()).collect(Collectors.toList());
-            if (majiangs.size()>=0){
-                newMajiangNum=majiangs.get(0).getMajiangNum();
+            majiangs = majiangs.stream().sorted(Comparator.comparing(majiangBean::getMajiangNum).reversed()).collect(Collectors.toList());
+            if (majiangs.size() >= 0) {
+                newMajiangNum = majiangs.get(0).getMajiangNum();
             }
-            for (com.majiang.user.majianguser.bean.majiangBean bean : majiangBeans) {
+            for (int i = 0; i < majiangnum; i++) {
+                Bean = new majiangBean();
+                Bean.setNum(4);
+                Bean.setMajiangNum(newMajiangNum);
+                BeanUtils.setXXX(Bean);
+                System.out.println("将要添加麻将："+Bean);
+                majiangMapper.addMajiang(Bean);
+                newMajiangNum++;
+            }
+            // 调用mapper的方法直接获取数据库总的所有麻将桌，并将其更新到redis中
+            majiangs=majiangMapper.getAllmajiang();
+            redisUtils.set(this.majiangs, majiangs, 60 * 60 * 24);
+
+
+
+            /* for (com.majiang.user.majianguser.bean.majiangBean bean : majiangBeans) {
+                bean = new majiangBean();
                 bean.setMajiangNum(newMajiangNum);
                 bean.setNum(4);
                 //这里会setKeyID  但是后面的升库没有将其写入数据库中
@@ -108,7 +130,8 @@ public class MajiangServiceImpl implements MajiangService {
                 Thread.sleep(2000);
                 majiangMapper.addMajiang(bean);
                 newMajiangNum++;
-            }
+            }*/
+            majiangVo = new MajiangVo(UserEnum.SUCSS);
         } catch (Exception e) {
             LOGGER.error("添加麻将出现错误,系统异常", e);
             //事务手动回滚
@@ -116,7 +139,7 @@ public class MajiangServiceImpl implements MajiangService {
         } finally {
             LOGGER.warn("添加的麻将数量为:" + majiangnum);
         }
-        return null;
+        return majiangVo;
     }
 
     @Override

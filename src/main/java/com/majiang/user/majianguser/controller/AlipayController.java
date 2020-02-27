@@ -50,7 +50,7 @@ public class AlipayController {
 
      * @Description: 支付宝同步通知页面
      */
-    @RequestMapping(value = "/alipayReturnNotice")
+    @RequestMapping(value = "/alipayReturnNotice",method = RequestMethod.GET)
     public String alipayReturnNotice(HttpServletRequest request, HttpServletRequest response) throws Exception {
 
         LOGGER.warn("支付成功, 进入同步通知接口controller层...");
