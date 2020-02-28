@@ -135,5 +135,6 @@ public class MajiangController {
      * @修改人和其它信息
      */
     @RequestMapping(value = "/addMjiang", method = RequestMethod.POST)
+    @ResponseBody
     public MajiangVo addMajang(Integer majiangnum) {return majiangService.addMajiang(majiangnum);}
 }

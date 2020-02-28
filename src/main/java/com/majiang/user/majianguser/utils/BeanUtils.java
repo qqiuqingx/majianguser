@@ -1,6 +1,4 @@
 package com.majiang.user.majianguser.utils;
-import com.majiang.user.majianguser.bean.UserInfo;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -46,25 +44,41 @@ public final class BeanUtils {
         Class cls = obj.getClass();
         try {
             Method setKeyID = cls.getDeclaredMethod("setKeyID",String.class);
-            Method setAddTime = cls.getDeclaredMethod("setAddTime",Date.class);
-            Method setModifTime = cls.getDeclaredMethod("setModifTime",Date.class);
-            Method setIsDelete = cls.getDeclaredMethod("setIsDelete",Integer.class);
-           System.out.println(setKeyID.getName()+""+setAddTime);
-           setKeyID.invoke(obj,SIMPLE_DATE_FORMAT.format(new Date()));
-           setIsDelete.invoke(obj,0);
-           setAddTime.invoke(obj,new Date());
-           setModifTime.invoke(obj,new Date());
+            Method setAddTime = cls.getMethod("setAddTime",Date.class);
+            Method setModifTime = cls.getMethod("setModifTime",Date.class);
+            Method setIsDelete = cls.getMethod("setIsDelete",Integer.class);
+            System.out.println(setKeyID.getName()+""+setAddTime);
+            setKeyID.invoke(obj,SIMPLE_DATE_FORMAT.format(new Date()));
+            setIsDelete.invoke(obj,0);
+            setAddTime.invoke(obj,new Date());
+            setModifTime.invoke(obj,new Date());
             System.out.println("设置公共属性完毕");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    /*public static void main(String[] args) {
-        UserInfo userInfo = new UserInfo();
-        setXXX(userInfo);
-        System.out.println(userInfo);
-    }*/
+    /**
+     *@描述   新设置公共参数的方法，目前供 majiangBean和MajangUserBean可用
+     *@参数  [obj] 要设置的类
+     *@返回值  void
+     *@创建人  qiuqingx
+     *@创建时间  2020-02-28 15:00:32
+     *@修改人和其它信息
+     */
+    public  static synchronized void newSetXXX(Object obj){
+        Class cls = obj.getClass();
+        try {
+            Method setAddTime = cls.getMethod("setAddTime",Date.class);
+            Method setModifTime = cls.getMethod("setModifyTime",Date.class);
+            Method setIsDelete = cls.getMethod("setIsDelete",Integer.class);
+            setIsDelete.invoke(obj,0);
+            setAddTime.invoke(obj,new Date());
+            setModifTime.invoke(obj,new Date());
+            System.out.println("设置公共属性完毕");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 添加方法注释.

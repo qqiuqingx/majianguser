@@ -119,7 +119,7 @@ public class AlipayServiceImpl implements AlipayService {
                 valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
                 params.put(name, valueStr);
             }
-            System.out.println("同步验签的params");
+            System.out.println("同步验签的params:");
             Set<Map.Entry<String, String>> entries = params.entrySet();
             for (Map.Entry<String, String> entry : entries) {
                 System.out.println(entry.getKey()+":"+entry.getValue());
@@ -170,7 +170,7 @@ public class AlipayServiceImpl implements AlipayService {
         return null;
     }
     /**
-     *@描述
+     *@描述 支付宝手机网站支付
      *@参数  [majiangUserBean]
      *@返回值  java.lang.String
      *@创建人  qiuqingx
@@ -186,7 +186,8 @@ public class AlipayServiceImpl implements AlipayService {
         payRequest.setNotifyUrl(AlipayConfig.notify_url);
         System.out.println("设置的完整的NotifyUrl:"+payRequest.getNotifyUrl());
         System.out.println("ReturnUrl:"+payRequest.getReturnUrl());
-        System.out.println("编码:"+AlipayConfig.charset);
+        System.out.println("private:"+AlipayConfig.merchant_private_key_rsa);
+        System.out.println("public:"+AlipayConfig.alipay_public_key_rsa);
         //总价
         Double totalAmount = majiangUserBean.getSumPrice().doubleValue();
         //KeyID：订单号
@@ -202,6 +203,8 @@ public class AlipayServiceImpl implements AlipayService {
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
         System.out.println("发送支付宝订单支付信息:"+payRequest.getBizContent());
+
+
         return alipayClient.pageExecute(payRequest).getBody();
     }
 
@@ -278,9 +281,12 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     /**
-     * 更新Order 包括redis和数据库
-     *
-     * @param majiangUserBean
+     *@描述  更新订单支付状态
+     *@参数  [majiangUserBean, userPhone]
+     *@返回值  void
+     *@创建人  qiuqingx
+     *@创建时间  2020-02-28 14:19:39
+     *@修改人和其它信息
      */
     public void updateUserOrder(MajiangUserBean majiangUserBean, String userPhone) throws Exception {
         LOGGER.warn("AlipayServiceImpl.updateUserOrder..........");

@@ -6,6 +6,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -19,9 +20,9 @@ public class MySwaggerConfig {
         System.out.println("swagger配置类》》》》》》》》》》》》》》》》》》》》》");
         return new Docket(DocumentationType.SWAGGER_2)
                 //详细的定制信息
-                .apiInfo(ApiInfo.DEFAULT)
-                //分组
-                .groupName("子安测试")
+                .apiInfo(apiInfo("麻将馆","1.0"))
+                //分组 因为程序的编码是gbk，所以如果这里设置为中文的话会有问题
+                .groupName("test")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.majiang.user.majianguser.controller"))//API包路径
                 // 扫描所有
@@ -34,7 +35,13 @@ public class MySwaggerConfig {
      * 添加摘要信息
      * @return
      */
-   /* private ApiInfo apiInfo() {
-        return new ApiInfo(ApiInfo.DEFAULT);
-    }*/
+    private ApiInfo apiInfo(String title,String version) {
+        return new ApiInfoBuilder()
+                .title(title)
+                .description("接口信息")
+                .termsOfServiceUrl("https://github.com/qqiuqingx/majianguser")
+                .contact(new Contact("qqiuqingx","https://github.com/qqiuqingx/majianguser","qqiuqingx@163.com"))
+                .version(version)
+                .build();
+    }
 }

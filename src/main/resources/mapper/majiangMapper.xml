@@ -31,7 +31,7 @@
         insert into majiang(
            majiangNum,num,IsDelete,addTime,modifyTime
         )VALUES (
-            #{majiangNum},#{IsDelete},#{num},#{addTime},#{modifyTime}
+            #{majiangNum},#{num},#{IsDelete},#{addTime},#{modifyTime}
         );
     </insert>
 
