@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,7 +44,7 @@ public class AlipayServiceImpl implements AlipayService {
      * 调取支付宝接口 web端支付
      * RSA2只能用公钥证书方式，现改为RSA公钥方式
      */
-    AlipayClient alipayClient = new DefaultAlipayClient(
+    AlipayClient alipayClient= new DefaultAlipayClient(
             AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key_rsa, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key_rsa, AlipayConfig.sign_type_rsa);
 
 
@@ -203,8 +204,6 @@ public class AlipayServiceImpl implements AlipayService {
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
         System.out.println("发送支付宝订单支付信息:"+payRequest.getBizContent());
-
-
         return alipayClient.pageExecute(payRequest).getBody();
     }
 
