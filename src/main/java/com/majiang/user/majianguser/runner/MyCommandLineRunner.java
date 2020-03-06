@@ -1,8 +1,6 @@
 package com.majiang.user.majianguser.runner;
 
 import com.majiang.user.majianguser.bean.majiangBean;
-import com.majiang.user.majianguser.mapper.majiangMapper;
-import com.majiang.user.majianguser.service.impl.MajiangServiceImpl;
 import com.majiang.user.majianguser.utils.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Collections;
 import java.util.stream.Collectors;
-import java.net.InetAddress;
 
 
 @Component
