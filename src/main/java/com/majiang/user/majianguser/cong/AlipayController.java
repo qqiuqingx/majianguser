@@ -1,4 +1,4 @@
-package com.majiang.user.majianguser.controller;
+package com.majiang.user.majianguser.cong;
 
 import com.alipay.api.internal.util.AlipaySignature;
 import com.majiang.user.majianguser.bean.vo.OrderVO;
