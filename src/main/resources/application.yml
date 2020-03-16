@@ -25,7 +25,7 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-    url: jdbc:mysql://47.104.237.81:3306/UnifiedUserInfo?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/UnifiedUserInfo?serverTimezone=GMT%2B8&characterEncoding=utf-8
     username: root
     password: qiu1994~~~@@@
     #默认使用的是tomcat数据源，在此使用自己引入的数据源Druid
@@ -34,7 +34,7 @@ spring:
     #下面这两个配置，可以在每次连接的时候判断一些连接是否有效
   redis:
     port: 6379
-    host: 47.104.237.81
+    host: localhost
     database: 0
     lettuce:
       shutdown-timeout: 100s
@@ -44,7 +44,7 @@ spring:
     active: dev
   #MQ配置
   rabbitmq:
-    host: 47.104.237.81
+    host: localhost
     port: 5672
     username: admin
     password: qiu1994~~~@@@
